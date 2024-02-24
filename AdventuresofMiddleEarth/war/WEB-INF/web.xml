@@ -8,39 +8,39 @@
   <!-- Servlets -->
   <servlet>
     <servlet-name>ImageServlet</servlet-name>
-    <servlet-class>edu.ycp.cs320.middle_earth.servlet.ImageServlet</servlet-class>
+    <servlet-class>com.github.tadukoo.middle_earth.servlet.ImageServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>IndexServlet</servlet-name>
-    <servlet-class>edu.ycp.cs320.middle_earth.servlet.IndexServlet</servlet-class>
+    <servlet-class>com.github.tadukoo.middle_earth.servlet.IndexServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>GameServlet</servlet-name>
-    <servlet-class>edu.ycp.cs320.middle_earth.servlet.GameServlet</servlet-class>
+    <servlet-class>com.github.tadukoo.middle_earth.servlet.GameServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>InventoryServlet</servlet-name>
-    <servlet-class>edu.ycp.cs320.middle_earth.servlet.InventoryServlet</servlet-class>
+    <servlet-class>com.github.tadukoo.middle_earth.servlet.InventoryServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>GameViewServlet</servlet-name>
-    <servlet-class>edu.ycp.cs320.middle_earth.servlet.GameViewServlet</servlet-class>
+    <servlet-class>com.github.tadukoo.middle_earth.servlet.GameViewServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>MapServlet</servlet-name>
-    <servlet-class>edu.ycp.cs320.middle_earth.servlet.MapServlet</servlet-class>
+    <servlet-class>com.github.tadukoo.middle_earth.servlet.MapServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>CharacterServlet</servlet-name>
-    <servlet-class>edu.ycp.cs320.middle_earth.servlet.CharacterServlet</servlet-class>
+    <servlet-class>com.github.tadukoo.middle_earth.servlet.CharacterServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>CombatServlet</servlet-name>
-    <servlet-class>edu.ycp.cs320.middle_earth.servlet.CombatServlet</servlet-class>
+    <servlet-class>com.github.tadukoo.middle_earth.servlet.CombatServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>AccountServlet</servlet-name>
-    <servlet-class>edu.ycp.cs320.middle_earth.servlet.AccountServlet</servlet-class>
+    <servlet-class>com.github.tadukoo.middle_earth.servlet.AccountServlet</servlet-class>
   </servlet>
   
   

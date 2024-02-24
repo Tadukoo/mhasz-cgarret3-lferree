@@ -1,4 +1,4 @@
-package edu.ycp.cs320.sqldemo;
+package edu.ycp.cs320.middle_earth.sqldemo;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

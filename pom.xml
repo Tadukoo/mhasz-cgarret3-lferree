@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.github.tadukoo.maven</groupId>
+		<artifactId>TadukooMavenLibraryPOM</artifactId>
+		<version>0.4.2-Alpha</version>
+	</parent>
+	<groupId>com.github.tadukoo.aome</groupId>
+	<artifactId>AdventuresOfMiddleEarthParent</artifactId>
+	<version>2.0-Alpha-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<description>Utilities for making forms</description>
+	<modules>
+		<module>AdventuresofMiddleEarth</module>
+	</modules>
+	<properties>
+		<!-- Info -->
+		<shortName>AdventureOfMiddleEarth</shortName>
+		<tadukoo.util.version>0.6-Beta</tadukoo.util.version>
+	</properties>
+</project>

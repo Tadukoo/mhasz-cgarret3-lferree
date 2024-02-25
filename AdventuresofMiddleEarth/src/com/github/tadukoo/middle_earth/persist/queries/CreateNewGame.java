@@ -1,8 +1,8 @@
 package com.github.tadukoo.middle_earth.persist.queries;
 
-import edu.ycp.cs320.middle_earth.persist.DatabaseProvider;
-import edu.ycp.cs320.middle_earth.persist.IDatabase;
-import edu.ycp.cs320.middle_earth.persist.InitDatabase;
+import com.github.tadukoo.middle_earth.persist.DatabaseProvider;
+import com.github.tadukoo.middle_earth.persist.IDatabase;
+import com.github.tadukoo.middle_earth.persist.InitDatabase;
 
 public class CreateNewGame {
 	public static void main(String[] args) throws Exception {

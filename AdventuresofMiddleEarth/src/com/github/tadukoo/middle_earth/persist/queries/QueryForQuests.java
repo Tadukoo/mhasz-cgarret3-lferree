@@ -4,9 +4,9 @@ import java.util.List;
 
 import com.github.tadukoo.middle_earth.model.Quest;
 import com.github.tadukoo.middle_earth.model.Constructs.Item;
-import edu.ycp.cs320.middle_earth.persist.DatabaseProvider;
-import edu.ycp.cs320.middle_earth.persist.IDatabase;
-import edu.ycp.cs320.middle_earth.persist.InitDatabase;
+import com.github.tadukoo.middle_earth.persist.DatabaseProvider;
+import com.github.tadukoo.middle_earth.persist.IDatabase;
+import com.github.tadukoo.middle_earth.persist.InitDatabase;
 
 public class QueryForQuests {
 	public static void main(String[] args) throws Exception {

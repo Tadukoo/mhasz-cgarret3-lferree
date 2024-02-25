@@ -1726,7 +1726,7 @@ public class DerbyDatabase implements IDatabase {
 				} finally {
 					DBUtil.closeQuietly(resultSet);
 					DBUtil.closeQuietly(stmt);
-					edu.ycp.cs320.sqldemo.DBUtil.closeQuietly(conn);
+					DBUtil.closeQuietly(conn);
 				}
 			}
 		});

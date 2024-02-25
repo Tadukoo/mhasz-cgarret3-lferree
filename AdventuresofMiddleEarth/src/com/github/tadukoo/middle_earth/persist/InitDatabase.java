@@ -1,7 +1,7 @@
 package com.github.tadukoo.middle_earth.persist;
 
-import edu.ycp.cs320.middle_earth.persist.DatabaseProvider;
-//import edu.ycp.cs320.middle_earth.persist.FakeDatabase;
+import com.github.tadukoo.middle_earth.persist.DatabaseProvider;
+//import com.github.tadukoo.middle_earth.persist.FakeDatabase;
 
 public class InitDatabase {
 	public static void init() {

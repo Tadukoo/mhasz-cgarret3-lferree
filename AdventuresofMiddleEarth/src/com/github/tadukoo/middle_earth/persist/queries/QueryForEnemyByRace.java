@@ -1,9 +1,9 @@
 package com.github.tadukoo.middle_earth.persist.queries;
 
 import com.github.tadukoo.middle_earth.model.Characters.Enemy;
-import edu.ycp.cs320.middle_earth.persist.DatabaseProvider;
-import edu.ycp.cs320.middle_earth.persist.IDatabase;
-import edu.ycp.cs320.middle_earth.persist.InitDatabase;
+import com.github.tadukoo.middle_earth.persist.DatabaseProvider;
+import com.github.tadukoo.middle_earth.persist.IDatabase;
+import com.github.tadukoo.middle_earth.persist.InitDatabase;
 
 public class QueryForEnemyByRace {
 	public static void main(String[] args) throws Exception {

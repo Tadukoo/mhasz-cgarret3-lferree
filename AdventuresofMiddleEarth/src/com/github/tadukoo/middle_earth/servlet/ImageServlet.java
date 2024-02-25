@@ -1,23 +1,23 @@
 package com.github.tadukoo.middle_earth.servlet;
 
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.nio.file.Files;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 /**
  * The Image servlet for serving from absolute path.
  * @author BalusC
- * @link http://balusc.blogspot.com/2007/04/imageservlet.html
+ * <a href="http://balusc.blogspot.com/2007/04/imageservlet.html">Link</a>
  */
 @WebServlet("/image/*")
-public class ImageServlet extends HttpServlet {
+public class ImageServlet extends HttpServlet{
 
     // Properties ---------------------------------------------------------------------------------
 
@@ -25,7 +25,7 @@ public class ImageServlet extends HttpServlet {
 
     // Init ---------------------------------------------------------------------------------------
 
-    public void init() throws ServletException {
+    public void init() throws ServletException{
 
         // Define base path somehow. You can define it as init-param of the servlet.
     	File currentDirFile = new File(".");

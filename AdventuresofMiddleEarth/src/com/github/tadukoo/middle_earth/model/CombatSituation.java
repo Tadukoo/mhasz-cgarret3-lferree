@@ -8,9 +8,9 @@ import com.github.tadukoo.middle_earth.model.Characters.Player;
 import com.github.tadukoo.middle_earth.model.Characters.Character;
 import com.github.tadukoo.middle_earth.model.Characters.Enemy;
 import com.github.tadukoo.middle_earth.model.Constructs.Item;
-import edu.ycp.cs320.middle_earth.persist.DatabaseProvider;
-import edu.ycp.cs320.middle_earth.persist.IDatabase;
-import edu.ycp.cs320.middle_earth.persist.InitDatabase;
+import com.github.tadukoo.middle_earth.persist.DatabaseProvider;
+import com.github.tadukoo.middle_earth.persist.IDatabase;
+import com.github.tadukoo.middle_earth.persist.InitDatabase;
 
 public class CombatSituation{
 	private ArrayList<Integer> characterIDs;

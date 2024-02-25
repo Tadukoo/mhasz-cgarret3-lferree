@@ -1,18 +1,18 @@
 package com.github.tadukoo.middle_earth.servlet;
 
-import java.io.IOException;
-import java.util.ArrayList;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import com.github.tadukoo.middle_earth.controller.Game;
 import com.github.tadukoo.middle_earth.model.Characters.Player;
 import com.github.tadukoo.middle_earth.model.Constructs.Item;
 import com.github.tadukoo.middle_earth.model.Constructs.ItemType;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
-public class CharacterServlet extends HttpServlet {
+import java.io.IOException;
+import java.util.ArrayList;
+
+public class CharacterServlet extends HttpServlet{
     private static final long serialVersionUID = 1L;
 
 

@@ -3,17 +3,16 @@ package com.github.tadukoo.middle_earth.servlet;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import com.github.tadukoo.middle_earth.controller.Account;
 import com.github.tadukoo.middle_earth.controller.Game;
-import edu.ycp.cs320.middle_earth.persist.DatabaseProvider;
-import edu.ycp.cs320.middle_earth.persist.DerbyDatabase;
-import edu.ycp.cs320.middle_earth.persist.IDatabase;
+import com.github.tadukoo.middle_earth.persist.DatabaseProvider;
+import com.github.tadukoo.middle_earth.persist.DerbyDatabase;
+import com.github.tadukoo.middle_earth.persist.IDatabase;
 
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 public class IndexServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;

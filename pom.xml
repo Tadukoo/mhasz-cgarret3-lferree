@@ -20,5 +20,38 @@
 		<!-- Info -->
 		<shortName>AdventureOfMiddleEarth</shortName>
 		<tadukoo.util.version>0.6-Beta</tadukoo.util.version>
+		
+		<!-- Tomcat Versions -->
+		<tomcat.servlet.version>5.0.0</tomcat.servlet.version>
+		<tomcat.jstl-api.version>3.0.0</tomcat.jstl-api.version>
+		<tomcat.jstl.version>3.0.1</tomcat.jstl.version>
+		
+		<!-- Tomcat Dependencies -->
+		<tomcat.servlet.groupID>jakarta.servlet</tomcat.servlet.groupID>
+		<tomcat.servlet.artifactID>jakarta.servlet-api</tomcat.servlet.artifactID>
+		<tomcat.jstl-api.groupID>jakarta.servlet.jsp.jstl</tomcat.jstl-api.groupID>
+		<tomcat.jstl-api.artifactID>jakarta.servlet.jsp.jstl-api</tomcat.jstl-api.artifactID>
+		<tomcat.jstl.groupID>org.glassfish.web</tomcat.jstl.groupID>
+		<tomcat.jstl.artifactID>jakarta.servlet.jsp.jstl</tomcat.jstl.artifactID>
 	</properties>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>${tomcat.servlet.groupID}</groupId>
+				<artifactId>${tomcat.servlet.artifactID}</artifactId>
+				<version>${tomcat.servlet.version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>${tomcat.jstl-api.groupID}</groupId>
+				<artifactId>${tomcat.jstl-api.artifactID}</artifactId>
+				<version>${tomcat.jstl-api.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${tomcat.jstl.groupID}</groupId>
+				<artifactId>${tomcat.jstl.artifactID}</artifactId>
+				<version>${tomcat.jstl.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 </project>

@@ -1,11 +1,10 @@
 package com.github.tadukoo.middle_earth.controller;
 
-import edu.ycp.cs320.middle_earth.persist.DatabaseProvider;
-import edu.ycp.cs320.middle_earth.persist.DerbyDatabase;
-import edu.ycp.cs320.middle_earth.persist.IDatabase;
+import com.github.tadukoo.middle_earth.persist.DatabaseProvider;
+import com.github.tadukoo.middle_earth.persist.DerbyDatabase;
+import com.github.tadukoo.middle_earth.persist.IDatabase;
 
 import java.util.ArrayList;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Account{

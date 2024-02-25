@@ -10,4 +10,44 @@
 	</parent>
 	<artifactId>AdventuresofMiddleEarth</artifactId>
 	<packaging>war</packaging>
+	<dependencies>
+		<dependency>
+			<groupId>${junit.jupiter.groupID}</groupId>
+			<artifactId>${junit.jupiter.artifactID}</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${junit.platform.groupID}</groupId>
+			<artifactId>${junit.platform.artifactID}</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${tomcat.servlet.groupID}</groupId>
+			<artifactId>${tomcat.servlet.artifactID}</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${tomcat.jstl-api.groupID}</groupId>
+			<artifactId>${tomcat.jstl-api.artifactID}</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${tomcat.jstl.groupID}</groupId>
+			<artifactId>${tomcat.jstl.artifactID}</artifactId>
+		</dependency>
+	</dependencies>
+	<build>
+		<finalName>${project.artifactId}</finalName>
+		<resources>
+			<resource>
+				<directory>${directory.resource}</directory>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>3.4.0</version>
+				<configuration>
+					<warSourceDirectory>war</warSourceDirectory>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>

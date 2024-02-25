@@ -1,16 +1,15 @@
 package com.github.tadukoo.middle_earth.servlet;
 
-import java.io.IOException;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import com.github.tadukoo.middle_earth.controller.Account;
 
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
-public class AccountServlet extends HttpServlet {
+import java.io.IOException;
+
+public class AccountServlet extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 	
 	@Override

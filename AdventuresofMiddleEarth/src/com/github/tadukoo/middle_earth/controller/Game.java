@@ -13,9 +13,9 @@ import com.github.tadukoo.middle_earth.model.Characters.Character;
 import com.github.tadukoo.middle_earth.model.Constructs.Item;
 import com.github.tadukoo.middle_earth.model.Constructs.ItemType;
 import com.github.tadukoo.middle_earth.model.Constructs.Map;
-import edu.ycp.cs320.middle_earth.persist.DatabaseProvider;
-import edu.ycp.cs320.middle_earth.persist.DerbyDatabase;
-import edu.ycp.cs320.middle_earth.persist.IDatabase;
+import com.github.tadukoo.middle_earth.persist.DatabaseProvider;
+import com.github.tadukoo.middle_earth.persist.DerbyDatabase;
+import com.github.tadukoo.middle_earth.persist.IDatabase;
 
 public class Game implements Engine{
 	private Map map;

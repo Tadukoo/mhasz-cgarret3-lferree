@@ -1,17 +1,18 @@
 package com.github.tadukoo.middle_earth.model.Constructs;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class ObjectTest{
 	private Object object;
 	
-	@Before
+	@BeforeEach
 	public void setup(){
 		object = new Object();
 	}
@@ -19,7 +20,7 @@ public class ObjectTest{
 	@Test
 	public void testSetCommandResponses(){
 		// Create a HashMap
-		HashMap<String, String> responses = new HashMap<String, String>();
+		HashMap<String, String> responses = new HashMap<>();
 		responses.put("open", "what'd you say open?");
 		
 		// Set it in object
@@ -29,7 +30,7 @@ public class ObjectTest{
 		assertEquals("what'd you say open?", object.getCommandResponses().get("open"));
 		
 		// Make another HashMap
-		HashMap<String, String> responses2 = new HashMap<String, String>();
+		HashMap<String, String> responses2 = new HashMap<>();
 		responses2.put("climb", "Climb? Are you crazy?");
 		
 		// Reset it in object (to ensure no crazy stuff)
@@ -37,7 +38,7 @@ public class ObjectTest{
 		
 		// Check it gucci
 		assertEquals("Climb? Are you crazy?", object.getCommandResponses().get("climb"));
-		assertEquals(null, object.getCommandResponses().get("open"));
+		assertNull(object.getCommandResponses().get("open"));
 	}
 	
 	@Test
@@ -63,7 +64,7 @@ public class ObjectTest{
 	
 	@Test
 	public void testSetItems(){
-		ArrayList<Item> items = new ArrayList<Item>();
+		ArrayList<Item> items = new ArrayList<>();
 		Item derp = new Item();
 		derp.setName("Derpster");
 		items.add(derp);
@@ -76,7 +77,7 @@ public class ObjectTest{
 	
 	@Test
 	public void testResetItems(){
-		ArrayList<Item> items = new ArrayList<Item>();
+		ArrayList<Item> items = new ArrayList<>();
 		Item derp = new Item();
 		derp.setName("Derpster");
 		items.add(derp);
@@ -86,7 +87,7 @@ public class ObjectTest{
 		assertEquals(1, object.getItems().size());
 		assertEquals(derp, object.getItems().get(0));
 		
-		ArrayList<Item> items2 = new ArrayList<Item>();
+		ArrayList<Item> items2 = new ArrayList<>();
 		Item somethingElse = new Item();
 		somethingElse.setName("This is different from the other");
 		items2.add(somethingElse);

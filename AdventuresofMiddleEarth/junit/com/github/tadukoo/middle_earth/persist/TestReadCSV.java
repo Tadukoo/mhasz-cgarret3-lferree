@@ -1,12 +1,14 @@
 package com.github.tadukoo.middle_earth.persist;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class TestReadCSV{
 	private ReadCSV read;
@@ -15,26 +17,26 @@ public class TestReadCSV{
 		try{
 			read = new ReadCSV("test_read.csv");
 		}catch(IOException e){
-			e.printStackTrace();
+			fail(e);
 		}
 	}
 	
 	public void doClose(){
 		try{
-			read.close();;
+			read.close();
 		}catch(IOException e){
-			e.printStackTrace();
+			fail(e);
 		}
 	}
 	
 	@Test
-	public void testConstructorDoesntFail(){
+	public void testConstructorDoesNotFail(){
 		try{
 			read = new ReadCSV("test_read.csv");
 			
 			read.close();
 		}catch(IOException e){
-			assertEquals(0, 1);
+			fail(e);
 		}
 	}
 	
@@ -43,7 +45,7 @@ public class TestReadCSV{
 		doConstructor();
 		
 		try{
-			ArrayList<String> actual = new ArrayList<String>(read.next());
+			ArrayList<String> actual = new ArrayList<>(read.next());
 			assertEquals(7, actual.size());
 			assertEquals("1", actual.get(0));
 			assertEquals("Test text", actual.get(1));
@@ -53,7 +55,7 @@ public class TestReadCSV{
 			assertEquals("29384", actual.get(5));
 			assertEquals("derp", actual.get(6));
 		}catch(IOException e){
-			e.printStackTrace();
+			fail(e);
 		}
 		
 		doClose();
@@ -67,7 +69,7 @@ public class TestReadCSV{
 			// Skip first line
 			read.next();
 			
-			ArrayList<String> actual = new ArrayList<String>(read.next());
+			ArrayList<String> actual = new ArrayList<>(read.next());
 			
 			assertEquals(12, actual.size());
 			assertEquals("59", actual.get(0));
@@ -83,7 +85,7 @@ public class TestReadCSV{
 			assertEquals("20193", actual.get(10));
 			assertEquals("29384", actual.get(11));
 		}catch(IOException e){
-			e.printStackTrace();
+			fail(e);
 		}
 		
 		doClose();
@@ -100,9 +102,9 @@ public class TestReadCSV{
 			
 			List<String> actual = read.next();
 			
-			assertEquals(null, actual);
+			assertNull(actual);
 		}catch(IOException e){
-			e.printStackTrace();
+			fail(e);
 		}
 	}
 }

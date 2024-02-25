@@ -1,16 +1,15 @@
 package com.github.tadukoo.middle_earth.controller;
 
-import static org.junit.Assert.assertEquals;
-
 import java.util.ArrayList;
-
-import org.junit.Before;
-import org.junit.Test;
 
 import com.github.tadukoo.middle_earth.model.Characters.Character;
 import com.github.tadukoo.middle_earth.model.Characters.Inventory;
 import com.github.tadukoo.middle_earth.model.Characters.Player;
 import com.github.tadukoo.middle_earth.model.Constructs.Item;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class InventoryModeActionsTest{
 	private Game game;
@@ -19,13 +18,13 @@ public class InventoryModeActionsTest{
 	private Item helmet;
 	private Item key;
 	
-	@Before
+	@BeforeEach
 	public void setup(){
 		game = new Game();
 		player = new Player();
 		
 		// Populate Player's inventory
-		ArrayList<Item> playerItems = new ArrayList<Item>();
+		ArrayList<Item> playerItems = new ArrayList<>();
 		sword = new Item();
 		sword.setName("Sword");
 		sword.setLongDescription("A Long sword. Probably stolen from a giant golem or something.");
@@ -49,7 +48,7 @@ public class InventoryModeActionsTest{
 		player.setinventory(inventory);
 		
 		// Setup Character Array
-		ArrayList<Character> chars = new ArrayList<Character>();
+		ArrayList<Character> chars = new ArrayList<>();
 		chars.add(player);
 		
 		// Put Player into Game
@@ -70,7 +69,7 @@ public class InventoryModeActionsTest{
 		
 		// Check that response is correct
 		assertEquals(item.getName() + ": " + item.getLongDescription() + ";Weight: " + item.getItemWeight() + 
-				";Quest item: " + String.valueOf(item.getIsQuestItem()), response);
+				";Quest item: " + item.getIsQuestItem(), response);
 	}
 	
 	@Test
@@ -83,7 +82,7 @@ public class InventoryModeActionsTest{
 		
 		// Check that response is correct
 		assertEquals(item.getName() + ": " + item.getLongDescription() + ";Weight: " + item.getItemWeight() + 
-				";Quest item: " + String.valueOf(item.getIsQuestItem()), response);
+				";Quest item: " + item.getIsQuestItem(), response);
 	}
 	
 	@Test
@@ -96,6 +95,6 @@ public class InventoryModeActionsTest{
 		
 		// Check that response is correct
 		assertEquals(item.getName() + ": " + item.getLongDescription() + ";Weight: " + item.getItemWeight() + 
-				";Quest item: " + String.valueOf(item.getIsQuestItem()), response);
+				";Quest item: " + item.getIsQuestItem(), response);
 	}
 }

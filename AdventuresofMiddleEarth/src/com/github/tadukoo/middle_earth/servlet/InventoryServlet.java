@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class InventoryServlet extends HttpServlet{
     private static final long serialVersionUID = 1L;
@@ -27,7 +28,7 @@ public class InventoryServlet extends HttpServlet{
         String command = (String) req.getSession().getAttribute("command");
         int counter = 1;
         
-        ArrayList<Item> itemlist = game.getplayer().getinventory().getitems();
+        List<Item> itemlist = game.getplayer().getinventory().getitems();
         ArrayList<Item> cleanList = new ArrayList<Item>();
         for (int i = 0; i < itemlist.size(); i++){
         	Item item = itemlist.get(i);
@@ -39,7 +40,7 @@ public class InventoryServlet extends HttpServlet{
         req.setAttribute("numItems", counter);
         
         game.setmode("inventory");
-        ArrayList<Item> inventory_list =  game.getplayer().getinventory().getitems();
+        List<Item> inventory_list =  game.getplayer().getinventory().getitems();
         String inventory_display_list = "";
         for (int j = 0; j < inventory_list.size(); j++){
         	inventory_display_list = inventory_display_list + inventory_list.get(j).getName() + ": " + inventory_list.get(j).getShortDescription()+";";
@@ -69,7 +70,7 @@ public class InventoryServlet extends HttpServlet{
         Game game = (Game) req.getSession().getAttribute("game");
         game.setmode("inventory");
         // Gets the inventory of the player
-        ArrayList<Item> inventory_list =  game.getplayer().getinventory().getitems();
+        List<Item> inventory_list =  game.getplayer().getinventory().getitems();
         
         //Inventory is split into two display sections, the inventory list, then the responses to the commands in inventory
         String inventory_display_list = "";

@@ -1,27 +1,27 @@
 package com.github.tadukoo.middle_earth.model;
 
-import static org.junit.Assert.assertEquals;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.junit.Before;
-import org.junit.Test;
-
 import com.github.tadukoo.middle_earth.model.Characters.NPC;
 import com.github.tadukoo.middle_earth.model.Constructs.Item;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class QuestTest{
 	private Quest quest;
 	
-	@Before
+	@BeforeEach
 	public void setup(){
 		quest = new Quest();
 	}
 	
 	@Test
 	public void testSetRewardItems(){
-		ArrayList<Item> items = new ArrayList<Item>();
+		ArrayList<Item> items = new ArrayList<>();
 		Item stick = new Item();
 		stick.setName("Stick");
 		Item chestplate = new Item();
@@ -38,7 +38,7 @@ public class QuestTest{
 	
 	@Test
 	public void testResetRewardItems(){
-		ArrayList<Item> items = new ArrayList<Item>();
+		ArrayList<Item> items = new ArrayList<>();
 		Item stick = new Item();
 		stick.setName("Stick");
 		Item chestplate = new Item();
@@ -52,7 +52,7 @@ public class QuestTest{
 		assertEquals(stick, quest.getRewardItems().get(0));
 		assertEquals(chestplate, quest.getRewardItems().get(1));
 		
-		ArrayList<Item> items2 = new ArrayList<Item>();
+		ArrayList<Item> items2 = new ArrayList<>();
 		Item sword = new Item();
 		sword.setName("Sword");
 		Item helmet = new Item();
@@ -87,7 +87,7 @@ public class QuestTest{
 	
 	@Test
 	public void testSetDialogue(){
-		HashMap<String, NPC> dialogue = new HashMap<String, NPC>();
+		HashMap<String, NPC> dialogue = new HashMap<>();
 		NPC npc1 = new NPC();
 		npc1.setname("Derpkins");
 		dialogue.put("My name is Derpkins.", npc1);
@@ -99,7 +99,7 @@ public class QuestTest{
 	
 	@Test
 	public void testResetDialogue(){
-		HashMap<String, NPC> dialogue = new HashMap<String, NPC>();
+		HashMap<String, NPC> dialogue = new HashMap<>();
 		NPC npc1 = new NPC();
 		npc1.setname("Derpkins");
 		dialogue.put("My name is Derpkins.", npc1);
@@ -108,7 +108,7 @@ public class QuestTest{
 		
 		assertEquals(npc1, quest.getDialogue().get("My name is Derpkins."));
 		
-		HashMap<String, NPC> dialogue2 = new HashMap<String, NPC>();
+		HashMap<String, NPC> dialogue2 = new HashMap<>();
 		NPC npc2 = new NPC();
 		npc2.setname("Derpy Derp");
 		dialogue2.put("Derp derp derp.", npc2);
@@ -118,7 +118,7 @@ public class QuestTest{
 		
 		quest.setDialogue(dialogue2);
 		
-		assertEquals(null, quest.getDialogue().get("My name is Derpkins."));
+		assertNull(quest.getDialogue().get("My name is Derpkins."));
 		assertEquals(npc2, quest.getDialogue().get("Derp derp derp."));
 		assertEquals(npc3, quest.getDialogue().get("Invalid NPC"));
 	}

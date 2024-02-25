@@ -2,13 +2,14 @@ package com.github.tadukoo.middle_earth.controller;
 
 import java.util.ArrayList;
 
-import org.junit.Before;
-import org.junit.Test;
-
 import com.github.tadukoo.middle_earth.model.Characters.Character;
 import com.github.tadukoo.middle_earth.model.Characters.Player;
 import com.github.tadukoo.middle_earth.model.Constructs.Map;
 import com.github.tadukoo.middle_earth.model.Constructs.MapTile;
+import com.github.tadukoo.middle_earth.persist.DatabaseProvider;
+import com.github.tadukoo.middle_earth.persist.FakeDatabase;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * These tests are solely for the Character-Specific (excluding Player) action methods in Game.
@@ -28,8 +29,9 @@ public class GameCharacterActionsTest{
 	private MapTile westOfStarting;
 	private MapTile northWestOfStarting;
 	
-	@Before
+	@BeforeEach
 	public void setup(){
+		DatabaseProvider.setInstance(new FakeDatabase());
 		game = new Game();
 		// This is here in case Game doesn't set mode to game by default.
 		game.setmode("game");
@@ -96,19 +98,19 @@ public class GameCharacterActionsTest{
 	}
 	
 	public void testValidMove(Game game, MapTile original, MapTile destination, String direction){
-		HandleMovementCommands.checkValidMovePreconditions(game, original);
+		HandleMovementCommandsTest.checkValidMovePreconditions(game, original);
 		
 		game.move(direction);
 		
-		HandleMovementCommands.checkValidMovePostConditions(game, destination);
+		HandleMovementCommandsTest.checkValidMovePostConditions(game, destination);
 	}
 	
 	public void testInvalidMove(Game game, MapTile setup, String direction){
-		HandleMovementCommands.setupInvalidMovePreConditions(game, setup);
+		HandleMovementCommandsTest.setupInvalidMovePreConditions(game, setup);
 		
 		game.move(direction);
 		
-		HandleMovementCommands.checkInvalidMovePostConditions(game, setup);
+		HandleMovementCommandsTest.checkInvalidMovePostConditions(game, setup);
 	}
 	
 	

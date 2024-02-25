@@ -10,7 +10,6 @@ import com.github.tadukoo.middle_earth.model.Characters.Enemy;
 import com.github.tadukoo.middle_earth.model.Constructs.Item;
 import com.github.tadukoo.middle_earth.persist.DatabaseProvider;
 import com.github.tadukoo.middle_earth.persist.IDatabase;
-import com.github.tadukoo.middle_earth.persist.InitDatabase;
 
 public class CombatSituation{
 	private ArrayList<Integer> characterIDs;
@@ -119,12 +118,10 @@ public class CombatSituation{
 	}
 	
 	public Enemy createEnemy(ArrayList<String> races, int playerLocation){
-		// Initialize database and stuff
-		InitDatabase.init();
 		IDatabase db = DatabaseProvider.getInstance();
 		
 		// If races is empty, get all races from the database instead.
-		if(races.size() == 0){
+		if(races.isEmpty()){
 			races = db.getAllEnemyRaces();
 		}
 		
@@ -329,7 +326,6 @@ public class CombatSituation{
 		game.add_dialog("You have been awarded 300 experience!");
 		
 		// Get Database
-		InitDatabase.init();
 		IDatabase db = DatabaseProvider.getInstance();
 		
 		// Determine if boss fight or not (for legendary drop or not)

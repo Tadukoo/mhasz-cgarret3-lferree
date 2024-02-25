@@ -1,10 +1,6 @@
 package com.github.tadukoo.middle_earth.controller;
 
-import static org.junit.Assert.assertEquals;
-
 import java.util.ArrayList;
-
-import org.junit.Test;
 
 import com.github.tadukoo.middle_earth.model.CombatSituation;
 import com.github.tadukoo.middle_earth.model.Quest;
@@ -14,6 +10,9 @@ import com.github.tadukoo.middle_earth.model.Constructs.Item;
 import com.github.tadukoo.middle_earth.model.Constructs.Map;
 import com.github.tadukoo.middle_earth.model.Constructs.MapTile;
 import com.github.tadukoo.middle_earth.model.Constructs.Object;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * These tests are solely meant to test the setters in the Game class. Other methods are tested in other Test classes.
@@ -53,7 +52,7 @@ public class GameSettersTest{
 	@Test
 	public void testsetCharacters(){
 		Game game = new Game();
-		ArrayList<Character> chars = new ArrayList<Character>();
+		ArrayList<Character> chars = new ArrayList<>();
 		Player player = new Player();
 		chars.add(player);
 		
@@ -66,7 +65,7 @@ public class GameSettersTest{
 	@Test
 	public void testResetCharacters(){
 		Game game = new Game();
-		ArrayList<Character> chars = new ArrayList<Character>();
+		ArrayList<Character> chars = new ArrayList<>();
 		Player player = new Player();
 		chars.add(player);
 		
@@ -75,7 +74,7 @@ public class GameSettersTest{
 		assertEquals(1, game.getcharacters().size());
 		assertEquals(player, game.getcharacters().get(0));
 		
-		ArrayList<Character> chars2 = new ArrayList<Character>();
+		ArrayList<Character> chars2 = new ArrayList<>();
 		chars2.add(new Player());
 		chars2.add(new Player());
 		
@@ -88,7 +87,7 @@ public class GameSettersTest{
 	public void testgetPlayer(){
 		Game game = new Game();
 		
-		ArrayList<Character> characters = new ArrayList<Character>();
+		ArrayList<Character> characters = new ArrayList<>();
 		characters.add(new Player());
 		
 		game.setcharacters(characters);
@@ -99,7 +98,7 @@ public class GameSettersTest{
 	@Test
 	public void testgetPlayer_setCharacters(){
 		Game game = new Game();
-		ArrayList<Character> chars = new ArrayList<Character>();
+		ArrayList<Character> chars = new ArrayList<>();
 		Player player = new Player();
 		player.sethit_points(100);
 		player.setname("Derpkins");
@@ -145,7 +144,7 @@ public class GameSettersTest{
 	@Test
 	public void testsetObjects(){
 		Game game = new Game();
-		ArrayList<Object> objs = new ArrayList<Object>();
+		ArrayList<Object> objs = new ArrayList<>();
 		Object bloop = new Object();
 		objs.add(bloop);
 		game.setobjects(objs);
@@ -157,7 +156,7 @@ public class GameSettersTest{
 	@Test
 	public void testResetObjects(){
 		Game game = new Game();
-		ArrayList<Object> objs = new ArrayList<Object>();
+		ArrayList<Object> objs = new ArrayList<>();
 		Object bloop = new Object();
 		objs.add(bloop);
 		game.setobjects(objs);
@@ -165,7 +164,7 @@ public class GameSettersTest{
 		assertEquals(1, game.getobjects().size());
 		assertEquals(bloop, game.getobjects().get(0));
 		
-		ArrayList<Object> objs2 = new ArrayList<Object>();
+		ArrayList<Object> objs2 = new ArrayList<>();
 		Object bloop2 = new Object();
 		Object derpy = new Object();
 		objs2.add(bloop2);
@@ -180,7 +179,7 @@ public class GameSettersTest{
 	@Test
 	public void testsetItems(){
 		Game game = new Game();
-		ArrayList<Item> itms = new ArrayList<Item>();
+		ArrayList<Item> itms = new ArrayList<>();
 		Item plop = new Item();
 		itms.add(plop);
 		game.setitems(itms);
@@ -192,7 +191,7 @@ public class GameSettersTest{
 	@Test
 	public void testResetItems(){
 		Game game = new Game();
-		ArrayList<Item> itms = new ArrayList<Item>();
+		ArrayList<Item> itms = new ArrayList<>();
 		Item plop = new Item();
 		itms.add(plop);
 		game.setitems(itms);
@@ -200,7 +199,7 @@ public class GameSettersTest{
 		assertEquals(1, game.getitems().size());
 		assertEquals(plop, game.getitems().get(0));
 		
-		ArrayList<Item> itms2 = new ArrayList<Item>();
+		ArrayList<Item> itms2 = new ArrayList<>();
 		Item plop2 = new Item();
 		Item derp = new Item();
 		itms2.add(plop2);
@@ -216,7 +215,7 @@ public class GameSettersTest{
 	public void testsetDialog(){
 		Game game = new Game();
 		
-		ArrayList<String> test_dialog = new ArrayList<String>();
+		ArrayList<String> test_dialog = new ArrayList<>();
 		test_dialog.add("This is a ");
 		test_dialog.add("pretty simple ");
 		test_dialog.add(" test.");
@@ -233,7 +232,7 @@ public class GameSettersTest{
 	public void testResetDialog(){
 		Game game = new Game();
 		
-		ArrayList<String> test_dialog = new ArrayList<String>();
+		ArrayList<String> test_dialog = new ArrayList<>();
 		test_dialog.add("This is a ");
 		test_dialog.add("pretty simple ");
 		test_dialog.add(" test.");
@@ -245,7 +244,7 @@ public class GameSettersTest{
 		assertEquals("pretty simple ", game.getdialog().get(1));
 		assertEquals(" test.", game.getdialog().get(2));
 		
-		ArrayList<String> test_dialog2 = new ArrayList<String>();
+		ArrayList<String> test_dialog2 = new ArrayList<>();
 		test_dialog2.add("Another");
 		test_dialog2.add("simple");
 		
@@ -304,7 +303,7 @@ public class GameSettersTest{
 	public void testgetDisplay_Text(){
 		Game game = new Game();
 		
-		ArrayList<String> test_dialog = new ArrayList<String>();
+		ArrayList<String> test_dialog = new ArrayList<>();
 		test_dialog.add("This is a ");
 		test_dialog.add("pretty simple ");
 		test_dialog.add(" test.");
@@ -318,7 +317,7 @@ public class GameSettersTest{
 	public void testsetQuests(){
 		Game game = new Game();
 		
-		ArrayList<Quest> quests = new ArrayList<Quest>();
+		ArrayList<Quest> quests = new ArrayList<>();
 		game.setquests(quests);
 		
 		assertEquals(quests, game.getquests());
@@ -328,12 +327,12 @@ public class GameSettersTest{
 	public void testResetQuests(){
 		Game game = new Game();
 		
-		ArrayList<Quest> quests = new ArrayList<Quest>();
+		ArrayList<Quest> quests = new ArrayList<>();
 		game.setquests(quests);
 		
 		assertEquals(quests, game.getquests());
 		
-		ArrayList<Quest> quests2 = new ArrayList<Quest>();
+		ArrayList<Quest> quests2 = new ArrayList<>();
 		quests2.add(new Quest());
 		game.setquests(quests2);
 		
@@ -343,7 +342,7 @@ public class GameSettersTest{
 	@Test
 	public void testgetMapTile_LongDescription(){
 		Game game = new Game();
-		ArrayList<Character> chars = new ArrayList<Character>();
+		ArrayList<Character> chars = new ArrayList<>();
 		Player player = new Player();
 		player.setlocation(0);
 		chars.add(player);
@@ -362,7 +361,7 @@ public class GameSettersTest{
 	@Test
 	public void testgetMapTile_Name(){
 		Game game = new Game();
-		ArrayList<Character> chars = new ArrayList<Character>();
+		ArrayList<Character> chars = new ArrayList<>();
 		Player player = new Player();
 		player.setlocation(0);
 		chars.add(player);
@@ -382,7 +381,7 @@ public class GameSettersTest{
 	public void testsetBattle(){
 		Game game = new Game();
 		
-		ArrayList<Character> chars = new ArrayList<Character>();
+		ArrayList<Character> chars = new ArrayList<>();
 		chars.add(new Player());
 		game.setcharacters(chars);
 		

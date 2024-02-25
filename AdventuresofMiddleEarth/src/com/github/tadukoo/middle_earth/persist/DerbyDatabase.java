@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -2805,7 +2806,7 @@ public class DerbyDatabase implements IDatabase {
 				PreparedStatement stmt = null;
 				PreparedStatement stmt1 = null;
 				
-				ArrayList<Item> itemList = player.getinventory().getitems();
+				List<Item> itemList = player.getinventory().getitems();
 				ArrayList<Integer> itemIDList = new ArrayList<Integer>();
 				for(Item item : itemList) {
 					itemIDList.add(item.getID());

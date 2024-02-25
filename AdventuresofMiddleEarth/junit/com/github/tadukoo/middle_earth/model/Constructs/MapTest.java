@@ -1,18 +1,19 @@
 package com.github.tadukoo.middle_earth.model.Constructs;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class MapTest{
 	private Map map;
 	
-	@Before
+	@BeforeEach
 	public void setup(){
-		// Create a blank map.... self explanatory
+		// Create a blank map.... self-explanatory
 		map = new Map();
 	}
 	
@@ -44,7 +45,7 @@ public class MapTest{
 		assertEquals(0, map.getMapTiles().size());
 		
 		// Create an ArrayList with one expertly crafted MapTile
-		ArrayList<MapTile> mapTiles = new ArrayList<MapTile>();
+		ArrayList<MapTile> mapTiles = new ArrayList<>();
 		MapTile tile = new MapTile();
 		mapTiles.add(tile);
 		
@@ -62,7 +63,7 @@ public class MapTest{
 		assertEquals(0, map.getMapTiles().size());
 		
 		// Create an ArrayList with one expertly crafted MapTile
-		ArrayList<MapTile> mapTiles = new ArrayList<MapTile>();
+		ArrayList<MapTile> mapTiles = new ArrayList<>();
 		MapTile tile = new MapTile();
 		mapTiles.add(tile);
 		
@@ -74,7 +75,7 @@ public class MapTest{
 		assertEquals(tile, map.getMapTiles().get(0));
 		
 		// Create a new ArrayList with 2 Obviously different MapTiles
-		ArrayList<MapTile> mapTiles2 = new ArrayList<MapTile>();
+		ArrayList<MapTile> mapTiles2 = new ArrayList<>();
 		MapTile tile1 = new MapTile();
 		tile1.setName("Basic");
 		MapTile tile2 = new MapTile();
@@ -100,7 +101,7 @@ public class MapTest{
 		tile2.setID(509);
 		
 		// Add the MapTiles to an ArrayList
-		ArrayList<MapTile> tiles = new ArrayList<MapTile>();
+		ArrayList<MapTile> tiles = new ArrayList<>();
 		tiles.add(tile);
 		tiles.add(tile2);
 		
@@ -113,7 +114,7 @@ public class MapTest{
 	}
 	
 	@Test
-	public void testGetMapTileByIDWhenIDIsntPresent(){
+	public void testGetMapTileByIDWhenIDIsNotPresent(){
 		// Create 2 obviously different MapTiles
 		MapTile tile = new MapTile();
 		tile.setID(52);
@@ -121,7 +122,7 @@ public class MapTest{
 		tile2.setID(509);
 		
 		// Add the MapTiles to an ArrayList
-		ArrayList<MapTile> tiles = new ArrayList<MapTile>();
+		ArrayList<MapTile> tiles = new ArrayList<>();
 		tiles.add(tile);
 		tiles.add(tile2);
 		
@@ -129,6 +130,6 @@ public class MapTest{
 		map.setMapTiles(tiles);
 		
 		// Ensure that no MapTile is returned from an invalid ID (1234)
-		assertEquals(null, map.getMapTileByID(1234));
+		assertNull(map.getMapTileByID(1234));
 	}
 }

@@ -1,23 +1,24 @@
 package com.github.tadukoo.middle_earth.model.Characters;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.github.tadukoo.middle_earth.model.Constructs.Item;
 
 public class Inventory{
-	private ArrayList<Item> items;
+	private List<Item> items;
 	private int weight;
 	private int inventory_id;
 	
 	public Inventory(){
-		items = new ArrayList<Item>();
+		items = new ArrayList<>();
 	};
 	
-	public ArrayList<Item> getitems(){
+	public List<Item> getitems(){
 		return items;
 	}
 	
-	public void setitems(ArrayList<Item> items){
+	public void setitems(List<Item> items){
 		this.items = items;
 	}
 	

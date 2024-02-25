@@ -1,19 +1,18 @@
 package com.github.tadukoo.middle_earth.persist;
 
-import static org.junit.Assert.assertEquals;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Test;
-
 import com.github.tadukoo.middle_earth.model.Constructs.Item;
 import com.github.tadukoo.middle_earth.model.Constructs.ItemType;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class InitialDataTest{
 	
 	private ArrayList<Item> getActualItems() throws Exception{
-		ArrayList<Item> items = new ArrayList<Item>();
+		ArrayList<Item> items = new ArrayList<>();
 		
 		ReadCSV itemsReader = new ReadCSV("items.csv");
 		List<String> tuple = itemsReader.next();

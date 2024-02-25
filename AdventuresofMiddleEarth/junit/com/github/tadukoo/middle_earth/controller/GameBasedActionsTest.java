@@ -1,9 +1,9 @@
 package com.github.tadukoo.middle_earth.controller;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * These tests are solely for testing the Game-Based Actions (not specific to Characters) in Game. 
@@ -12,7 +12,7 @@ import org.junit.Test;
 public class GameBasedActionsTest{
 	private Game game;
 	
-	@Before
+	@BeforeEach
 	public void setup(){
 		game = new Game();
 	}

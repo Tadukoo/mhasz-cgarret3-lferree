@@ -33,10 +33,10 @@ public class IndexServlet extends HttpServlet {
 			throws ServletException, IOException {
 				
 		System.out.println("Index Servlet: doPost");
-		Account account = (Account) req.getSession().getAttribute("account");
 		DatabaseProvider.setInstance(new DerbyDatabase());
+		Account account = (Account) req.getSession().getAttribute("account");
 		IDatabase db = DatabaseProvider.getInstance();
-		ArrayList<Integer> games = new ArrayList<Integer>();
+		ArrayList<Integer> games = new ArrayList<>();
 		String errorMessage = null;
 		if (req.getSession().getAttribute("player") != null) {
 			games = db.getGameIDs((String) req.getSession().getAttribute("player"));

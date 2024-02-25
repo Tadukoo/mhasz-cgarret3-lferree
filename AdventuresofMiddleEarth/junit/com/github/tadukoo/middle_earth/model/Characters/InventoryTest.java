@@ -1,26 +1,25 @@
 package com.github.tadukoo.middle_earth.model.Characters;
 
-import static org.junit.Assert.assertEquals;
-
 import java.util.ArrayList;
 
-import org.junit.Before;
-import org.junit.Test;
-
 import com.github.tadukoo.middle_earth.model.Constructs.Item;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class InventoryTest{
 	private Inventory inventory;
 	
-	@Before
+	@BeforeEach
 	public void setup(){
 		inventory = new Inventory();
 	}
 	
 	@Test
-	public void testsetItems(){
+	public void testSetItems(){
 		// Create an ArrayList of Items that are totally different
-		ArrayList<Item> items = new ArrayList<Item>();
+		ArrayList<Item> items = new ArrayList<>();
 		Item derp = new Item();
 		derp.setShortDescription("Just a Derp");
 		Item otherDerp = new Item();
@@ -37,7 +36,7 @@ public class InventoryTest{
 		assertEquals(otherDerp, inventory.getitems().get(1));
 		
 		// Make another ArrayList of Items
-		ArrayList<Item> items2 = new ArrayList<Item>();
+		ArrayList<Item> items2 = new ArrayList<>();
 		Item flop = new Item();
 		flop.setName("Flop");
 		Item qwop = new Item();

@@ -1,24 +1,23 @@
 package com.github.tadukoo.middle_earth.model.Characters;
 
-import static org.junit.Assert.assertEquals;
-
 import java.util.ArrayList;
 
-import org.junit.Before;
-import org.junit.Test;
-
 import com.github.tadukoo.middle_earth.model.Quest;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class PlayerTest{
 	private Player player;
 	
-	@Before
+	@BeforeEach
 	public void setup(){
 		player = new Player();
 	}
 	
 	@Test
-	public void testsetExperience(){
+	public void testSetExperience(){
 		player.setexperience(6);
 		
 		assertEquals(6, player.getexperience());
@@ -29,7 +28,7 @@ public class PlayerTest{
 	}
 	
 	@Test
-	public void testsetCarry_Weight(){
+	public void testSetCarry_Weight(){
 		player.setcarry_weight(837);
 		
 		assertEquals(837, player.getcarry_weight());
@@ -40,8 +39,8 @@ public class PlayerTest{
 	}
 	
 	@Test
-	public void testsetQuests(){
-		ArrayList<Quest> quests = new ArrayList<Quest>();
+	public void testSetQuests(){
+		ArrayList<Quest> quests = new ArrayList<>();
 		Quest quest = new Quest();
 		quests.add(quest);
 		
@@ -50,7 +49,7 @@ public class PlayerTest{
 		assertEquals(1, player.getquests().size());
 		assertEquals(quest, player.getquests().get(0));
 		
-		ArrayList<Quest> quests2 = new ArrayList<Quest>();
+		ArrayList<Quest> quests2 = new ArrayList<>();
 		Quest quest1 = new Quest();
 		Quest quest2 = new Quest();
 		quests2.add(quest1);

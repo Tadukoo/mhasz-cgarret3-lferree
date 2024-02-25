@@ -2,6 +2,8 @@ package com.github.tadukoo.middle_earth.servlet;
 
 import com.github.tadukoo.middle_earth.controller.Account;
 
+import com.github.tadukoo.middle_earth.persist.DatabaseProvider;
+import com.github.tadukoo.middle_earth.persist.DerbyDatabase;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -33,6 +35,7 @@ public class AccountServlet extends HttpServlet{
 		String form = req.getParameter("submit");
 		
 		if (form.equalsIgnoreCase("Submit")) {
+			DatabaseProvider.setInstance(new DerbyDatabase());
 			Account account = new Account();
 			 
 			

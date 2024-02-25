@@ -1,24 +1,28 @@
 package com.github.tadukoo.middle_earth.controller;
 
-import static org.junit.Assert.assertEquals;
+import com.github.tadukoo.middle_earth.persist.DatabaseProvider;
+import com.github.tadukoo.middle_earth.persist.FakeDatabase;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class AccountTest{
 	private Account account;
 	
-	@Before
+	@BeforeEach
 	public void setup(){
+		DatabaseProvider.setInstance(new FakeDatabase());
 		account = new Account();
 		account.setusername(null);
 		account.setgame_ids(null);
 	}
 	
 	@Test
-	public void testsetUsername(){
+	public void testSetUsername(){
 		// Set that name!
 		account.setusername("Myself lol");
 		
@@ -33,9 +37,9 @@ public class AccountTest{
 	}
 	
 	@Test
-	public void testsetGame_ID(){
+	public void testSetGame_ID(){
 		// Set that ID!
-		ArrayList<Integer> ints = new ArrayList<Integer>();
+		ArrayList<Integer> ints = new ArrayList<>();
 		ints.add(1029);
 		account.setgame_ids(ints);
 		
@@ -44,7 +48,7 @@ public class AccountTest{
 		assertEquals(1029, (int) account.getgame_ids().get(0));
 		
 		// Set it again! (Checking against weird add stuff)
-		ArrayList<Integer> ints2 = new ArrayList<Integer>();
+		ArrayList<Integer> ints2 = new ArrayList<>();
 		ints2.add(2938);
 		ints2.add(5);
 		account.setgame_ids(ints2);
@@ -59,8 +63,7 @@ public class AccountTest{
 	public void testCreate_Account(){
 		// Try to create account and get response
 		String response = account.create_account("New User", "New_Password2", "new_user@example.com");
-		System.out.println(response);
-		// Check that the response is a success
+		assertEquals("Successful", response);
 	}
 	
 	@Test
@@ -102,8 +105,8 @@ public class AccountTest{
 		assertEquals("Invalid Username or Password", response);
 		
 		// Check that user_token and game_id aren't set
-		assertEquals(null, account.getusername());
-		assertEquals(null, account.getgame_ids());
+		assertNull(account.getusername());
+		assertNull(account.getgame_ids());
 	}
 	
 	@Test
@@ -115,7 +118,7 @@ public class AccountTest{
 		assertEquals("Invalid Username or Password", response);
 		
 		// Check that user_token and game_id aren't set
-		assertEquals(null, account.getusername());
-		assertEquals(null, account.getgame_ids());
+		assertNull(account.getusername());
+		assertNull(account.getgame_ids());
 	}
 }

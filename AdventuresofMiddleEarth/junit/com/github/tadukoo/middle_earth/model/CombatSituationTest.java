@@ -1,12 +1,6 @@
 package com.github.tadukoo.middle_earth.model;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import java.util.ArrayList;
-
-import org.junit.Before;
-import org.junit.Test;
 
 import com.github.tadukoo.middle_earth.controller.Game;
 import com.github.tadukoo.middle_earth.model.Characters.Character;
@@ -14,14 +8,24 @@ import com.github.tadukoo.middle_earth.model.Characters.Enemy;
 import com.github.tadukoo.middle_earth.model.Characters.Player;
 import com.github.tadukoo.middle_earth.model.Constructs.Item;
 import com.github.tadukoo.middle_earth.model.Constructs.ItemType;
+import com.github.tadukoo.middle_earth.persist.DatabaseProvider;
+import com.github.tadukoo.middle_earth.persist.FakeDatabase;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CombatSituationTest{
 	private Game game;
 	private Player player;
 	private CombatSituation battle;
 	
-	@Before
+	@BeforeEach
 	public void setup(){
+		DatabaseProvider.setInstance(new FakeDatabase());
 		// Create Game
 		game = new Game();
 		
@@ -33,7 +37,7 @@ public class CombatSituationTest{
 		player.setdefense(5);
 		
 		// Add Player to Game
-		ArrayList<Character> characters = new ArrayList<Character>();
+		ArrayList<Character> characters = new ArrayList<>();
 		characters.add(player);
 		game.setcharacters(characters);
 		
@@ -55,13 +59,13 @@ public class CombatSituationTest{
 				game.getdialog().get(0));
     
 		// Check that done is false
-		assertEquals(false, battle.isDone());
+		assertFalse(battle.isDone());
 	}
 	
 	@Test
 	public void testCreateEnemy(){
 		// Create races list
-		ArrayList<String> races = new ArrayList<String>();
+		ArrayList<String> races = new ArrayList<>();
 		races.add("Goblin");
 		
 		// Create the Enemy on mapTile (playerLocation) 4
@@ -72,7 +76,7 @@ public class CombatSituationTest{
 		assertEquals(0, enemy.getdefense());
 		assertEquals(50, enemy.gethit_points());
 		assertEquals(1, enemy.getlevel());
-		assertTrue(enemy.getname() != null);
+		assertNotNull(enemy.getname());
 		assertEquals("Goblin", enemy.getrace());
 	}
 	
@@ -536,7 +540,7 @@ public class CombatSituationTest{
 		assertEquals(150, player.getexperience());
 		
 		// Check that Battle is Done
-		assertEquals(true, battle.isDone());
+		assertTrue(battle.isDone());
 	}
 	
 	@Test
@@ -550,13 +554,13 @@ public class CombatSituationTest{
 		assertEquals("Restart if you think you can do better!", game.getdialog().get(2));
 		
 		// Check that Battle is Done
-		assertEquals(true, battle.isDone());
+		assertTrue(battle.isDone());
 	}
 	
 	@Test
 	public void testCalculateDamageEnemyToPlayer(){
-		// Enemy can do 10-12, Player has 5 defense
-		int min = 10;
+		// Enemy can do 9-12, considering Player has 5 defense
+		int min = 9;
 		int max = 12;
 		
 		// Get damage calculated

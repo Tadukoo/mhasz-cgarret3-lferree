@@ -1,16 +1,18 @@
 package com.github.tadukoo.middle_earth.model.Constructs;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class MapTileTest{
 	private MapTile tile;
 	
-	@Before
+	@BeforeEach
 	public void setup(){
 		tile = new MapTile();
 	}
@@ -31,14 +33,14 @@ public class MapTileTest{
 		assertEquals(8, tile.getConnections().keySet().size());
 		
 		// Same for these (just a different method for getting them)
-		assertEquals(0, (int) tile.getMoveValue("north"));
-		assertEquals(0, (int) tile.getMoveValue("south"));
-		assertEquals(0, (int) tile.getMoveValue("east"));
-		assertEquals(0, (int) tile.getMoveValue("west"));
-		assertEquals(0, (int) tile.getMoveValue("northwest"));
-		assertEquals(0, (int) tile.getMoveValue("northeast"));
-		assertEquals(0, (int) tile.getMoveValue("southwest"));
-		assertEquals(0, (int) tile.getMoveValue("southeast"));
+		assertEquals(0, tile.getMoveValue("north"));
+		assertEquals(0, tile.getMoveValue("south"));
+		assertEquals(0, tile.getMoveValue("east"));
+		assertEquals(0, tile.getMoveValue("west"));
+		assertEquals(0, tile.getMoveValue("northwest"));
+		assertEquals(0, tile.getMoveValue("northeast"));
+		assertEquals(0, tile.getMoveValue("southwest"));
+		assertEquals(0, tile.getMoveValue("southeast"));
 	}
 	
 	@Test
@@ -57,7 +59,7 @@ public class MapTileTest{
 	@Test
 	public void testSetObjects(){
 		// Create an ArrayList of Objects
-		ArrayList<Object> objs = new ArrayList<Object>();
+		ArrayList<Object> objs = new ArrayList<>();
 		Object derp = new Object();
 		derp.setName("Derpykins");
 		Object pling = new Object();
@@ -74,7 +76,7 @@ public class MapTileTest{
 		assertEquals(pling, tile.getObjects().get(1));
 		
 		// Create another ArrayList
-		ArrayList<Object> objs2 = new ArrayList<Object>();
+		ArrayList<Object> objs2 = new ArrayList<>();
 		Object ploppy = new Object();
 		ploppy.setName("IDK");
 		Object sloppy = new Object();
@@ -98,19 +100,19 @@ public class MapTileTest{
 	@Test
 	public void testSetVisited(){
 		// Check that by default it's not
-		assertEquals(false, tile.getVisited());
+		assertFalse(tile.getVisited());
 		
 		// Set it true
 		tile.setVisited(true);
 		
 		// Check it true
-		assertEquals(true, tile.getVisited());
+		assertTrue(tile.getVisited());
 		
 		// Try setting true again (to ensure not just a flip)
 		tile.setVisited(true);
 		
 		// Check it true (again)
-		assertEquals(true, tile.getVisited());
+		assertTrue(tile.getVisited());
 	}
 	
 	@Test

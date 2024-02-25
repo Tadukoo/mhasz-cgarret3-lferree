@@ -1,16 +1,15 @@
 package com.github.tadukoo.middle_earth.model.Characters;
 
-import static org.junit.Assert.assertEquals;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import com.github.tadukoo.middle_earth.model.Constructs.Item;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class VendorTest{
 	private Vendor vendor;
 	
-	@Before
+	@BeforeEach
 	public void setup(){
 		vendor = new Vendor();
 	}

@@ -1,9 +1,10 @@
 package com.github.tadukoo.middle_earth.model.Constructs;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * These tests are meant to test solely Construct.
@@ -11,7 +12,7 @@ import org.junit.Test;
 public class ConstructTest{
 	private Construct construct;
 	
-	@Before
+	@BeforeEach
 	public void setup(){
 		construct = new Construct();
 	}
@@ -27,16 +28,16 @@ public class ConstructTest{
 	
 	@Test
 	public void testSetName(){
-		assertEquals(null, construct.getName());
+		assertNull(construct.getName());
 		
-		construct.setName("Millenium Falcon Cockpit");
+		construct.setName("Millennium Falcon Cockpit");
 		
-		assertEquals("Millenium Falcon Cockpit", construct.getName());
+		assertEquals("Millennium Falcon Cockpit", construct.getName());
 	}
 	
 	@Test
 	public void testSetShortDescription(){
-		assertEquals(null, construct.getShortDescription());
+		assertNull(construct.getShortDescription());
 		
 		construct.setShortDescription("What do you think it is?");
 		
@@ -45,10 +46,10 @@ public class ConstructTest{
 	
 	@Test
 	public void testSetLongDescription(){
-		assertEquals(null, construct.getLongDescription());
+		assertNull(construct.getLongDescription());
 		
-		construct.setLongDescription("Here you are: The cockpit of Han Solo's Millenium Falcon.");
+		construct.setLongDescription("Here you are: The cockpit of Han Solo's Millennium Falcon.");
 		
-		assertEquals("Here you are: The cockpit of Han Solo's Millenium Falcon.", construct.getLongDescription());
+		assertEquals("Here you are: The cockpit of Han Solo's Millennium Falcon.", construct.getLongDescription());
 	}
 }

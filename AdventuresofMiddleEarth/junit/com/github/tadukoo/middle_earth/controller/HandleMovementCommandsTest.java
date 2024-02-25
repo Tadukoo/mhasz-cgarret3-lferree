@@ -1,21 +1,20 @@
 package com.github.tadukoo.middle_earth.controller;
 
-import static org.junit.Assert.assertEquals;
-
 import java.util.ArrayList;
-
-import org.junit.Before;
-import org.junit.Test;
 
 import com.github.tadukoo.middle_earth.model.Characters.Character;
 import com.github.tadukoo.middle_earth.model.Characters.Player;
 import com.github.tadukoo.middle_earth.model.Constructs.Map;
 import com.github.tadukoo.middle_earth.model.Constructs.MapTile;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * The movement commands are in here separate due to how many there are. It's insane.
  */
-public class HandleMovementCommands{
+public class HandleMovementCommandsTest{
 	private Game game;
 	private Player player;
 	private Map map;
@@ -31,13 +30,13 @@ public class HandleMovementCommands{
 	private static String invalidDirection = "You can't go that way";
 	private static String invalidMode = "Sorry, I didn't understand that.";
 	
-	@Before
+	@BeforeEach
 	public void setup(){
 		game = new Game();
 		// This is here just in case the Game doesn't initialize the current mode to this.
 		game.setmode("game");
 		player = new Player();
-		ArrayList<Character> characters = new ArrayList<Character>();
+		ArrayList<Character> characters = new ArrayList<>();
 		characters.add(player);
 		game.setcharacters(characters);
 		
@@ -102,7 +101,7 @@ public class HandleMovementCommands{
 		
 		// Add tiles to Map
 		map = new Map();
-		ArrayList<MapTile> tiles = new ArrayList<MapTile>();
+		ArrayList<MapTile> tiles = new ArrayList<>();
 		tiles.add(starting);
 		tiles.add(northOfStarting);
 		tiles.add(northEastOfStarting);

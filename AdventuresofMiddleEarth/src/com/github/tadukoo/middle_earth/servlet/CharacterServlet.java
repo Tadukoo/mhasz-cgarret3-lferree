@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class CharacterServlet extends HttpServlet{
     private static final long serialVersionUID = 1L;
@@ -32,14 +33,14 @@ public class CharacterServlet extends HttpServlet{
         Player player = (Player) game.getplayer();
         
         if (command != null && command.equalsIgnoreCase("cheatcodes!")) {
-        	ArrayList<Item> allItems = game.cheatcode();
+        	List<Item> allItems = game.cheatcode();
         	player.getinventory().setitems(allItems);
         }
         
         req.setAttribute("sp", player.getskill_points());
         
-        ArrayList<Item> itemlist = game.getplayer().getinventory().getitems();
-        ArrayList<Item> cleanList = new ArrayList<Item>();
+        List<Item> itemlist = game.getplayer().getinventory().getitems();
+        ArrayList<Item> cleanList = new ArrayList<>();
         for (int i = 0; i < itemlist.size(); i++){
         	Item item = itemlist.get(i);
         	cleanList.add(new Item(item.getItemWeight(), item.getattack_bonus(), item.getdefense_bonus(), item.gethp_bonus(), item.getlvl_requirement(), item.getItemType(), item.getName(), item.getID(), item.getShortDescription(), item.getLongDescription(), itemlist.get(i).getName().replaceAll(" ", "_") ));
@@ -98,7 +99,7 @@ public class CharacterServlet extends HttpServlet{
         
         req.setAttribute("sp", player.getskill_points());
         
-        ArrayList<Item> itemlist = game.getplayer().getinventory().getitems();
+        List<Item> itemlist = game.getplayer().getinventory().getitems();
         ArrayList<Item> cleanList = new ArrayList<Item>();
         for (int i = 0; i < itemlist.size(); i++){
         	Item item = itemlist.get(i);

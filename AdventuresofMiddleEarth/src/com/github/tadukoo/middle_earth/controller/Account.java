@@ -1,7 +1,6 @@
 package com.github.tadukoo.middle_earth.controller;
 
 import com.github.tadukoo.middle_earth.persist.DatabaseProvider;
-import com.github.tadukoo.middle_earth.persist.DerbyDatabase;
 import com.github.tadukoo.middle_earth.persist.IDatabase;
 
 import java.util.ArrayList;
@@ -96,7 +95,6 @@ public class Account{
 	}
 	
 	public String create_account(String username, String password, String email){
-		DatabaseProvider.setInstance(new DerbyDatabase());
 		IDatabase db = DatabaseProvider.getInstance();
 		
 		String error = "";
@@ -123,7 +121,6 @@ public class Account{
 	}
 	
 	public String login(String username, String password){
-		DatabaseProvider.setInstance(new DerbyDatabase());
 		IDatabase db = DatabaseProvider.getInstance();
 		
 		if (password.equals(db.getUserPasswordByUserName(username))) {

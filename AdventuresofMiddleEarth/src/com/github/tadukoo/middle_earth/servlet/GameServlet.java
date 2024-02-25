@@ -6,6 +6,7 @@ import com.github.tadukoo.middle_earth.model.Constructs.Item;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -139,7 +140,7 @@ public class GameServlet extends HttpServlet{
         
         if (game.getmode() == "inventory") {
         	
-        	ArrayList<Item> inventory_list =  game.getplayer().getinventory().getitems();
+        	List<Item> inventory_list =  game.getplayer().getinventory().getitems();
             
             String inventory_display_list = "";
         	for (int j = 0; j < inventory_list.size(); j++){

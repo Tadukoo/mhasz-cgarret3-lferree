@@ -12,13 +12,10 @@
 	<packaging>war</packaging>
 	<dependencies>
 		<dependency>
-			<groupId>${junit.jupiter.groupID}</groupId>
-			<artifactId>${junit.jupiter.artifactID}</artifactId>
+			<groupId>${tadukoo.util.groupID}</groupId>
+			<artifactId>${tadukoo.util.lang.artifactID}</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>${junit.platform.groupID}</groupId>
-			<artifactId>${junit.platform.artifactID}</artifactId>
-		</dependency>
+		<!-- Tomcat Related Dependencies -->
 		<dependency>
 			<groupId>${tomcat.servlet.groupID}</groupId>
 			<artifactId>${tomcat.servlet.artifactID}</artifactId>
@@ -30,6 +27,15 @@
 		<dependency>
 			<groupId>${tomcat.jstl.groupID}</groupId>
 			<artifactId>${tomcat.jstl.artifactID}</artifactId>
+		</dependency>
+		<!-- JUnit Dependencies -->
+		<dependency>
+			<groupId>${junit.jupiter.groupID}</groupId>
+			<artifactId>${junit.jupiter.artifactID}</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${junit.platform.groupID}</groupId>
+			<artifactId>${junit.platform.artifactID}</artifactId>
 		</dependency>
 	</dependencies>
 	<build>

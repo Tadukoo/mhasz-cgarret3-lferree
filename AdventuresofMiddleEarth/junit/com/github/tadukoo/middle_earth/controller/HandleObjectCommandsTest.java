@@ -1,23 +1,22 @@
 package com.github.tadukoo.middle_earth.controller;
 
-import static org.junit.Assert.assertEquals;
-
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import org.junit.Before;
-import org.junit.Test;
 
 import com.github.tadukoo.middle_earth.model.Characters.Character;
 import com.github.tadukoo.middle_earth.model.Characters.Player;
 import com.github.tadukoo.middle_earth.model.Constructs.Map;
 import com.github.tadukoo.middle_earth.model.Constructs.MapTile;
 import com.github.tadukoo.middle_earth.model.Constructs.Object;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class HandleObjectCommandsTest{
 	private Game game;
 	
-	@Before
+	@BeforeEach
 	public void setup(){
 		// Create the Game
 		game = new Game();
@@ -27,7 +26,7 @@ public class HandleObjectCommandsTest{
 		player.setlocation(0);
 		
 		// Create Characters Array and Put in Player
-		ArrayList<Character> chars = new ArrayList<Character>();
+		ArrayList<Character> chars = new ArrayList<>();
 		chars.add(player);
 		
 		// Set Characters Array in Game
@@ -39,7 +38,7 @@ public class HandleObjectCommandsTest{
 		tile.setID(0);
 		
 		// Create a MapTiles array and add the Tile to it
-		ArrayList<MapTile> tiles = new ArrayList<MapTile>();
+		ArrayList<MapTile> tiles = new ArrayList<>();
 		tiles.add(tile);
 		
 		// Create the Map and set the MapTiles Array to it
@@ -52,12 +51,12 @@ public class HandleObjectCommandsTest{
 		// Create a tree
 		Object IDontKnowAnymore = new Object();
 		IDontKnowAnymore.setName("Tree");
-		HashMap<String, String> commandResponses = new HashMap<String, String>();
+		HashMap<String, String> commandResponses = new HashMap<>();
 		commandResponses.put("climb", "Hello now");
 		IDontKnowAnymore.setCommandResponses(commandResponses);
 		
 		// Create an Objects Array with the Tree included
-		ArrayList<Object> objs = new ArrayList<Object>();
+		ArrayList<Object> objs = new ArrayList<>();
 		objs.add(IDontKnowAnymore);
 		
 		// Set the Objects Array to the MapTile

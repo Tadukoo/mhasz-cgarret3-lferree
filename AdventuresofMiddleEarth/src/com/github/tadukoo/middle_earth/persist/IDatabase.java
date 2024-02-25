@@ -1,6 +1,7 @@
 package com.github.tadukoo.middle_earth.persist;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.github.tadukoo.middle_earth.model.Characters.Inventory;
 import com.github.tadukoo.middle_earth.model.Characters.Player;
@@ -17,11 +18,11 @@ public interface IDatabase {
 	public Map getMap();
 	public Player getPlayer();
 	
-	public ArrayList<Item> getAllItems();
-	public ArrayList<Object> getAllObjects();
-	public ArrayList<MapTile> getAllMapTiles();
-	public ArrayList<Character> getAllCharacters();
-	public ArrayList<Quest> getAllQuests();
+	public List<Item> getAllItems();
+	public List<Object> getAllObjects();
+	public List<MapTile> getAllMapTiles();
+	public List<Character> getAllCharacters();
+	public List<Quest> getAllQuests();
 	
 	public Item getItemByID(int itemID);
 	public Object getObjectByID(int objectID);

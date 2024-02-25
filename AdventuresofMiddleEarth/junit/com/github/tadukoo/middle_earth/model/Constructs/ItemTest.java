@@ -1,14 +1,16 @@
 package com.github.tadukoo.middle_earth.model.Constructs;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ItemTest{
 	private Item item;
 	
-	@Before
+	@BeforeEach
 	public void setup(){
 		item = new Item();
 	}
@@ -33,19 +35,19 @@ public class ItemTest{
 	public void testSetIsQuestItem(){
 		item.setIsQuestItem(true);
 		
-		assertEquals(true, item.getIsQuestItem());
+		assertTrue(item.getIsQuestItem());
 		
 		item.setIsQuestItem(true);
 		
-		assertEquals(true, item.getIsQuestItem());
+		assertTrue(item.getIsQuestItem());
 		
 		item.setIsQuestItem(false);
 		
-		assertEquals(false, item.getIsQuestItem());
+		assertFalse(item.getIsQuestItem());
 		
 		item.setIsQuestItem(false);
 		
-		assertEquals(false, item.getIsQuestItem());
+		assertFalse(item.getIsQuestItem());
 	}
 	
 	@Test

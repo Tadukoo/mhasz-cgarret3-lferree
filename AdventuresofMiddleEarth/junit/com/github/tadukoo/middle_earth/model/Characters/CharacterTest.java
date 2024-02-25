@@ -1,20 +1,20 @@
 package com.github.tadukoo.middle_earth.model.Characters;
 
-import static org.junit.Assert.assertEquals;
-
 import java.util.ArrayList;
-
-import org.junit.Before;
-import org.junit.Test;
 
 import com.github.tadukoo.middle_earth.model.Constructs.Item;
 import com.github.tadukoo.middle_earth.model.Constructs.ItemType;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class CharacterTest{
 	private Character character;
-	private class Derp extends Character{};
+	private static class Derp extends Character{}
 	
-	@Before
+	@BeforeEach
 	public void setup(){
 		character = new Derp();
 	}
@@ -205,7 +205,7 @@ public class CharacterTest{
 		Inventory inventory = new Inventory();
 		Item derp = new Item();
 		derp.setName("Derpy Derp");
-		ArrayList<Item> items = new ArrayList<Item>();
+		ArrayList<Item> items = new ArrayList<>();
 		items.add(derp);
 		inventory.setitems(items);
 		
@@ -219,7 +219,7 @@ public class CharacterTest{
 		Inventory inventory2 = new Inventory();
 		Item derp2 = new Item();
 		derp2.setName("Not the Same Derp");
-		ArrayList<Item> items2 = new ArrayList<Item>();
+		ArrayList<Item> items2 = new ArrayList<>();
 		items2.add(derp2);
 		inventory.setitems(items2);
 		
@@ -264,9 +264,9 @@ public class CharacterTest{
 		// Ensure an IllegalArgumentException
 		try{
 			character.sethelm(notHelmet);
-			assertEquals("You are ", "not gucci");
+			fail();
 		}catch(IllegalArgumentException e){
-			assertEquals("You gucci", "You gucci");
+			// Expected
 		}
 	}
 	
@@ -304,9 +304,9 @@ public class CharacterTest{
 		// Ensure an IllegalArgumentException
 		try{
 			character.setbraces(notBraces);
-			assertEquals("You are ", "not gucci");
+			fail();
 		}catch(IllegalArgumentException e){
-			assertEquals("You gucci", "You gucci");
+			// Expected
 		}
 	}
 	
@@ -344,9 +344,9 @@ public class CharacterTest{
 		// Ensure an IllegalArgumentException
 		try{
 			character.setchest(notChest);
-			assertEquals("You are ", "not gucci");
+			fail();
 		}catch(IllegalArgumentException e){
-			assertEquals("You gucci", "You gucci");
+			// Expected
 		}
 	}
 	
@@ -384,9 +384,9 @@ public class CharacterTest{
 		// Ensure an IllegalArgumentException
 		try{
 			character.setlegs(notLegs);
-			assertEquals("You are ", "not gucci");
+			fail();
 		}catch(IllegalArgumentException e){
-			assertEquals("You gucci", "You gucci");
+			// Expected
 		}
 	}
 	
@@ -424,9 +424,9 @@ public class CharacterTest{
 		// Ensure an IllegalArgumentException
 		try{
 			character.setboots(notBoots);
-			assertEquals("You are ", "not gucci");
+			fail();
 		}catch(IllegalArgumentException e){
-			assertEquals("You gucci", "You gucci");
+			// Expected
 		}
 	}
 	
@@ -464,9 +464,9 @@ public class CharacterTest{
 		// Ensure an IllegalArgumentException
 		try{
 			character.setl_hand(notHand);
-			assertEquals("You are ", "not gucci");
+			fail();
 		}catch(IllegalArgumentException e){
-			assertEquals("You gucci", "You gucci");
+			// Expected
 		}
 	}
 	
@@ -504,9 +504,9 @@ public class CharacterTest{
 		// Ensure an IllegalArgumentException
 		try{
 			character.setr_hand(notHand);
-			assertEquals("You are ", "not gucci");
+			fail();
 		}catch(IllegalArgumentException e){
-			assertEquals("You gucci", "You gucci");
+			// Expected
 		}
 	}
 }

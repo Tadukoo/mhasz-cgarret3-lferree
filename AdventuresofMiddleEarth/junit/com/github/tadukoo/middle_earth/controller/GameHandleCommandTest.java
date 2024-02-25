@@ -1,12 +1,7 @@
 package com.github.tadukoo.middle_earth.controller;
 
-import static org.junit.Assert.assertEquals;
-
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import org.junit.Before;
-import org.junit.Test;
 
 import com.github.tadukoo.middle_earth.model.CombatSituation;
 import com.github.tadukoo.middle_earth.model.Characters.Character;
@@ -16,6 +11,11 @@ import com.github.tadukoo.middle_earth.model.Constructs.Item;
 import com.github.tadukoo.middle_earth.model.Constructs.Map;
 import com.github.tadukoo.middle_earth.model.Constructs.MapTile;
 import com.github.tadukoo.middle_earth.model.Constructs.Object;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * These Tests are meant to solely test handle_command(String command). The methods called by handle_command are 
@@ -37,7 +37,7 @@ public class GameHandleCommandTest{
 	private MapTile northEastOfStarting;
 	private String noComprend;
 	
-	@Before
+	@BeforeEach
 	public void setup(){
 		game = new Game();
 		player = new Player();
@@ -47,7 +47,7 @@ public class GameHandleCommandTest{
 		game.setmode("game");
 		
 		// Populate Player's inventory
-		ArrayList<Item> playerItems = new ArrayList<Item>();
+		ArrayList<Item> playerItems = new ArrayList<>();
 		sword = new Item();
 		sword.setName("Sword");
 		sword.setLongDescription("A Long sword. Probably stolen from a giant golem or something.");
@@ -71,7 +71,7 @@ public class GameHandleCommandTest{
 		player.setinventory(inventory);
 		
 		// Add Player to Game
-		ArrayList<Character> characters = new ArrayList<Character>();
+		ArrayList<Character> characters = new ArrayList<>();
 		characters.add(player);
 		game.setcharacters(characters);
 		
@@ -98,17 +98,17 @@ public class GameHandleCommandTest{
 		
 		ladder = new Object();
 		ladder.setName("Ladder");
-		HashMap<String, String> responses2 = new HashMap<String, String>();
+		HashMap<String, String> responses2 = new HashMap<>();
 		responses2.put("climb", "It's not so high up here...");
 		ladder.setCommandResponses(responses2);
-		ArrayList<Object> objs2 = new ArrayList<Object>();
+		ArrayList<Object> objs2 = new ArrayList<>();
 		objs2.add(ladder);
 		northOfStarting.setObjects(objs2);
 		
 		wood = new Item();
 		wood.setName("wood");
 		
-		ArrayList<Item> items = new ArrayList<Item>();
+		ArrayList<Item> items = new ArrayList<>();
 		items.add(wood);
 		
 		// Object burple holds wood
@@ -117,10 +117,10 @@ public class GameHandleCommandTest{
 		
 		tree = new Object();
 		tree.setName("Tree");
-		HashMap<String, String> responses = new HashMap<String, String>();
+		HashMap<String, String> responses = new HashMap<>();
 		responses.put("climb", "It's high up here!");
 		tree.setCommandResponses(responses);
-		ArrayList<Object> objs = new ArrayList<Object>();
+		ArrayList<Object> objs = new ArrayList<>();
 		objs.add(tree);
 		objs.add(burple);
 		starting.setObjects(objs);
@@ -149,7 +149,7 @@ public class GameHandleCommandTest{
 		
 		assertEquals(1, game.getdialog().size());
 		assertEquals(noComprend, game.getdialog().get(0));
-		assertEquals(null, response);
+		assertNull(response);
 	}
 	
 	@Test
@@ -167,7 +167,7 @@ public class GameHandleCommandTest{
 		
 		assertEquals(1, game.getdialog().size());
 		assertEquals(noComprend, game.getdialog().get(0));
-		assertEquals(null, response);
+		assertNull(response);
 	}
 	
 	@Test
@@ -257,7 +257,7 @@ public class GameHandleCommandTest{
 		
 		// Check that response is correct
 		assertEquals(item.getName() + ": " + item.getLongDescription() + ";Weight: " + item.getItemWeight() + 
-				";Quest item: " + String.valueOf(item.getIsQuestItem()), response);
+				";Quest item: " + item.getIsQuestItem(), response);
 	}
 	
 	@Test
@@ -273,7 +273,7 @@ public class GameHandleCommandTest{
 		
 		// Check that response is correct
 		assertEquals(item.getName() + ": " + item.getLongDescription() + ";Weight: " + item.getItemWeight() + 
-				";Quest item: " + String.valueOf(item.getIsQuestItem()), response);
+				";Quest item: " + item.getIsQuestItem(), response);
 	}
 	
 	@Test
@@ -289,7 +289,7 @@ public class GameHandleCommandTest{
 		
 		// Check that response is correct
 		assertEquals(item.getName() + ": " + item.getLongDescription() + ";Weight: " + item.getItemWeight() + 
-				";Quest item: " + String.valueOf(item.getIsQuestItem()), response);
+				";Quest item: " + item.getIsQuestItem(), response);
 	}
 	
 	/* 
@@ -376,9 +376,9 @@ public class GameHandleCommandTest{
 	public void testTakeCommandItemNotOnTile(){
 		// Set location of wood to a different tile than starting.
 		starting.setObjects(null);
-		ArrayList<Object> objs = new ArrayList<Object>();
+		ArrayList<Object> objs = new ArrayList<>();
 		Object derp = new Object();
-		ArrayList<Item> items = new ArrayList<Item>();
+		ArrayList<Item> items = new ArrayList<>();
 		items.add(wood);
 		derp.setItems(items);
 		objs.add(derp);
@@ -499,7 +499,7 @@ public class GameHandleCommandTest{
 	public void testAttackNoTarget(){
 		// Set up pre-conditions
 		game.setBattle(new CombatSituation(game, 1, 0));
-		game.setdialog(new ArrayList<String>());
+		game.setdialog(new ArrayList<>());
 		
 		// Run command
 		game.handle_command("attack");
@@ -513,7 +513,7 @@ public class GameHandleCommandTest{
 	public void testNonAttackCommandInCombat(){
 		// Set up pre-conditions
 		game.setBattle(new CombatSituation(game, 1, 0));
-		game.setdialog(new ArrayList<String>());
+		game.setdialog(new ArrayList<>());
 		
 		// Run command
 		game.handle_command("boogledee boo");

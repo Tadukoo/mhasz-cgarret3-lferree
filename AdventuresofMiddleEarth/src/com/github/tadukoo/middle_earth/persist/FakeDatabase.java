@@ -1,5 +1,6 @@
 package com.github.tadukoo.middle_earth.persist;
 
+import com.github.tadukoo.middle_earth.model.Constructs.ItemType;
 import com.github.tadukoo.middle_earth.model.Constructs.Map;
 import com.github.tadukoo.middle_earth.model.Constructs.MapTile;
 import com.github.tadukoo.middle_earth.model.Constructs.Item;
@@ -7,6 +8,9 @@ import com.github.tadukoo.middle_earth.model.Constructs.Object;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Random;
 
 import com.github.tadukoo.middle_earth.controller.Game;
 import com.github.tadukoo.middle_earth.model.Quest;
@@ -14,54 +18,54 @@ import com.github.tadukoo.middle_earth.model.Characters.Character;
 import com.github.tadukoo.middle_earth.model.Characters.Enemy;
 import com.github.tadukoo.middle_earth.model.Characters.Inventory;
 import com.github.tadukoo.middle_earth.model.Characters.Player;
+import persist.dbmod.StringPair;
+import persist.dbmod.User;
 
 
-public class FakeDatabase implements IDatabase {
+public class FakeDatabase implements IDatabase{
 	
-	private Map map;
-	private ArrayList<MapTile> mapTileList;
-	private ArrayList<Object> objectList;
-	private ArrayList<Item> itemList;
-	private ArrayList<Quest> questList;	
-	private ArrayList<Character> characterList;
-	private ArrayList<Inventory> inventoryList;
-	private ArrayList<Player> playerList;	
+	private final Random random;
+	private final Map map;
+	private final List<MapTile> mapTileList;
+	private final List<Object> objectList;
+	private final List<Item> itemList;
+	private final List<Quest> questList;
+	private final List<Character> characterList;
+	private final List<Inventory> inventoryList;
+	private final List<Player> playerList;
+	private final List<User> users;
+	private final List<Enemy> enemies;
+	private final List<StringPair> nameGenders;
 	
-	public FakeDatabase() {
-		map = new Map();
-		mapTileList = new ArrayList<MapTile>();
-		objectList = new ArrayList<Object>();
-		itemList = new ArrayList<Item>();
-		questList = new ArrayList<Quest>();
-		characterList = new ArrayList<Character>();
-		inventoryList = new ArrayList<Inventory>();
-		playerList = new ArrayList<Player>();	
-		
-		readInitialData();
-	}
-	
-	public void readInitialData() {
-		try {
-			itemList.addAll(InitialData.getItems());
-//			inventoryList.addAll(InitialData.getItemsToInventories());
-			objectList.addAll(InitialData.getObjects());
-			mapTileList.addAll(InitialData.getMapTiles());
-			//map = InitialData.getMap();
-			questList.addAll(InitialData.getQuests());
+	public FakeDatabase(){
+		try{
+			random = new Random(System.currentTimeMillis());
+			//map = InitialData.getMap(); TODO: Fix?
+			map = new Map();
+			mapTileList = InitialData.getMapTiles();
+			objectList = InitialData.getObjects();
+			itemList = InitialData.getItems();
+			questList = InitialData.getQuests();
+			characterList = new ArrayList<>(); // TODO: Load in InitialData?
+			//inventoryList.addAll(InitialData.getItemsToInventories()); TODO: Fix?
+			inventoryList = new ArrayList<>();
 			playerList = InitialData.getPlayers();
-		} catch (IOException e) {
+			users = InitialData.getUsers();
+			enemies = InitialData.getEnemies();
+			nameGenders = InitialData.getNameGenderList();
+		}catch(IOException e){
 			throw new IllegalStateException("Couldn't read initial data", e);
 		}
 	}
 	
 	
 	@Override
-	public ArrayList<Item> getAllItems() {
+	public List<Item> getAllItems() {
 		return itemList;
 	}
 	
 	@Override
-	public ArrayList<Object> getAllObjects() {
+	public List<Object> getAllObjects() {
 		
 		for(Object object : objectList) {
 			if(object.getItems() != null) {
@@ -84,7 +88,7 @@ public class FakeDatabase implements IDatabase {
 	}
 	
 	@Override
-	public ArrayList<MapTile> getAllMapTiles() {
+	public List<MapTile> getAllMapTiles() {
 		
 		for (MapTile mapTile :mapTileList) {
 			if (mapTile.getObjects() != null) {
@@ -117,7 +121,7 @@ public class FakeDatabase implements IDatabase {
 	}
 	
 	@Override
-	public ArrayList<Character> getAllCharacters() {
+	public List<Character> getAllCharacters() {
 		return characterList;
 	}
 	
@@ -152,7 +156,7 @@ public class FakeDatabase implements IDatabase {
 	}
 */	
 	@Override
-	public ArrayList<Quest> getAllQuests() {
+	public List<Quest> getAllQuests() {
 		for(Quest quest : questList) {
 			if(quest.getRewardItems() != null) {
 				for(Item item : quest.getRewardItems()) {
@@ -257,9 +261,11 @@ public class FakeDatabase implements IDatabase {
 	}
 	
 	@Override
-	public String getUserPasswordByUserName(String username) {
-		// TODO Auto-generated method stub
-		return null;
+	public String getUserPasswordByUserName(String username){
+		return users.stream()
+				.filter(user -> user.getUserName().equals(username))
+				.map(User::getPassword)
+				.findFirst().orElse(null);
 	}
 
 	@Override
@@ -269,9 +275,15 @@ public class FakeDatabase implements IDatabase {
 	}
 
 	@Override
-	public Enemy getEnemyByRace(String race) {
-		// TODO Auto-generated method stub
-		return null;
+	public Enemy getEnemyByRace(String race){
+		Enemy foundEnemy = enemies.stream()
+				.filter(enemy -> enemy.getrace().equals(race))
+				.findFirst().orElse(null);
+		if(foundEnemy == null){
+			return null;
+		}
+		foundEnemy.setname(nameGenders.get(random.nextInt(nameGenders.size())).getString1());
+		return foundEnemy;
 	}
 
 	@Override
@@ -281,9 +293,11 @@ public class FakeDatabase implements IDatabase {
 	}
 
 	@Override
-	public ArrayList<String> getAllEnemyRaces() {
-		// TODO Auto-generated method stub
-		return null;
+	public ArrayList<String> getAllEnemyRaces(){
+		return new ArrayList<>(enemies.stream()
+				.map(Enemy::getrace)
+				.distinct()
+				.toList());
 	}
 
 	@Override
@@ -293,9 +307,15 @@ public class FakeDatabase implements IDatabase {
 	}
 
 	@Override
-	public Item getHandHeldItem() {
-		// TODO Auto-generated method stub
-		return null;
+	public Item getHandHeldItem(){
+		List<Item> handHeldItems = itemList.stream()
+				.filter(item -> {
+					ItemType type = item.getItemType();
+					return (type == ItemType.L_HAND || type == ItemType.R_HAND) &&
+							!item.getLongDescription().startsWith("LEGENDARY");
+				})
+				.toList();
+		return handHeldItems.get(random.nextInt(handHeldItems.size()));
 	}
 
 	@Override
@@ -305,9 +325,16 @@ public class FakeDatabase implements IDatabase {
 	}
 
 	@Override
-	public Item getArmorItem() {
-		// TODO Auto-generated method stub
-		return null;
+	public Item getArmorItem(){
+		List<Item> armorItems = itemList.stream()
+				.filter(item -> {
+					ItemType type = item.getItemType();
+					return (type == ItemType.CHEST || type == ItemType.BRACES ||
+							type == ItemType.LEGS || type == ItemType.BOOTS) &&
+							!item.getLongDescription().startsWith("LEGENDARY");
+				})
+				.toList();
+		return armorItems.get(random.nextInt(armorItems.size()));
 	}
 
 	@Override
@@ -323,15 +350,21 @@ public class FakeDatabase implements IDatabase {
 	}
 
 	@Override
-	public Boolean doesUserNameExist(String username) {
-		// TODO Auto-generated method stub
-		return null;
+	public Boolean doesUserNameExist(String username){
+		Optional<User> foundUser = users.stream()
+				.filter(user -> user.getUserName().equals(username))
+				.findFirst();
+		return foundUser.isPresent();
 	}
 
 	@Override
-	public Boolean createNewUser(String username, String password, String email) {
-		// TODO Auto-generated method stub
-		return null;
+	public Boolean createNewUser(String username, String password, String email){
+		User newUser = new User();
+		newUser.setUserName(username);
+		newUser.setPassword(password);
+		newUser.setEmail(email);
+		users.add(newUser);
+		return true;
 	}
 
 	@Override
@@ -353,8 +386,10 @@ public class FakeDatabase implements IDatabase {
 	}
 
 	@Override
-	public Boolean isEmailInUse(String email) {
-		// TODO Auto-generated method stub
-		return null;
+	public Boolean isEmailInUse(String email){
+		Optional<User> foundUser = users.stream()
+				.filter(user -> user.getEmail().equals(email))
+				.findFirst();
+		return foundUser.isPresent();
 	}
 } 

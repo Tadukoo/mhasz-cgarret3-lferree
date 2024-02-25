@@ -1,6 +1,7 @@
 package com.github.tadukoo.middle_earth.controller;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import javax.swing.JFrame;
@@ -32,7 +33,7 @@ public class Game implements Engine{
 	
 	public Game(){
 		// dialog and mode are passed back and forth with each servlet/jsp call
-		dialog = new ArrayList<String>();
+		dialog = new ArrayList<>();
 		mode = "game";
 		
 		//####################################################
@@ -552,7 +553,7 @@ public class Game implements Engine{
 		mapIMG.setVisible(false);
 	}
 	
-	public ArrayList<Item> cheatcode() {
+	public List<Item> cheatcode() {
 		DatabaseProvider.setInstance(new DerbyDatabase());
 		IDatabase db = DatabaseProvider.getInstance();
 		

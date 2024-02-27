@@ -15,7 +15,6 @@ import com.github.tadukoo.middle_earth.model.Constructs.Item;
 import com.github.tadukoo.middle_earth.model.Constructs.ItemType;
 import com.github.tadukoo.middle_earth.model.Constructs.Map;
 import com.github.tadukoo.middle_earth.persist.DatabaseProvider;
-import com.github.tadukoo.middle_earth.persist.DerbyDatabase;
 import com.github.tadukoo.middle_earth.persist.IDatabase;
 
 public class Game implements Engine{
@@ -435,7 +434,6 @@ public class Game implements Engine{
 	
 	@Override
 	public void save(){
-		DatabaseProvider.setInstance(new DerbyDatabase());
 		IDatabase db = DatabaseProvider.getInstance();
 		db.saveGame(this);
 		mapPanel.save(user.getusername(), user.getcurrent_game());
@@ -553,8 +551,7 @@ public class Game implements Engine{
 		mapIMG.setVisible(false);
 	}
 	
-	public List<Item> cheatcode() {
-		DatabaseProvider.setInstance(new DerbyDatabase());
+	public List<Item> cheatcode(){
 		IDatabase db = DatabaseProvider.getInstance();
 		
 		return db.getAllItems();

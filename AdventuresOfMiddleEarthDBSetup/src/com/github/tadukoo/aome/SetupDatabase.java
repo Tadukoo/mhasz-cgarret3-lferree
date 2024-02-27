@@ -60,7 +60,7 @@ public class SetupDatabase{
 		// Load Users
 		List<UserPojo> userPojos = InitialData.getUserPojos();
 		for(UserPojo userPojo: userPojos){
-			userPojo.storeValues(database, true);
+			userPojo.storeValues(database, false);
 		}
 	}
 }

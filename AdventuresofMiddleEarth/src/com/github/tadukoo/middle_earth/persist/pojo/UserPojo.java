@@ -73,4 +73,8 @@ public class UserPojo extends AbstractDatabasePojo{
 	public String getPassword(){
 		return (String) getItem(PASSWORD_COLUMN_NAME);
 	}
+	
+	public void setEmail(String email){
+		setItem(EMAIL_COLUMN_NAME, email);
+	}
 }

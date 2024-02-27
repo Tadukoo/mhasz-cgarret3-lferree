@@ -13,6 +13,7 @@ import com.github.tadukoo.middle_earth.model.Constructs.Object;
 import com.github.tadukoo.middle_earth.model.Quest;
 import com.github.tadukoo.middle_earth.persist.pojo.DatabaseResult;
 import com.github.tadukoo.middle_earth.persist.pojo.UserPojo;
+import com.github.tadukoo.util.ListUtil;
 import com.github.tadukoo.util.LoggerUtil;
 import com.github.tadukoo.util.logger.EasyLogger;
 
@@ -50,35 +51,68 @@ public class MySQLDatabase implements IDatabase{
 			// Find password for given username by doing search
 			UserPojo userPojo = new UserPojo();
 			userPojo.setUsername(username);
-			List<UserPojo> results = userPojo.doSearch(database, UserPojo.class, true);
+			List<UserPojo> results = userPojo.doSearch(database, UserPojo.class, false);
 			// unique constraint on username prevents multiple users
 			password = results.get(0).getPassword();
 		}catch(SQLException e){
 			// Log the error and have it set for the result
-			logger.logError(e);
-			error = e.getMessage();
+			error = "Get User Password By Username SQL Error";
+			logger.logError(error, e);
 		}
 		return new DatabaseResult<>(password, error);
 	}
 	
+	/** {@inheritDoc} */
 	@Override
-	public ArrayList<String> getAllUsernames(){
-		return null;
+	public DatabaseResult<Boolean> doesUsernameExist(String username){
+		boolean usernameFound = false;
+		String error = null;
+		try{
+			// Find username by doing search
+			UserPojo userPojo = new UserPojo();
+			userPojo.setUsername(username);
+			List<UserPojo> results = userPojo.doSearch(database, UserPojo.class, false);
+			usernameFound = ListUtil.isNotBlank(results);
+		}catch(SQLException e){
+			// Log the error and have it set for the result
+			error = "Does Username Exist SQL Error";
+			logger.logError(error, e);
+		}
+		return new DatabaseResult<>(usernameFound, error);
 	}
 	
+	/** {@inheritDoc} */
 	@Override
-	public Boolean doesUsernameExist(String username){
-		return null;
+	public DatabaseResult<Boolean> isEmailInUse(String email){
+		boolean emailFound = false;
+		String error = null;
+		try{
+			// Find email by doing search
+			UserPojo userPojo = new UserPojo();
+			userPojo.setEmail(email);
+			List<UserPojo> results = userPojo.doSearch(database, UserPojo.class, false);
+			emailFound = ListUtil.isNotBlank(results);
+		}catch(SQLException e){
+			// Log the error and have it set for the result
+			error = "Is Email In Use SQL Error";
+			logger.logError(error, e);
+		}
+		return new DatabaseResult<>(emailFound, error);
 	}
 	
+	/** {@inheritDoc} */
 	@Override
-	public Boolean isEmailInUse(String email){
-		return null;
-	}
-	
-	@Override
-	public Boolean createNewUser(String username, String password, String email){
-		return null;
+	public DatabaseResult<Boolean> createNewUser(String username, String password, String email){
+		try{
+			UserPojo userPojo = new UserPojo(username, password, email);
+			userPojo.storeValues(database, false);
+			return new DatabaseResult<>(true, null);
+		}catch(SQLException e){
+			// Log the error and have it set for the result
+			String error = "Create New User SQL Error";
+			logger.logError(error, e);
+			return new DatabaseResult<>(false, error);
+		}
 	}
 	
 	@Override

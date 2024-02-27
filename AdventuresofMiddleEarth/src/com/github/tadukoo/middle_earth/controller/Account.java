@@ -3,11 +3,14 @@ package com.github.tadukoo.middle_earth.controller;
 import com.github.tadukoo.middle_earth.persist.DatabaseProvider;
 import com.github.tadukoo.middle_earth.persist.IDatabase;
 import com.github.tadukoo.middle_earth.persist.pojo.DatabaseResult;
+import com.github.tadukoo.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 public class Account{
+	private static final Pattern EMAIL_PATTERN = Pattern.compile("^[a-zA-Z0-9_+&*-]+(?:\\." +
+			"[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$");
 	private String username;
 	private ArrayList<Integer> game_ids;
 	private int current_game;
@@ -46,34 +49,35 @@ public class Account{
 	}
 	
 	public String usernameCheck(String username, IDatabase db){
-		
-		if (db.doesUsernameExist(username)) {
+		DatabaseResult<Boolean> result = db.doesUsernameExist(username);
+		if(result.success() && result.result()){
 			return "\nSorry that Username is already taken.";
-		} else {
+		}else if(!result.success()){
+			return "\n" + result.errorMessage();
+		}else{
 			return "Passes";
 		}
-		// TODO: Implement (Checks database to see if username already exists, if not returns "Passes"  as result;
-		//throw new UnsupportedOperationException("Not implemented yet!");
 	}
 	
-	public String emailCheck(String email, IDatabase db)
-    {
-        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+
-                            "[a-zA-Z0-9_+&*-]+)*@" +
-                            "(?:[a-zA-Z0-9-]+\\.)+[a-z" +
-                            "A-Z]{2,7}$";
-                             
-        Pattern pat = Pattern.compile(emailRegex);
-        if (email == null)
-            return "\nPlease enter and email address.";
-        if (pat.matcher(email).matches()) {
-        	if(!db.isEmailInUse(email)) {
-        		return "Passes";
-        	} else {
-        		return "\nSorry it seems you've already have an account with that email.";
-        	}
-        } else {
-        	return "\nPlease enter a valid email address.";
+	public String emailCheck(String email, IDatabase db){
+		// Check email is not empty
+		if(StringUtil.isBlank(email)){
+			return "\nPlease enter an email address.";
+		}
+		
+		// Check it's a valid email address
+		if(!EMAIL_PATTERN.matcher(email).matches()){
+			return "\nPlease enter a valid email address.";
+		}
+		
+		// Check if email is in use
+		DatabaseResult<Boolean> emailInUse = db.isEmailInUse(email);
+		if(!emailInUse.success()){
+			return "\n" + emailInUse.errorMessage();
+		}else if(emailInUse.result()){
+			return "\nSorry it seems you've already have an account with that email.";
+		}else{
+            return "Passes";
         }
     }
 	
@@ -96,27 +100,33 @@ public class Account{
 	}
 	
 	public String create_account(String username, String password, String email){
+		// Grab the database and run checks
 		IDatabase db = DatabaseProvider.getInstance();
-		
 		String error = "";
 		String usernameCheck = usernameCheck(username, db);
 		String passwordCheck = passwordCheck(password);
 		String emailCheck = emailCheck(email, db);
 		
-		if (!usernameCheck.equals("Passes")) {
-			error = error + usernameCheck;
+		// Combine any errors hit
+		if(!usernameCheck.equals("Passes")){
+			error += usernameCheck;
 		}
-		if (!passwordCheck.equals("Passes")){
-			error = error + passwordCheck;
+		if(!passwordCheck.equals("Passes")){
+			error += passwordCheck;
 		}
-		if (!emailCheck.equals("Passes")) {
-			error = error + emailCheck;
+		if(!emailCheck.equals("Passes")){
+			error += emailCheck;
 		}
 		
-		if (error == ""){
-			db.createNewUser(username, password, email);
-			return "Successful";
-		} else {
+		// Create a New User if all checks pass, return errors if anything goes wrong
+		if(StringUtil.isBlank(error)){
+			DatabaseResult<Boolean> result = db.createNewUser(username, password, email);
+			if(result.success()){
+				return "Successful";
+			}else{
+				return result.errorMessage();
+			}
+		}else{
 			return error;
 		}
 	}

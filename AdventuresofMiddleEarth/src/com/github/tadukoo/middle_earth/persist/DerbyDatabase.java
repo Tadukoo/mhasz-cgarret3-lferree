@@ -1989,134 +1989,17 @@ public class DerbyDatabase implements IDatabase {
 	////////////////////////////////////////////////////////////////////////////////////////
 
 	@Override
-	public ArrayList<String> getAllUsernames() {
-		return executeTransaction(new Transaction<ArrayList<String>>() {
-			@Override
-			public ArrayList<String> execute(Connection conn) throws SQLException {
-				PreparedStatement stmt = null;
-				ResultSet resultSet = null;
-				
-				try {
-					
-					stmt = conn.prepareStatement(
-							"select users.username "
-							+ "from users");
-					
-					resultSet = stmt.executeQuery();
-					
-					String username = new String();
-					ArrayList<String> userList = new ArrayList<String>();
-					
-					Boolean found = false;
-					while(resultSet.next()) {
-						found = true;
-						username = resultSet.getString(1);
-						userList.add(username);
-					}
-					
-					if(!found) {
-						System.out.println("UserList is empty");
-					}
-					
-					return userList;
-				} finally {
-					DBUtil.closeQuietly(resultSet);
-					DBUtil.closeQuietly(stmt);
-					DBUtil.closeQuietly(conn);
-				}
-			}
-		});
-	}
-
-	@Override
-	public Boolean doesUsernameExist(String username) {
-		return executeTransaction(new Transaction<Boolean>() {
-			@Override
-			public Boolean execute(Connection conn) throws SQLException {
-				ResultSet resultSet = null;
-				PreparedStatement stmt = null;
-				try {
-					stmt = conn.prepareStatement(
-							"select users.username "
-							+ "from users "
-							+ "where users.username = ?"
-					);
-					stmt.setString(1, username);
-					resultSet = stmt.executeQuery();
-					
-					if(resultSet.next()) {
-						return true;
-					}
-					return false;
-				} finally {
-					DBUtil.closeQuietly(conn);
-					DBUtil.closeQuietly(resultSet);
-					DBUtil.closeQuietly(stmt);
-				}
-			}
-		});
+	public DatabaseResult<Boolean> doesUsernameExist(String username){
+		throw new UnsupportedOperationException("DerbyDatabase not supported anymore!");
 	}
 	
 	@Override
-	public Boolean isEmailInUse(String email) {
-		return executeTransaction(new Transaction<Boolean>() {
-			@Override
-			public Boolean execute(Connection conn) throws SQLException {
-				ResultSet resultSet = null;
-				PreparedStatement stmt = null;
-				try {
-					stmt = conn.prepareStatement(
-							"select users.email "
-							+ "from users "
-							+ "where users.email = ?"
-					);
-					stmt.setString(1, email);
-					resultSet = stmt.executeQuery();
-					
-					if(resultSet.next()) {
-						return true;
-					}
-					return false;
-				} finally {
-					DBUtil.closeQuietly(conn);
-					DBUtil.closeQuietly(resultSet);
-					DBUtil.closeQuietly(stmt);
-				}
-			}
-		});
+	public DatabaseResult<Boolean> isEmailInUse(String email){
+		throw new UnsupportedOperationException("DerbyDatabase not supported anymore!");
 	}
 
 	public DatabaseResult<String> getUserPasswordByUsername(final String userName){
-		return executeTransaction(conn -> {
-			PreparedStatement stmt = null;
-			ResultSet resultPassword = null;
-			try {
-				stmt = conn.prepareStatement(
-						"select users.password "
-						+ "from users "
-						+ "where users.username = ? ");
-				stmt.setString(1, userName);
-				resultPassword = stmt.executeQuery();
-				
-				String password = null;
-				
-				boolean found = false;
-				while(resultPassword.next()) {
-					found = true;
-					password = resultPassword.getString(1);
-				}
-				
-				if(!found) {
-					return new DatabaseResult<>(null, "That username was not found");
-				}
-				
-				return new DatabaseResult<>(password, null);
-			} finally {
-				DBUtil.closeQuietly(resultPassword);
-				DBUtil.closeQuietly(stmt);
-				DBUtil.closeQuietly(conn);
-			}
-		});
+		throw new UnsupportedOperationException("DerbyDatabase not supported anymore!");
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////
@@ -2199,28 +2082,8 @@ public class DerbyDatabase implements IDatabase {
 	***************************************************************************************************/
 	
 	@Override
-	public Boolean createNewUser(String username, String password, String email) {
-		return executeTransaction(new Transaction<Boolean>() {
-			@Override
-			public Boolean execute(Connection conn) throws SQLException {
-				PreparedStatement insertUser = null;
-				try {
-					insertUser = conn.prepareStatement(
-							"insert into users (username, password, email) "
-							+ "values (?, ?, ?)"
-					);
-					insertUser.setString(1, username);
-					insertUser.setString(2, password);
-					insertUser.setString(3, email);
-					insertUser.executeUpdate();
-					
-					return true;
-				} finally {
-					DBUtil.closeQuietly(conn);
-					DBUtil.closeQuietly(insertUser);
-				}
-			}
-		});
+	public DatabaseResult<Boolean> createNewUser(String username, String password, String email){
+		throw new UnsupportedOperationException("DerbyDatabase not supported anymore!");
 	}
 	
 	public Integer createNewGame(String username) { 

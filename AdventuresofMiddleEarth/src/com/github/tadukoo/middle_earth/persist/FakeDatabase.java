@@ -60,6 +60,45 @@ public class FakeDatabase implements IDatabase{
 		}
 	}
 	
+	/** {@inheritDoc} */
+	@Override
+	public DatabaseResult<String> getUserPasswordByUsername(String username){
+		String password = users.stream()
+				.filter(user -> user.getUserName().equals(username))
+				.map(User::getPassword)
+				.findFirst().orElse(null);
+		String error = StringUtil.isBlank(password)?"Failed to find user":null;
+		return new DatabaseResult<>(password, error);
+	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public DatabaseResult<Boolean> doesUsernameExist(String username){
+		Optional<User> foundUser = users.stream()
+				.filter(user -> user.getUserName().equals(username))
+				.findFirst();
+		return new DatabaseResult<>(foundUser.isPresent(), null);
+	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public DatabaseResult<Boolean> isEmailInUse(String email){
+		Optional<User> foundUser = users.stream()
+				.filter(user -> user.getEmail().equals(email))
+				.findFirst();
+		return new DatabaseResult<>(foundUser.isPresent(), null);
+	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public DatabaseResult<Boolean> createNewUser(String username, String password, String email){
+		User newUser = new User();
+		newUser.setUserName(username);
+		newUser.setPassword(password);
+		newUser.setEmail(email);
+		users.add(newUser);
+		return new DatabaseResult<>(true, null);
+	}
 	
 	@Override
 	public List<Item> getAllItems() {
@@ -261,22 +300,6 @@ public class FakeDatabase implements IDatabase{
 		// TODO Auto-generated method stub
 		
 	}
-	
-	@Override
-	public DatabaseResult<String> getUserPasswordByUsername(String username){
-		String password = users.stream()
-				.filter(user -> user.getUserName().equals(username))
-				.map(User::getPassword)
-				.findFirst().orElse(null);
-		String error = StringUtil.isBlank(password)?"Failed to find user":null;
-		return new DatabaseResult<>(password, error);
-	}
-
-	@Override
-	public ArrayList<String> getAllUsernames() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public Enemy getEnemyByRace(String race){
@@ -352,25 +375,7 @@ public class FakeDatabase implements IDatabase{
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	@Override
-	public Boolean doesUsernameExist(String username){
-		Optional<User> foundUser = users.stream()
-				.filter(user -> user.getUserName().equals(username))
-				.findFirst();
-		return foundUser.isPresent();
-	}
-
-	@Override
-	public Boolean createNewUser(String username, String password, String email){
-		User newUser = new User();
-		newUser.setUserName(username);
-		newUser.setPassword(password);
-		newUser.setEmail(email);
-		users.add(newUser);
-		return true;
-	}
-
+	
 	@Override
 	public Integer createNewGame(String username) {
 		// TODO Auto-generated method stub
@@ -388,12 +393,4 @@ public class FakeDatabase implements IDatabase{
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	@Override
-	public Boolean isEmailInUse(String email){
-		Optional<User> foundUser = users.stream()
-				.filter(user -> user.getEmail().equals(email))
-				.findFirst();
-		return foundUser.isPresent();
-	}
-} 
+}

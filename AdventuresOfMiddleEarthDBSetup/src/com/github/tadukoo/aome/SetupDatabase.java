@@ -3,7 +3,6 @@ package com.github.tadukoo.aome;
 import com.github.tadukoo.database.mysql.Database;
 import com.github.tadukoo.middle_earth.persist.DatabaseSettings;
 import com.github.tadukoo.middle_earth.persist.InitialData;
-import com.github.tadukoo.middle_earth.persist.MySQLDatabase;
 import com.github.tadukoo.middle_earth.persist.pojo.UserPojo;
 import com.github.tadukoo.util.LoggerUtil;
 import com.github.tadukoo.util.logger.EasyLogger;

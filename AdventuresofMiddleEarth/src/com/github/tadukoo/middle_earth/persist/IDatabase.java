@@ -21,10 +21,9 @@ public interface IDatabase{
 	 */
 	
 	DatabaseResult<String> getUserPasswordByUsername(String username);
-	List<String> getAllUsernames();
-	Boolean doesUsernameExist(String username);
-	Boolean isEmailInUse(String email);
-	Boolean createNewUser(String username, String password, String email);
+	DatabaseResult<Boolean> doesUsernameExist(String username);
+	DatabaseResult<Boolean> isEmailInUse(String email);
+	DatabaseResult<Boolean> createNewUser(String username, String password, String email);
 	
 	Map getMap();
 	Player getPlayer();

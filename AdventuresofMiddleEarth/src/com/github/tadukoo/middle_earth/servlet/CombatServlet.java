@@ -12,24 +12,20 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 public class CombatServlet extends HttpServlet{
-	private static final long serialVersionUID = 1L;
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
-		
+			throws ServletException, IOException{
 		System.out.println("Combat Servlet: doGet");
 		
 		Game game = (Game) req.getSession().getAttribute("game");
         String command = (String) req.getSession().getAttribute("command");
         System.out.println(command);
         game.setmode("combat");
-        if (command != null) {
+        if(command != null){
         	// holds the error message text, if there is any
-        	String errorMessage = null;
-        	
-        	errorMessage = game.handle_command(command);
-        	if (errorMessage != null) {
+        	String errorMessage = game.handle_command(command);
+        	if(errorMessage != null){
         		game.add_dialog(errorMessage);
         	}
         } 
@@ -64,40 +60,37 @@ public class CombatServlet extends HttpServlet{
 		*/
 		
 		//Set the Enemies in combat mode
-		
 		Character e1 = null;
 		Character e2 = null;
 		Character e3 = null;
 		ArrayList<Integer> enemy = game.getBattle().getCharacterIDs();
-		for (int i = 0; i < enemy.size(); i++) {
-			if (i == 0) {
+		for(int i = 0; i < enemy.size(); i++){
+			if(i == 0){
 				req.setAttribute("p1", "player1");
 				req.setAttribute("p1Name", game.getplayer().getname());
 				req.setAttribute("p1Health", game.getplayer().gethit_points());
-			}
-			else if (i == 1) {
+			}else if(i == 1){
 				e1 = game.getcharacters().get(enemy.get(i));
-			} else if (i == 2) {
+			}else if(i == 2){
 				e2 = game.getcharacters().get(enemy.get(i));
-			} else if (i == 3) {
+			}else if(i == 3){
 				e3 = game.getcharacters().get(enemy.get(i));
 			}
 		}
 		
-		
-		if (e1 != null) {
+		if(e1 != null){
 			req.setAttribute("e1", e1);
 			req.setAttribute("e1Name", e1.getname());
 			req.setAttribute("e1Health", e1.gethit_points());
 			req.setAttribute("e1Race", e1.getrace().replaceAll(" ", ""));
 		}
-		if (e2 != null) {
+		if(e2 != null){
 			req.setAttribute("e2", e2);
 			req.setAttribute("e2Name", e2.getname());
 			req.setAttribute("e2Health", e2.gethit_points());
 			req.setAttribute("e2Race", e2.getrace().replaceAll(" ", ""));
 		}
-		if (e3 != null) {
+		if(e3 != null){
 			req.setAttribute("e3", e3);
 			req.setAttribute("e3Name", e3.getname());
 			req.setAttribute("e3Health", e3.gethit_points());
@@ -109,12 +102,9 @@ public class CombatServlet extends HttpServlet{
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
-				
+			throws ServletException, IOException{
 		System.out.println("Combat Servlet: doPost");
-
+		
 		req.getRequestDispatcher("/_view/combat.jsp").forward(req, resp);
-		
-		
 	}
 }

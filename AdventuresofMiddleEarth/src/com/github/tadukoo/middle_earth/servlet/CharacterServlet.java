@@ -14,25 +14,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CharacterServlet extends HttpServlet{
-    private static final long serialVersionUID = 1L;
-
-
+	
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
-
+            throws ServletException, IOException{
         System.out.println("Character Servlet: doGet");
-
         
-        //Load data for the initial call to the inventory jsp
-
+        // Load data for the initial call to the inventory jsp
         Game game = (Game) req.getSession().getAttribute("game");
         String command = (String) req.getSession().getAttribute("command");
-        
-        
         Player player = (Player) game.getplayer();
         
-        if (command != null && command.equalsIgnoreCase("cheatcodes!")) {
+        if(command != null && command.equalsIgnoreCase("cheatcodes!")){
         	List<Item> allItems = game.cheatcode();
         	player.getinventory().setitems(allItems);
         }
@@ -40,11 +33,14 @@ public class CharacterServlet extends HttpServlet{
         req.setAttribute("sp", player.getskill_points());
         
         List<Item> itemlist = game.getplayer().getinventory().getitems();
-        ArrayList<Item> cleanList = new ArrayList<>();
-        for (int i = 0; i < itemlist.size(); i++){
-        	Item item = itemlist.get(i);
-        	cleanList.add(new Item(item.getItemWeight(), item.getattack_bonus(), item.getdefense_bonus(), item.gethp_bonus(), item.getlvl_requirement(), item.getItemType(), item.getName(), item.getID(), item.getShortDescription(), item.getLongDescription(), itemlist.get(i).getName().replaceAll(" ", "_") ));
-        }
+        List<Item> cleanList = new ArrayList<>();
+	    for(Item item: itemlist){
+		    cleanList.add(new Item(
+				    item.getItemWeight(), item.getattack_bonus(), item.getdefense_bonus(),
+				    item.gethp_bonus(), item.getlvl_requirement(), item.getItemType(),
+				    item.getName(), item.getID(), item.getShortDescription(), item.getLongDescription(),
+				    item.getName().replaceAll(" ", "_")));
+	    }
         
         req.setAttribute(("itemTest"), cleanList);
         
@@ -68,25 +64,23 @@ public class CharacterServlet extends HttpServlet{
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
+            throws ServletException, IOException{
     	System.out.println("Character: doPost");
     	
-    	
-    	
     	Game game = (Game) req.getSession().getAttribute("game");
-    	
     	Player player = (Player) game.getplayer();
     	
-    	if (req.getParameter("remove") != null) {
+    	if(req.getParameter("remove") != null){
     		req.getSession().setAttribute(req.getParameter("remove"), "");
     		System.out.println(req.getParameter("remove"));
-    		String type = (String) req.getParameter("remove").substring(0, req.getParameter("remove").length()-3);
+    		String type = req.getParameter("remove").substring(0, req.getParameter("remove").length()-3);
     		player.remove(type);
     		
     		req.setAttribute(req.getParameter("remove"), null);
     	}
     	
-        if (req.getParameter("updateskillpoints")!=null && req.getParameter("updateskillpoints").equalsIgnoreCase("true")){
+        if(req.getParameter("updateskillpoints")!=null &&
+		        req.getParameter("updateskillpoints").equalsIgnoreCase("true")){
         	player.setattack(Integer.parseInt(req.getParameter("attack")));
         	player.setdefense(Integer.parseInt(req.getParameter("defense")));
         	player.setspecial_attack(Integer.parseInt(req.getParameter("specialattack")));
@@ -100,60 +94,62 @@ public class CharacterServlet extends HttpServlet{
         req.setAttribute("sp", player.getskill_points());
         
         List<Item> itemlist = game.getplayer().getinventory().getitems();
-        ArrayList<Item> cleanList = new ArrayList<Item>();
-        for (int i = 0; i < itemlist.size(); i++){
-        	Item item = itemlist.get(i);
-        	cleanList.add(new Item(item.getItemWeight(), item.getattack_bonus(), item.getdefense_bonus(), item.gethp_bonus(), item.getlvl_requirement(), item.getItemType(), item.getName(), item.getID(), item.getShortDescription(), item.getLongDescription(), itemlist.get(i).getName().replaceAll(" ", "_") ));
-        }
+        List<Item> cleanList = new ArrayList<>();
+	    for(Item item: itemlist){
+		    cleanList.add(new Item(item.getItemWeight(), item.getattack_bonus(), item.getdefense_bonus(),
+				    item.gethp_bonus(), item.getlvl_requirement(), item.getItemType(),
+				    item.getName(), item.getID(), item.getShortDescription(), item.getLongDescription(),
+				    item.getName().replaceAll(" ", "_")));
+	    }
         
-        for (Item item : cleanList) {
-        	if (item.getName().equals(req.getParameter("head"))){
-        		if (item.getItemType() == ItemType.HELM) {
+        for(Item item: cleanList){
+        	if(item.getName().equals(req.getParameter("head"))){
+        		if(item.getItemType() == ItemType.HELM){
         			game.getplayer().sethelm(item);
         			req.getSession().setAttribute("headIMG", item.getdescription_update());
-        		} else {
+        		}else{
         			req.setAttribute("errorMessage", "Only a Hemlet can be equiped there.");
         		}
-        	} else if (item.getName().equals(req.getParameter("chest"))){
-        		if (item.getItemType() == ItemType.CHEST) {
+        	}else if(item.getName().equals(req.getParameter("chest"))){
+        		if(item.getItemType() == ItemType.CHEST){
         			game.getplayer().setchest(item);
         			req.getSession().setAttribute("chestIMG", item.getdescription_update());
-        		} else {
+        		}else{
         			req.setAttribute("errorMessage", "Only a Chestplate can be equiped there.");
         		}
-        	} else if (item.getName().equals(req.getParameter("arms"))){
-        		if (item.getItemType() == ItemType.BRACES) {
+        	}else if(item.getName().equals(req.getParameter("arms"))){
+        		if(item.getItemType() == ItemType.BRACES){
         			game.getplayer().setbraces(item);
         			req.getSession().setAttribute("armsIMG", item.getdescription_update());
-        		} else {
+        		}else{
         			req.setAttribute("errorMessage", "Only arm braces can be equiped there.");
         		}
-        	} else if (item.getName().equals(req.getParameter("lhand"))){
-        		if (item.getItemType() == ItemType.L_HAND) {
+        	}else if (item.getName().equals(req.getParameter("lhand"))){
+        		if(item.getItemType() == ItemType.L_HAND){
         			game.getplayer().setl_hand(item);
         			req.getSession().setAttribute("lhandIMG", item.getdescription_update());
-        		} else {
+        		}else{
         			req.setAttribute("errorMessage", "Only left handed items can be equiped there.");
         		}
-        	} else if (item.getName().equals(req.getParameter("rhand"))){
-        		if (item.getItemType() == ItemType.R_HAND) {
+        	}else if (item.getName().equals(req.getParameter("rhand"))){
+        		if(item.getItemType() == ItemType.R_HAND){
         			game.getplayer().setr_hand(item);
         			req.getSession().setAttribute("rhandIMG", item.getdescription_update());
-        		} else {
+        		}else{
         			req.setAttribute("errorMessage", "Only right handed items can be equiped there.");
         		}
-        	} else if (item.getName().equals(req.getParameter("legs"))){
-        		if (item.getItemType() == ItemType.LEGS) {
+        	}else if(item.getName().equals(req.getParameter("legs"))){
+        		if(item.getItemType() == ItemType.LEGS){
         			game.getplayer().setlegs(item);
         			req.getSession().setAttribute("legsIMG", item.getdescription_update());
-        		} else {
+        		}else{
         			req.setAttribute("errorMessage", "Only leg guards can be equiped there.");
         		}
-        	} else if (item.getName().equals(req.getParameter("boots"))){
-        		if (item.getItemType() == ItemType.BOOTS) {
+        	}else if(item.getName().equals(req.getParameter("boots"))){
+        		if(item.getItemType() == ItemType.BOOTS){
         			game.getplayer().setboots(item);
         			req.getSession().setAttribute("bootsIMG", item.getdescription_update());
-        		} else {
+        		}else{
         			req.setAttribute("errorMessage", "Only boots can be equiped there.");
         		}
         	}

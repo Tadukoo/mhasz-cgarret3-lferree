@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
 /**
@@ -26,7 +27,6 @@ public class ImageServlet extends HttpServlet{
     // Init ---------------------------------------------------------------------------------------
 
     public void init() throws ServletException{
-
         // Define base path somehow. You can define it as init-param of the servlet.
     	File currentDirFile = new File(".");
 		String path = currentDirFile.getAbsolutePath();
@@ -54,7 +54,7 @@ public class ImageServlet extends HttpServlet{
         }
 
         // Decode the file name (might contain spaces and on) and prepare file object.
-        File image = new File(imagePath, URLDecoder.decode(requestedImage, "UTF-8"));
+        File image = new File(imagePath, URLDecoder.decode(requestedImage, StandardCharsets.UTF_8));
         // Check if file actually exists in filesystem.
         if (!image.exists()) {
             // Do your thing if the file appears to be non-existing.

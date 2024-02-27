@@ -14,28 +14,23 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 public class GameServlet extends HttpServlet{
-    private static final long serialVersionUID = 1L;
-
-
+	
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
-
+            throws ServletException, IOException{
         System.out.println("Game Servlet: doGet");
         
         Game game = (Game) req.getSession().getAttribute("game");
         String command = (String) req.getSession().getAttribute("command");
         
         game.setmode("game");
-        if (command != null) {
+        if(command != null){
         	// holds the error message text, if there is any
-        	String errorMessage = null;
-        	
-        	errorMessage = game.handle_command(command);
-        	if (errorMessage != null) {
+        	String errorMessage = game.handle_command(command);
+        	if(errorMessage != null){
         		game.add_dialog(errorMessage);
         	}
-        } else {
+        }else{
         	game.add_dialog(game.getmapTile_name());
         	game.add_dialog(game.getmapTile_longDescription());
         }
@@ -43,7 +38,7 @@ public class GameServlet extends HttpServlet{
         req.setAttribute("dialog", game.getdisplay_text());
         // call JSP to generate empty form
         
-        if (game.getmode().equalsIgnoreCase("combat")) {
+        if(game.getmode().equalsIgnoreCase("combat")){
         	req.setAttribute("dialog", game.getcombat_text());
         	// Set the players in combat mode
     		
@@ -72,56 +67,51 @@ public class GameServlet extends HttpServlet{
     		*/
     		
     		//Set the Enemies in combat mode
-    		
     		Character e1 = null;
     		Character e2 = null;
     		Character e3 = null;
     		ArrayList<Integer> enemy = game.getBattle().getCharacterIDs();
-    		for (int i = 0; i < enemy.size(); i++) {
-    			if (i == 0) {
+    		for(int i = 0; i < enemy.size(); i++){
+    			if(i == 0){
     				req.setAttribute("p1", "player1");
     				req.setAttribute("p1Name", game.getplayer().getname());
     				req.setAttribute("p1Health", game.getplayer().gethit_points());
-    			}
-    			else if (i == 1) {
+    			}else if(i == 1){
     				e1 = game.getcharacters().get(enemy.get(i));
-    			} else if (i == 2) {
+    			}else if(i == 2){
     				e2 = game.getcharacters().get(enemy.get(i));
-    			} else if (i == 3) {
+    			}else if(i == 3){
     				e3 = game.getcharacters().get(enemy.get(i));
     			}
     		}
-    		
-    		
-    		if (e1 != null) {
+			
+    		if(e1 != null){
     			req.setAttribute("e1", e1);
     			req.setAttribute("e1Name", e1.getname());
     			req.setAttribute("e1Health", e1.gethit_points());
     			req.setAttribute("e1Race", e1.getrace().replaceAll(" ", ""));
     		}
-    		if (e2 != null) {
+    		if(e2 != null){
     			req.setAttribute("e2", e2);
     			req.setAttribute("e2Name", e2.getname());
     			req.setAttribute("e2Health", e2.gethit_points());
     			req.setAttribute("e2Race", e2.getrace().replaceAll(" ", ""));
     		}
-    		if (e3 != null) {
+    		if(e3 != null){
     			req.setAttribute("e3", e3);
     			req.setAttribute("e3Name", e3.getname());
     			req.setAttribute("e3Health", e3.gethit_points());
     			req.setAttribute("e3Race", e3.getrace().replaceAll(" ", ""));
     		}
         	req.getRequestDispatcher("/_view/combat.jsp").forward(req, resp);
-        }
-        else {
+        }else{
         	req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
         }
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
-
+            throws ServletException, IOException{
         System.out.println("Game Servlet: doPost");
         
         Game game = (Game) req.getSession().getAttribute("game");
@@ -138,34 +128,33 @@ public class GameServlet extends HttpServlet{
         
         display_text = game.getdisplay_text();
         
-        if (game.getmode() == "inventory") {
-        	
-        	List<Item> inventory_list =  game.getplayer().getinventory().getitems();
-            
-            String inventory_display_list = "";
-        	for (int j = 0; j < inventory_list.size(); j++){
-            	inventory_display_list = inventory_display_list + inventory_list.get(j).getName() + ": " + inventory_list.get(j).getShortDescription()+";";
-            }
-        	
-        	req.setAttribute("inventory", inventory_display_list);
-        	req.setAttribute("mode", game.getmode());
-            req.getRequestDispatcher("/_view/inventory.jsp").forward(req, resp);
-        } 
-        else if (game.getmode() == "map") {
-        	// TODO Implement
-    		throw new UnsupportedOperationException("Not implemented yet!");
-            //req.getRequestDispatcher("/_view/map.jsp").forward(req, resp);
-        } 
-        else if (game.getmode() == "character") {
-        	// TODO Implement
-    		throw new UnsupportedOperationException("Not implemented yet!");
-        	//req.getRequestDispatcher("/_view/character.jsp").forward(req, resp);
-        } 
-        else {
-        	req.setAttribute("dialog", display_text);
-        	req.setAttribute("mode", game.getmode());
-        	// now call the JSP to render the new page
-        	req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
-        }
+		switch(game.getmode()){
+			case "inventory":
+				List<Item> inventory_list =  game.getplayer().getinventory().getitems();
+				
+				StringBuilder inventory_display_list = new StringBuilder();
+				for(Item item: inventory_list){
+					inventory_display_list.append(item.getName()).append(": ")
+							.append(item.getShortDescription()).append(";");
+				}
+				
+				req.setAttribute("inventory", inventory_display_list.toString());
+				req.setAttribute("mode", game.getmode());
+				req.getRequestDispatcher("/_view/inventory.jsp").forward(req, resp);
+				break;
+			case "map":
+				// TODO Implement
+				throw new UnsupportedOperationException("Not implemented yet!");
+				//req.getRequestDispatcher("/_view/map.jsp").forward(req, resp);
+			case "character":
+				// TODO Implement
+				throw new UnsupportedOperationException("Not implemented yet!");
+				//req.getRequestDispatcher("/_view/character.jsp").forward(req, resp);
+			default:
+				req.setAttribute("dialog", display_text);
+				req.setAttribute("mode", game.getmode());
+				// now call the JSP to render the new page
+				req.getRequestDispatcher("/_view/game.jsp").forward(req, resp);
+		}
     }
 }

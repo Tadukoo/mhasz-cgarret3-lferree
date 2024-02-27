@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.github.tadukoo.middle_earth.model.Constructs.Object;
+import com.github.tadukoo.middle_earth.persist.pojo.UserPojo;
 import persist.dbmod.IntPair;
 import persist.dbmod.ObjectIDCommandResponse;
 import persist.dbmod.StringPair;
@@ -46,38 +47,33 @@ public class InitialData {
 	
 	public static ArrayList<Integer> getInventoriesToCharacters() throws IOException {
 		ArrayList<Integer> inventoriesToCharactersList = new ArrayList<Integer>();
-		ReadCSV readInventoriesToCharacters = new ReadCSV("inventoriestocharacters.csv");
-		try {
-			while (true) {
+		try(ReadCSV readInventoriesToCharacters = new ReadCSV("inventoriestocharacters.csv")){
+			while(true){
 				List<String> tuple = readInventoriesToCharacters.next();
-				if (tuple == null) {
+				if(tuple == null){
 					break;
 				}
-				Iterator<String> i = tuple.iterator();
 				
-				while (i.hasNext()) {
-					inventoriesToCharactersList.add(Integer.parseInt(i.next()));
+				for(String s: tuple){
+					inventoriesToCharactersList.add(Integer.parseInt(s));
 				}
 			}
 			return inventoriesToCharactersList;
 			
-		} finally {
-			readInventoriesToCharacters.close();
 		}
 	}
 	
 	
 	public static ArrayList<StringPair> getNameGenderList() throws IOException {
 		ArrayList<StringPair> nameGenderList = new ArrayList<StringPair>();
-		ReadCSV readNames = new ReadCSV("names.csv");
-		try {
-			while (true) {
+		try(ReadCSV readNames = new ReadCSV("names.csv")){
+			while(true){
 				List<String> tuple = readNames.next();
-				if (tuple == null) {
+				if(tuple == null){
 					break;
 				}
 				Iterator<String> i = tuple.iterator();
-
+				
 				StringPair nameGender = new StringPair();
 				nameGender.setString1(i.next());
 				nameGender.setString2(i.next());
@@ -85,18 +81,15 @@ public class InitialData {
 			}
 			return nameGenderList;
 			
-		} finally {
-			readNames.close();
 		}
 	}
 	
 	public static ArrayList<Enemy> getEnemies() throws IOException {
 		ArrayList<Enemy> enemyList = new ArrayList<Enemy>();
-		ReadCSV readEnemies = new ReadCSV("enemies.csv");
-		try {
-			while (true) {
+		try(ReadCSV readEnemies = new ReadCSV("enemies.csv")){
+			while(true){
 				List<String> tuple = readEnemies.next();
-				if (tuple == null) {
+				if(tuple == null){
 					break;
 				}
 				Iterator<String> i = tuple.iterator();
@@ -108,51 +101,45 @@ public class InitialData {
 				enemy.sethit_points(Integer.parseInt(i.next()));
 				
 				enemyList.add(enemy);
- 			}
+			}
 			return enemyList;
-		} finally {
-			readEnemies.close();
 		}
 	}
 	
 	public static ArrayList<Item> getItems() throws IOException {
 		ArrayList<Item> itemList = new ArrayList<Item>();
-		ReadCSV readItems = new ReadCSV("items.csv");
-		try {
-			while (true) {
+		try(ReadCSV readItems = new ReadCSV("items.csv")){
+			while(true){
 				List<String> tuple = readItems.next();
-				if(tuple == null) {
+				if(tuple == null){
 					break;
 				}
-				Iterator<String> i = tuple.iterator();		
+				Iterator<String> i = tuple.iterator();
 				Item item = new Item();
-					
+				
 				item.setName(i.next());
- 				item.setLongDescription(i.next());
- 				item.setShortDescription(i.next());
- 				item.setdescription_update(i.next());
+				item.setLongDescription(i.next());
+				item.setShortDescription(i.next());
+				item.setdescription_update(i.next());
 				item.setattack_bonus(Integer.parseInt(i.next()));
-  				item.setdefense_bonus(Integer.parseInt(i.next()));
-  				item.sethp_bonus(Integer.parseInt(i.next())); 				
- 				item.setItemWeight(Integer.parseInt(i.next()));
- 				item.setItemType(ItemType.valueOf(i.next()));
- 				item.setlvl_requirement(Integer.parseInt(i.next()));
+				item.setdefense_bonus(Integer.parseInt(i.next()));
+				item.sethp_bonus(Integer.parseInt(i.next()));
+				item.setItemWeight(Integer.parseInt(i.next()));
+				item.setItemType(ItemType.valueOf(i.next()));
+				item.setlvl_requirement(Integer.parseInt(i.next()));
 				
 				itemList.add(item);
 			}
 			return itemList;
-		} finally {
-			readItems.close();
 		}
 	}
 		
 	public static ArrayList<IntPair> getItemsToInventories() throws IOException {
 		ArrayList<IntPair> itemToInventoryList = new ArrayList<IntPair>();
-		ReadCSV readItemsToInventories = new ReadCSV("itemstoinventories.csv");
-		try {						
-			while (true) {
+		try(ReadCSV readItemsToInventories = new ReadCSV("itemstoinventories.csv")){
+			while(true){
 				List<String> tuple = readItemsToInventories.next();
-				if(tuple == null) {
+				if(tuple == null){
 					break;
 				}
 				Iterator<String> i = tuple.iterator();
@@ -162,21 +149,18 @@ public class InitialData {
 				
 				itemToInventoryList.add(intPair);
 			}
-			return itemToInventoryList;	
+			return itemToInventoryList;
 			
-		} finally {
-			readItemsToInventories.close();
 		}
 	}
 	
 	public static ArrayList<IntPair> getItemsToObjects() throws IOException {
 		ArrayList<IntPair> itemsToObjectsList = new ArrayList<IntPair>();
-		ReadCSV readItemsToObjects = new ReadCSV("itemstoobjects.csv");
 		
-		try {
-			while (true) {
+		try(ReadCSV readItemsToObjects = new ReadCSV("itemstoobjects.csv")){
+			while(true){
 				List<String> tuple = readItemsToObjects.next();
-				if (tuple == null) {
+				if(tuple == null){
 					break;
 				}
 				Iterator<String> i = tuple.iterator();
@@ -188,18 +172,15 @@ public class InitialData {
 			}
 			return itemsToObjectsList;
 			
-		} finally {
-			readItemsToObjects.close();
 		}
 	}
 	
 	public static ArrayList<Map> getMaps() throws IOException {
 		ArrayList<Map> mapList = new ArrayList<Map>();
-		ReadCSV readMaps = new ReadCSV("map.csv");
-		try {
-			while (true) {
+		try(ReadCSV readMaps = new ReadCSV("map.csv")){
+			while(true){
 				List<String> tuple = readMaps.next();
-				if(tuple == null) {
+				if(tuple == null){
 					break;
 				}
 				Iterator<String> i = tuple.iterator();
@@ -212,18 +193,15 @@ public class InitialData {
 				mapList.add(map);
 			}
 			return mapList;
-		} finally {
-			readMaps.close();
 		}
 	}
 	
 	public static ArrayList<IntPair> getMapTilesToMaps() throws IOException {
 		ArrayList<IntPair> intPairList = new ArrayList<IntPair>();
-		ReadCSV readMapTilesToMaps = new ReadCSV("maptilestomaps.csv");
-		try {
-			while (true) {
+		try(ReadCSV readMapTilesToMaps = new ReadCSV("maptilestomaps.csv")){
+			while(true){
 				List<String> tuple = readMapTilesToMaps.next();
-				if(tuple == null) {
+				if(tuple == null){
 					break;
 				}
 				Iterator<String> i = tuple.iterator();
@@ -234,19 +212,16 @@ public class InitialData {
 				intPairList.add(intPair);
 			}
 			return intPairList;
-		} finally {
-			readMapTilesToMaps.close();
-		}	
+		}
 	}
 	
 	public static ArrayList<HashMap<String, Integer>> getMapTileConnections() throws IOException {
 		ArrayList<HashMap<String, Integer>> mapTileConnectionsList = new ArrayList<HashMap<String, Integer>>();
-		ReadCSV readMapTileConnections = new ReadCSV("maptileconnections.csv");
-		try {
-			while (true) {
+		try(ReadCSV readMapTileConnections = new ReadCSV("maptileconnections.csv")){
+			while(true){
 				List<String> tuple = readMapTileConnections.next();
 				
-				if(tuple == null) {
+				if(tuple == null){
 					break;
 				}
 				Iterator<String> i = tuple.iterator();
@@ -260,24 +235,21 @@ public class InitialData {
 				mapTileConnections.put("southwest", Integer.parseInt(i.next()));
 				mapTileConnections.put("west", Integer.parseInt(i.next()));
 				mapTileConnections.put("northwest", Integer.parseInt(i.next()));
-					
+				
 				mapTileConnectionsList.add(mapTileConnections);
 			}
 			return mapTileConnectionsList;
-		} finally {
-			readMapTileConnections.close();
 		}
 	}
 	
 	public static ArrayList<MapTile> getMapTiles() throws IOException {
 		ArrayList<MapTile> mapTileList = new ArrayList<MapTile>();
 		
-		ReadCSV readMapTiles = new ReadCSV("maptiles.csv");
-		try {
+		try(ReadCSV readMapTiles = new ReadCSV("maptiles.csv")){
 			int mapTileID = 1;
-			while (true) {
+			while(true){
 				List<String> tuple = readMapTiles.next();
-				if(tuple == null) {
+				if(tuple == null){
 					break;
 				}
 				Iterator<String> i = tuple.iterator();
@@ -294,27 +266,23 @@ public class InitialData {
 			}
 			
 			return mapTileList;
-		} finally {
-			readMapTiles.close();
 		}
 	}
 	
 	public static ArrayList<ObjectIDCommandResponse> getObjectCommandResponses() throws IOException {
 		ArrayList<ObjectIDCommandResponse> objectCommandResponseList = new ArrayList<ObjectIDCommandResponse>();
 		
-		ReadCSV readObjectCommandResponses = new ReadCSV("objectcommandresponses.csv");
-		
-		try {
-			while (true) {
+		try(ReadCSV readObjectCommandResponses = new ReadCSV("objectcommandresponses.csv")){
+			while(true){
 				List<String> tuple = readObjectCommandResponses.next();
-				if(tuple == null) {
+				if(tuple == null){
 					break;
 				}
 				Iterator<String> i = tuple.iterator();
 				
 				ObjectIDCommandResponse objectCommandResponse = new ObjectIDCommandResponse();
 				
-				while (i.hasNext()) {
+				while(i.hasNext()){
 					objectCommandResponse.setObjectID(Integer.parseInt(i.next()));
 					objectCommandResponse.setCommand(i.next());
 					objectCommandResponse.setResponse(i.next());
@@ -322,24 +290,20 @@ public class InitialData {
 				}
 			}
 			return objectCommandResponseList;
-		} finally {
-			readObjectCommandResponses.close();
 		}
 	}
 	
 	public static ArrayList<Object> getObjects() throws IOException {
 		ArrayList<Object> objectList = new ArrayList<Object>();
-
-		ReadCSV readObjects = new ReadCSV("objects.csv");
-
-		try {
-			while (true) {
+		
+		try(ReadCSV readObjects = new ReadCSV("objects.csv")){
+			while(true){
 				List<String> tuple = readObjects.next();
-				if(tuple == null) {
+				if(tuple == null){
 					break;
 				}
 				Iterator<String> i = tuple.iterator();
-		
+				
 				Object object = new Object();
 				
 				object.setName(i.next());
@@ -349,18 +313,15 @@ public class InitialData {
 				objectList.add(object);
 			}
 			return objectList;
-		} finally {
-			readObjects.close();
 		}
 	} 
 	
 	public static ArrayList<IntPair> getObjectsToMapTiles() throws IOException {
 		ArrayList<IntPair> objectsToMapTilesList = new ArrayList<IntPair>();
-		ReadCSV readObjectsToMapTiles = new ReadCSV("objectstomaptiles.csv");
-		try {
-			while (true) {
+		try(ReadCSV readObjectsToMapTiles = new ReadCSV("objectstomaptiles.csv")){
+			while(true){
 				List<String> tuple = readObjectsToMapTiles.next();
-				if(tuple == null) {
+				if(tuple == null){
 					break;
 				}
 				Iterator<String> i = tuple.iterator();
@@ -369,21 +330,18 @@ public class InitialData {
 				intPair.setInt2(Integer.parseInt(i.next()));
 				
 				objectsToMapTilesList.add(intPair);
-			}			
+			}
 			return objectsToMapTilesList;
 			
-		} finally {
-			readObjectsToMapTiles.close();
 		}
 	}
 
 	public static ArrayList<Player> getPlayers() throws IOException {
 		ArrayList<Player> playerList = new ArrayList<Player>();
-		ReadCSV readPlayers = new ReadCSV("players.csv");
-		try {
-			while (true) {
+		try(ReadCSV readPlayers = new ReadCSV("players.csv")){
+			while(true){
 				List<String> tuple = readPlayers.next();
-				if (tuple == null) {
+				if(tuple == null){
 					break;
 				}
 				Iterator<String> i = tuple.iterator();
@@ -405,15 +363,15 @@ public class InitialData {
 				player.setlocation(Integer.parseInt(i.next()));
 				player.setinventory_id(Integer.parseInt(i.next()));
 				
-				/**
+				/*
 				 * The next few lines are equipping armor pieces to pass player
 				 * back up to the database.  If there is no item associated with
 				 * a slot, it puts an empty item of the correct ItemType in the
-				 * slot. There is a check in DerbyDatabase to make sure the any 
+				 * slot. There is a check in DerbyDatabase to make sure the any
 				 * item in the slot is of the correct type in actuality, but they
-				 * must be passed assuming so until that check.  It would mean 
+				 * must be passed assuming so until that check.  It would mean
 				 * that the database is broken.  Unfortunately you cannot check
-				 * at this stage, you must check after the item is pulled from 
+				 * at this stage, you must check after the item is pulled from
 				 * the masteritems table
 				 */
 				Item item = new Item();
@@ -455,34 +413,31 @@ public class InitialData {
 				
 				player.setexperience(Integer.parseInt(i.next()));
 				player.setcarry_weight(Integer.parseInt(i.next()));
-			
+				
 				playerList.add(player);
-			}	
+			}
 			return playerList;
-		} finally {
-			readPlayers.close();
 		}
 	}
 	
 	public static ArrayList<Quest> getQuests() throws IOException {
 		ArrayList<Quest> questList = new ArrayList<Quest>();
-		ReadCSV readQuests = new ReadCSV("quests.csv");
-		try {
-			while (true) {
+		try(ReadCSV readQuests = new ReadCSV("quests.csv")){
+			while(true){
 				List<String> tuple = readQuests.next();
-				if(tuple == null) {
+				if(tuple == null){
 					break;
 				}
 				Iterator<String> i = tuple.iterator();
 				
 				Quest quest = new Quest();
-				if(i.hasNext()) {
+				if(i.hasNext()){
 					String questAtt = i.next();
-					if(questAtt.equals("rewardItems")) {
+					if(questAtt.equals("rewardItems")){
 						questAtt = i.next();
 						ArrayList<Item> itemList = new ArrayList<Item>();
-
-						while(!questAtt.equals("rewardCoins") && i.hasNext()) {
+						
+						while(!questAtt.equals("rewardCoins") && i.hasNext()){
 							Item item = new Item();
 							item.setID(Integer.parseInt(questAtt));
 							itemList.add(item);
@@ -491,26 +446,22 @@ public class InitialData {
 						quest.setRewardItems(itemList);
 					}
 					
-					if(i.hasNext() && questAtt.equals("rewardCoins"))
-					{
+					if(i.hasNext() && questAtt.equals("rewardCoins")){
 						quest.setRewardCoins(Integer.parseInt(i.next()));
 					}
 				}
 				questList.add(quest);
-			}	
+			}
 			return questList;
-		} finally {
-			readQuests.close();
 		}
 	} 
 	
 	public static ArrayList<User> getUsers() throws IOException {
 		ArrayList<User> userList = new ArrayList<User>();
-		ReadCSV readUsers = new ReadCSV("users.csv");
-		try {
-			while (true) {
+		try(ReadCSV readUsers = new ReadCSV("users.csv")){
+			while(true){
 				List<String> tuple = readUsers.next();
-				if(tuple == null) {
+				if(tuple == null){
 					break;
 				}
 				Iterator<String> i = tuple.iterator();
@@ -520,12 +471,30 @@ public class InitialData {
 				user.setUserName(i.next());
 				user.setPassword(i.next());
 				user.setEmail(i.next());
-				userList.add(user);			
-			} 
-			return userList; 
-		} finally {
-			readUsers.close();
+				userList.add(user);
+			}
+			return userList;
 		}
 	}
 	
+	public static List<UserPojo> getUserPojos() throws IOException{
+		List<UserPojo> userPojos = new ArrayList<>();
+		// Read users from the CSV
+		try(ReadCSV readUsers = new ReadCSV("users.csv")){
+			List<String> tuple = readUsers.next();
+			while(tuple != null){
+				// Grab the parts of the user
+				String username = tuple.get(0);
+				String password = tuple.get(1);
+				String email = tuple.get(2);
+				
+				// Create the user and add it to the List
+				userPojos.add(new UserPojo(username, password, email));
+				
+				// Grab next tuple
+				tuple = readUsers.next();
+			}
+			return userPojos;
+		}
+	}
 }

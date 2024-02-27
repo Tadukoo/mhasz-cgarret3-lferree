@@ -18,6 +18,8 @@ import com.github.tadukoo.middle_earth.model.Characters.Character;
 import com.github.tadukoo.middle_earth.model.Characters.Enemy;
 import com.github.tadukoo.middle_earth.model.Characters.Inventory;
 import com.github.tadukoo.middle_earth.model.Characters.Player;
+import com.github.tadukoo.middle_earth.persist.pojo.DatabaseResult;
+import com.github.tadukoo.util.StringUtil;
 import persist.dbmod.StringPair;
 import persist.dbmod.User;
 
@@ -261,15 +263,17 @@ public class FakeDatabase implements IDatabase{
 	}
 	
 	@Override
-	public String getUserPasswordByUserName(String username){
-		return users.stream()
+	public DatabaseResult<String> getUserPasswordByUsername(String username){
+		String password = users.stream()
 				.filter(user -> user.getUserName().equals(username))
 				.map(User::getPassword)
 				.findFirst().orElse(null);
+		String error = StringUtil.isBlank(password)?"Failed to find user":null;
+		return new DatabaseResult<>(password, error);
 	}
 
 	@Override
-	public ArrayList<String> getAllUserNames() {
+	public ArrayList<String> getAllUsernames() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -350,7 +354,7 @@ public class FakeDatabase implements IDatabase{
 	}
 
 	@Override
-	public Boolean doesUserNameExist(String username){
+	public Boolean doesUsernameExist(String username){
 		Optional<User> foundUser = users.stream()
 				.filter(user -> user.getUserName().equals(username))
 				.findFirst();

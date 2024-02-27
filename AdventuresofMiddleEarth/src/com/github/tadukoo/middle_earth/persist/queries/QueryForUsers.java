@@ -1,6 +1,6 @@
 package com.github.tadukoo.middle_earth.persist.queries;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import com.github.tadukoo.middle_earth.persist.DatabaseProvider;
 import com.github.tadukoo.middle_earth.persist.IDatabase;
@@ -14,7 +14,7 @@ public class QueryForUsers {
 		// get the DB instance and execute transaction
 
 		IDatabase db = DatabaseProvider.getInstance();
-		ArrayList<String> userList = db.getAllUserNames();
+		List<String> userList = db.getAllUsernames();
 		
 		// check if anything was returned and output the list
 		if (userList.isEmpty()) {
@@ -25,9 +25,9 @@ public class QueryForUsers {
 			}
 		}
 		
-		System.out.println("Does " + userList.get(0) + " exist? = " + db.doesUserNameExist(userList.get(0)));
+		System.out.println("Does " + userList.get(0) + " exist? = " + db.doesUsernameExist(userList.get(0)));
 		
-		if(!db.doesUserNameExist("Blart")) {
+		if(!db.doesUsernameExist("Blart")) {
 			System.out.println(db.createNewUser("Blart", "whocares", "Blart@email.email"));
 		}
 	}

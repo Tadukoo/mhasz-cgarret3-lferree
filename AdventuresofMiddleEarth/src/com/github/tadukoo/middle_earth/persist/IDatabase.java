@@ -13,49 +13,55 @@ import com.github.tadukoo.middle_earth.model.Constructs.Item;
 import com.github.tadukoo.middle_earth.model.Constructs.Object;
 import com.github.tadukoo.middle_earth.model.Constructs.Map;
 import com.github.tadukoo.middle_earth.model.Constructs.MapTile;
+import com.github.tadukoo.middle_earth.persist.pojo.DatabaseResult;
 
-public interface IDatabase {
-	public Map getMap();
-	public Player getPlayer();
+public interface IDatabase{
+	/*
+	 * Account related Queries
+	 */
 	
-	public List<Item> getAllItems();
-	public List<Object> getAllObjects();
-	public List<MapTile> getAllMapTiles();
-	public List<Character> getAllCharacters();
-	public List<Quest> getAllQuests();
+	DatabaseResult<String> getUserPasswordByUsername(String username);
+	List<String> getAllUsernames();
+	Boolean doesUsernameExist(String username);
+	Boolean isEmailInUse(String email);
+	Boolean createNewUser(String username, String password, String email);
 	
-	public Item getItemByID(int itemID);
-	public Object getObjectByID(int objectID);
-	public MapTile getMapTileByID(int mapTileID);
-	public Inventory getInventoryByID(int inventoryID);
+	Map getMap();
+	Player getPlayer();
 	
-	public Character getCharacterByName(String characterName);
+	List<Item> getAllItems();
+	List<Object> getAllObjects();
+	List<MapTile> getAllMapTiles();
+	List<Character> getAllCharacters();
+	List<Quest> getAllQuests();
 	
-	public Item removeItemFromInventory(Item item, Inventory inventory);
-	public Item removeItemFromObject(Item item, Object object);
+	Item getItemByID(int itemID);
+	Object getObjectByID(int objectID);
+	MapTile getMapTileByID(int mapTileID);
+	Inventory getInventoryByID(int inventoryID);
 	
-	public void addItemToInventory(Item item, Inventory inventory);
-	public void addItemToObject(Item item, Object object);
+	Character getCharacterByName(String characterName);
 	
-	public Game loadGame(int gameID);
-	public void saveGame(Game game);
+	Item removeItemFromInventory(Item item, Inventory inventory);
+	Item removeItemFromObject(Item item, Object object);
 	
-	public String getUserPasswordByUserName(String username);
-	public ArrayList<String> getAllUserNames();
-	public Boolean doesUserNameExist(String username);
-	public Boolean isEmailInUse(String email);
-	public Boolean createNewUser(String username, String password, String email);
-	public Integer createNewGame(String username);
-	public ArrayList<Integer> getGameIDs(String username);
+	void addItemToInventory(Item item, Inventory inventory);
+	void addItemToObject(Item item, Object object);
 	
-	public Enemy getEnemyByRace(String race);
-	public ArrayList<Enemy> getAllEnemies();
-	public ArrayList<String> getAllEnemyRaces();
+	Game loadGame(int gameID);
+	void saveGame(Game game);
 	
-	public Item getLegendaryItem();
-	public Item getLegendaryItem(String itemType);
-	public Item getHandHeldItem();
-	public Item getHandHeldItem(String whichHand);
-	public Item getArmorItem();
-	public Item getArmorItem(String armorType);
+	Integer createNewGame(String username);
+	ArrayList<Integer> getGameIDs(String username);
+	
+	Enemy getEnemyByRace(String race);
+	ArrayList<Enemy> getAllEnemies();
+	ArrayList<String> getAllEnemyRaces();
+	
+	Item getLegendaryItem();
+	Item getLegendaryItem(String itemType);
+	Item getHandHeldItem();
+	Item getHandHeldItem(String whichHand);
+	Item getArmorItem();
+	Item getArmorItem(String armorType);
 }

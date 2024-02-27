@@ -15,11 +15,18 @@
 	<description>Utilities for making forms</description>
 	<modules>
 		<module>AdventuresofMiddleEarth</module>
+		<module>AdventuresOfMiddleEarthDBSetup</module>
 	</modules>
 	<properties>
 		<!-- Info -->
 		<shortName>AdventureOfMiddleEarth</shortName>
 		<tadukoo.util.version>0.6-Beta</tadukoo.util.version>
+		<tadukoo.database.version>0.4-Alpha-SNAPSHOT</tadukoo.database.version>
+		
+		<!-- Tadukoo Database Info -->
+		<tadukoo.database.groupID>com.github.tadukoo.database</tadukoo.database.groupID>
+		<tadukoo.database.mysql.artifactID>TadukooMySQL</tadukoo.database.mysql.artifactID>
+		<tadukoo.database.mysql.version>${tadukoo.database.version}</tadukoo.database.mysql.version>
 		
 		<!-- Tomcat Versions -->
 		<tomcat.servlet.version>5.0.0</tomcat.servlet.version>
@@ -36,6 +43,12 @@
 	</properties>
 	<dependencyManagement>
 		<dependencies>
+			<dependency>
+				<groupId>${tadukoo.database.groupID}</groupId>
+				<artifactId>${tadukoo.database.mysql.artifactID}</artifactId>
+				<version>${tadukoo.database.mysql.version}</version>
+			</dependency>
+			<!-- Tomcat Related Dependencies -->
 			<dependency>
 				<groupId>${tomcat.servlet.groupID}</groupId>
 				<artifactId>${tomcat.servlet.artifactID}</artifactId>

@@ -2,6 +2,7 @@ package com.github.tadukoo.middle_earth.controller;
 
 import com.github.tadukoo.middle_earth.persist.DatabaseProvider;
 import com.github.tadukoo.middle_earth.persist.IDatabase;
+import com.github.tadukoo.middle_earth.persist.pojo.DatabaseResult;
 
 import java.util.ArrayList;
 import java.util.regex.Pattern;
@@ -46,7 +47,7 @@ public class Account{
 	
 	public String usernameCheck(String username, IDatabase db){
 		
-		if (db.doesUserNameExist(username)) {
+		if (db.doesUsernameExist(username)) {
 			return "\nSorry that Username is already taken.";
 		} else {
 			return "Passes";
@@ -123,10 +124,11 @@ public class Account{
 	public String login(String username, String password){
 		IDatabase db = DatabaseProvider.getInstance();
 		
-		if (password.equals(db.getUserPasswordByUserName(username))) {
+		DatabaseResult<String> passwordResult = db.getUserPasswordByUsername(username);
+		if(passwordResult.success() && password.equals(passwordResult.result())){
 			setusername(username);
 			return "Success!";
-		} else {
+		}else{
 			return "Invalid Username or Password";
 		}
 	}

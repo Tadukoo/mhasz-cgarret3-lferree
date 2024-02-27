@@ -15,6 +15,10 @@
 			<groupId>${tadukoo.util.groupID}</groupId>
 			<artifactId>${tadukoo.util.lang.artifactID}</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>${tadukoo.database.groupID}</groupId>
+			<artifactId>${tadukoo.database.mysql.artifactID}</artifactId>
+		</dependency>
 		<!-- Tomcat Related Dependencies -->
 		<dependency>
 			<groupId>${tomcat.servlet.groupID}</groupId>

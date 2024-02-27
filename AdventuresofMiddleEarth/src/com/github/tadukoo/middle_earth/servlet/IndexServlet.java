@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import com.github.tadukoo.middle_earth.controller.Account;
 import com.github.tadukoo.middle_earth.controller.Game;
 import com.github.tadukoo.middle_earth.persist.DatabaseProvider;
-import com.github.tadukoo.middle_earth.persist.DerbyDatabase;
 import com.github.tadukoo.middle_earth.persist.IDatabase;
 
 import jakarta.servlet.ServletException;
@@ -14,13 +13,11 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-public class IndexServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+public class IndexServlet extends HttpServlet{
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		
 		System.out.println("Index Servlet: doGet");
 		String playerToken = (String) req.getSession().getAttribute("player");
 		req.setAttribute("playerToken", playerToken);
@@ -31,9 +28,8 @@ public class IndexServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-				
 		System.out.println("Index Servlet: doPost");
-		DatabaseProvider.setInstance(new DerbyDatabase());
+		DatabaseProvider.initDefaultDatabase(getServletContext());
 		Account account = (Account) req.getSession().getAttribute("account");
 		IDatabase db = DatabaseProvider.getInstance();
 		ArrayList<Integer> games = new ArrayList<>();

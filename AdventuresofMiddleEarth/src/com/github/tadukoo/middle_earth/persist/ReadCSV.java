@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 public class ReadCSV implements Closeable {
-	private BufferedReader reader;
+	private final BufferedReader reader;
 	
 	public ReadCSV(String resourceName) throws IOException {
 		InputStream in = this.getClass().getClassLoader().getResourceAsStream(resourceName);
@@ -25,7 +25,7 @@ public class ReadCSV implements Closeable {
 		if (line == null) {
 			return null;
 		}
-		List<String> tuple = new ArrayList<String>();
+		List<String> tuple = new ArrayList<>();
 		StringTokenizer tok = new StringTokenizer(line, "|");
 		while (tok.hasMoreTokens()) {
 			tuple.add(tok.nextToken().trim());

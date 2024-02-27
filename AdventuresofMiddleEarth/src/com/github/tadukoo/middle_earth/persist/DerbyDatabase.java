@@ -21,6 +21,7 @@ import com.github.tadukoo.middle_earth.model.Characters.Player;
 import com.github.tadukoo.middle_earth.model.Constructs.Item;
 import com.github.tadukoo.middle_earth.model.Constructs.ItemType;
 import com.github.tadukoo.middle_earth.model.Constructs.Object;
+import com.github.tadukoo.middle_earth.persist.pojo.DatabaseResult;
 import persist.dbmod.IntPair;
 import persist.dbmod.ObjectIDCommandResponse;
 import persist.dbmod.StringPair;
@@ -28,6 +29,7 @@ import persist.dbmod.User;
 import com.github.tadukoo.middle_earth.model.Constructs.Map;
 import com.github.tadukoo.middle_earth.model.Constructs.MapTile;
 
+@Deprecated
 public class DerbyDatabase implements IDatabase {
 	static {
 		try {
@@ -1987,7 +1989,7 @@ public class DerbyDatabase implements IDatabase {
 	////////////////////////////////////////////////////////////////////////////////////////
 
 	@Override
-	public ArrayList<String> getAllUserNames() {
+	public ArrayList<String> getAllUsernames() {
 		return executeTransaction(new Transaction<ArrayList<String>>() {
 			@Override
 			public ArrayList<String> execute(Connection conn) throws SQLException {
@@ -2027,7 +2029,7 @@ public class DerbyDatabase implements IDatabase {
 	}
 
 	@Override
-	public Boolean doesUserNameExist(String username) {
+	public Boolean doesUsernameExist(String username) {
 		return executeTransaction(new Transaction<Boolean>() {
 			@Override
 			public Boolean execute(Connection conn) throws SQLException {
@@ -2084,37 +2086,35 @@ public class DerbyDatabase implements IDatabase {
 		});
 	}
 
-	public String getUserPasswordByUserName(final String userName) {
-		return executeTransaction(new Transaction<String>() {
-			public String execute(Connection conn) throws SQLException {
-				PreparedStatement stmt = null;
-				ResultSet resultPassword = null;
-				try {
-					stmt = conn.prepareStatement(
-							"select users.password "
-							+ "from users "
-							+ "where users.username = ? ");
-					stmt.setString(1, userName);
-					resultPassword = stmt.executeQuery();
-					
-					String password = new String();
-					
-					Boolean found = false;
-					while(resultPassword.next()) {
-						found = true;
-						password = resultPassword.getString(1);
-					}
-					
-					if(!found) {
-						System.out.println("That username was not found");
-					}
-					
-					return password;
-				} finally {
-					DBUtil.closeQuietly(resultPassword);
-					DBUtil.closeQuietly(stmt);
-					DBUtil.closeQuietly(conn);
+	public DatabaseResult<String> getUserPasswordByUsername(final String userName){
+		return executeTransaction(conn -> {
+			PreparedStatement stmt = null;
+			ResultSet resultPassword = null;
+			try {
+				stmt = conn.prepareStatement(
+						"select users.password "
+						+ "from users "
+						+ "where users.username = ? ");
+				stmt.setString(1, userName);
+				resultPassword = stmt.executeQuery();
+				
+				String password = null;
+				
+				boolean found = false;
+				while(resultPassword.next()) {
+					found = true;
+					password = resultPassword.getString(1);
 				}
+				
+				if(!found) {
+					return new DatabaseResult<>(null, "That username was not found");
+				}
+				
+				return new DatabaseResult<>(password, null);
+			} finally {
+				DBUtil.closeQuietly(resultPassword);
+				DBUtil.closeQuietly(stmt);
+				DBUtil.closeQuietly(conn);
 			}
 		});
 	}

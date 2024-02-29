@@ -7,11 +7,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.github.tadukoo.middle_earth.model.Constructs.Object;
-import com.github.tadukoo.middle_earth.persist.pojo.UserPojo;
+import com.github.tadukoo.middle_earth.persist.pojo.User;
 import persist.dbmod.IntPair;
 import persist.dbmod.ObjectIDCommandResponse;
 import persist.dbmod.StringPair;
-import persist.dbmod.User;
 import com.github.tadukoo.middle_earth.model.Constructs.Item;
 import com.github.tadukoo.middle_earth.model.Constructs.Map;
 import com.github.tadukoo.middle_earth.model.Constructs.MapTile;
@@ -454,31 +453,10 @@ public class InitialData {
 			}
 			return questList;
 		}
-	} 
-	
-	public static ArrayList<User> getUsers() throws IOException {
-		ArrayList<User> userList = new ArrayList<User>();
-		try(ReadCSV readUsers = new ReadCSV("users.csv")){
-			while(true){
-				List<String> tuple = readUsers.next();
-				if(tuple == null){
-					break;
-				}
-				Iterator<String> i = tuple.iterator();
-				
-				User user = new User();
-				//user.setUserID(Integer.parseInt(i.next()));
-				user.setUserName(i.next());
-				user.setPassword(i.next());
-				user.setEmail(i.next());
-				userList.add(user);
-			}
-			return userList;
-		}
 	}
 	
-	public static List<UserPojo> getUserPojos() throws IOException{
-		List<UserPojo> userPojos = new ArrayList<>();
+	public static List<User> getUserPojos() throws IOException{
+		List<User> users = new ArrayList<>();
 		// Read users from the CSV
 		try(ReadCSV readUsers = new ReadCSV("users.csv")){
 			List<String> tuple = readUsers.next();
@@ -489,12 +467,12 @@ public class InitialData {
 				String email = tuple.get(2);
 				
 				// Create the user and add it to the List
-				userPojos.add(new UserPojo(username, password, email));
+				users.add(new User(username, password, email));
 				
 				// Grab next tuple
 				tuple = readUsers.next();
 			}
-			return userPojos;
+			return users;
 		}
 	}
 }

@@ -12,7 +12,7 @@ import com.github.tadukoo.middle_earth.model.Constructs.MapTile;
 import com.github.tadukoo.middle_earth.model.Constructs.Object;
 import com.github.tadukoo.middle_earth.model.Quest;
 import com.github.tadukoo.middle_earth.persist.pojo.DatabaseResult;
-import com.github.tadukoo.middle_earth.persist.pojo.UserPojo;
+import com.github.tadukoo.middle_earth.persist.pojo.User;
 import com.github.tadukoo.util.ListUtil;
 import com.github.tadukoo.util.LoggerUtil;
 import com.github.tadukoo.util.logger.EasyLogger;
@@ -29,6 +29,12 @@ public class MySQLDatabase implements IDatabase{
 	/** The {@link EasyLogger logger} to use for this {@link MySQLDatabase} */
 	private final EasyLogger logger;
 	
+	/**
+	 * Creates a new MySQL Database with the given {@link DatabaseSettings settings}
+	 *
+	 * @param settings The {@link DatabaseSettings settings} to use for the database
+	 * @throws IOException If anything goes wrong around setting up the {@link EasyLogger logger}
+	 */
 	public MySQLDatabase(DatabaseSettings settings) throws IOException{
 		logger = new EasyLogger(
 				LoggerUtil.createFileLogger("mysql-database.log", Level.INFO));
@@ -49,9 +55,9 @@ public class MySQLDatabase implements IDatabase{
 		String password = null, error = null;
 		try{
 			// Find password for given username by doing search
-			UserPojo userPojo = new UserPojo();
-			userPojo.setUsername(username);
-			List<UserPojo> results = userPojo.doSearch(database, UserPojo.class, false);
+			User user = new User();
+			user.setUsername(username);
+			List<User> results = user.doSearch(database, User.class, false);
 			// unique constraint on username prevents multiple users
 			password = results.get(0).getPassword();
 		}catch(SQLException e){
@@ -69,9 +75,9 @@ public class MySQLDatabase implements IDatabase{
 		String error = null;
 		try{
 			// Find username by doing search
-			UserPojo userPojo = new UserPojo();
-			userPojo.setUsername(username);
-			List<UserPojo> results = userPojo.doSearch(database, UserPojo.class, false);
+			User user = new User();
+			user.setUsername(username);
+			List<User> results = user.doSearch(database, User.class, false);
 			usernameFound = ListUtil.isNotBlank(results);
 		}catch(SQLException e){
 			// Log the error and have it set for the result
@@ -88,9 +94,9 @@ public class MySQLDatabase implements IDatabase{
 		String error = null;
 		try{
 			// Find email by doing search
-			UserPojo userPojo = new UserPojo();
-			userPojo.setEmail(email);
-			List<UserPojo> results = userPojo.doSearch(database, UserPojo.class, false);
+			User user = new User();
+			user.setEmail(email);
+			List<User> results = user.doSearch(database, User.class, false);
 			emailFound = ListUtil.isNotBlank(results);
 		}catch(SQLException e){
 			// Log the error and have it set for the result
@@ -104,8 +110,8 @@ public class MySQLDatabase implements IDatabase{
 	@Override
 	public DatabaseResult<Boolean> createNewUser(String username, String password, String email){
 		try{
-			UserPojo userPojo = new UserPojo(username, password, email);
-			userPojo.storeValues(database, false);
+			User user = new User(username, password, email);
+			user.storeValues(database, false);
 			return new DatabaseResult<>(true, null);
 		}catch(SQLException e){
 			// Log the error and have it set for the result

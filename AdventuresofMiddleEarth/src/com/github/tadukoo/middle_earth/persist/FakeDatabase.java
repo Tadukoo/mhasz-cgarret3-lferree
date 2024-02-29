@@ -19,10 +19,9 @@ import com.github.tadukoo.middle_earth.model.Characters.Enemy;
 import com.github.tadukoo.middle_earth.model.Characters.Inventory;
 import com.github.tadukoo.middle_earth.model.Characters.Player;
 import com.github.tadukoo.middle_earth.persist.pojo.DatabaseResult;
+import com.github.tadukoo.middle_earth.persist.pojo.User;
 import com.github.tadukoo.util.StringUtil;
 import persist.dbmod.StringPair;
-import persist.dbmod.User;
-
 
 public class FakeDatabase implements IDatabase{
 	
@@ -52,7 +51,7 @@ public class FakeDatabase implements IDatabase{
 			//inventoryList.addAll(InitialData.getItemsToInventories()); TODO: Fix?
 			inventoryList = new ArrayList<>();
 			playerList = InitialData.getPlayers();
-			users = InitialData.getUsers();
+			users = InitialData.getUserPojos();
 			enemies = InitialData.getEnemies();
 			nameGenders = InitialData.getNameGenderList();
 		}catch(IOException e){
@@ -64,7 +63,7 @@ public class FakeDatabase implements IDatabase{
 	@Override
 	public DatabaseResult<String> getUserPasswordByUsername(String username){
 		String password = users.stream()
-				.filter(user -> user.getUserName().equals(username))
+				.filter(user -> user.getUsername().equals(username))
 				.map(User::getPassword)
 				.findFirst().orElse(null);
 		String error = StringUtil.isBlank(password)?"Failed to find user":null;
@@ -75,7 +74,7 @@ public class FakeDatabase implements IDatabase{
 	@Override
 	public DatabaseResult<Boolean> doesUsernameExist(String username){
 		Optional<User> foundUser = users.stream()
-				.filter(user -> user.getUserName().equals(username))
+				.filter(user -> user.getUsername().equals(username))
 				.findFirst();
 		return new DatabaseResult<>(foundUser.isPresent(), null);
 	}
@@ -92,11 +91,7 @@ public class FakeDatabase implements IDatabase{
 	/** {@inheritDoc} */
 	@Override
 	public DatabaseResult<Boolean> createNewUser(String username, String password, String email){
-		User newUser = new User();
-		newUser.setUserName(username);
-		newUser.setPassword(password);
-		newUser.setEmail(email);
-		users.add(newUser);
+		users.add(new User(username, password, email));
 		return new DatabaseResult<>(true, null);
 	}
 	

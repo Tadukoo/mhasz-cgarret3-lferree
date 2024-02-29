@@ -3,11 +3,11 @@ package com.github.tadukoo.middle_earth.controller;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.github.tadukoo.middle_earth.model.Characters.Character;
-import com.github.tadukoo.middle_earth.model.Characters.Player;
-import com.github.tadukoo.middle_earth.model.Constructs.Map;
-import com.github.tadukoo.middle_earth.model.Constructs.MapTile;
-import com.github.tadukoo.middle_earth.model.Constructs.GameObject;
+import com.github.tadukoo.aome.character.Character;
+import com.github.tadukoo.aome.character.Player;
+import com.github.tadukoo.aome.construct.Map;
+import com.github.tadukoo.aome.construct.MapTile;
+import com.github.tadukoo.aome.construct.GameObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

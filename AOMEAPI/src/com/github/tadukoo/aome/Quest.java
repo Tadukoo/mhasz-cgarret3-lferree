@@ -1,10 +1,10 @@
-package com.github.tadukoo.middle_earth.model;
+package com.github.tadukoo.aome;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.github.tadukoo.middle_earth.model.Characters.NPC;
-import com.github.tadukoo.middle_earth.model.Constructs.Item;
+import com.github.tadukoo.aome.character.NPC;
+import com.github.tadukoo.aome.construct.Item;
 
 public class Quest{
 	private ArrayList<Item> rewardItems;
@@ -12,8 +12,8 @@ public class Quest{
 	private HashMap<String, NPC> dialogue;
 	
 	public Quest() {
-		rewardItems = new ArrayList<Item>();
-		dialogue = new HashMap<String, NPC>();
+		rewardItems = new ArrayList<>();
+		dialogue = new HashMap<>();
 	}
 	
 	public void setRewardItems(ArrayList<Item> rewardItems) {

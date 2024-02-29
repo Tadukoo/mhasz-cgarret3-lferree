@@ -1,4 +1,4 @@
-package com.github.tadukoo.middle_earth.persist;
+package com.github.tadukoo.aome;
 
 import java.io.BufferedReader;
 import java.io.Closeable;

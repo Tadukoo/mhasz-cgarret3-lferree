@@ -1,7 +1,7 @@
-package com.github.tadukoo.middle_earth.model.Characters;
+package com.github.tadukoo.aome.character;
 
-import com.github.tadukoo.middle_earth.model.Constructs.Item;
-import com.github.tadukoo.middle_earth.model.Constructs.ItemType;
+import com.github.tadukoo.aome.construct.Item;
+import com.github.tadukoo.aome.construct.ItemType;
 
 public abstract class Character{
 	private String race;

@@ -1,4 +1,4 @@
-package com.github.tadukoo.middle_earth.persist.pojo;
+package com.github.tadukoo.aome;
 
 import com.github.tadukoo.database.mysql.pojo.AbstractDatabasePojo;
 import com.github.tadukoo.database.mysql.syntax.ColumnDefinition;

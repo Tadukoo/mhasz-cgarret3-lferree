@@ -1,4 +1,4 @@
-package com.github.tadukoo.middle_earth.persist;
+package com.github.tadukoo.aome;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -6,18 +6,13 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import com.github.tadukoo.middle_earth.model.Constructs.GameObject;
-import com.github.tadukoo.middle_earth.persist.pojo.User;
-import persist.dbmod.IntPair;
-import persist.dbmod.ObjectIDCommandResponse;
-import persist.dbmod.StringPair;
-import com.github.tadukoo.middle_earth.model.Constructs.Item;
-import com.github.tadukoo.middle_earth.model.Constructs.Map;
-import com.github.tadukoo.middle_earth.model.Constructs.MapTile;
-import com.github.tadukoo.middle_earth.model.Constructs.ItemType;
-import com.github.tadukoo.middle_earth.model.Quest;
-import com.github.tadukoo.middle_earth.model.Characters.Enemy;
-import com.github.tadukoo.middle_earth.model.Characters.Player;
+import com.github.tadukoo.aome.character.Enemy;
+import com.github.tadukoo.aome.character.Player;
+import com.github.tadukoo.aome.construct.GameObject;
+import com.github.tadukoo.aome.construct.Map;
+import com.github.tadukoo.aome.construct.MapTile;
+import com.github.tadukoo.aome.construct.Item;
+import com.github.tadukoo.aome.construct.ItemType;
 
 public class InitialData {
 /*

@@ -2,10 +2,10 @@ package com.github.tadukoo.middle_earth.controller;
 
 import java.util.ArrayList;
 
-import com.github.tadukoo.middle_earth.model.Characters.Character;
-import com.github.tadukoo.middle_earth.model.Characters.Inventory;
-import com.github.tadukoo.middle_earth.model.Characters.Player;
-import com.github.tadukoo.middle_earth.model.Constructs.Item;
+import com.github.tadukoo.aome.character.Character;
+import com.github.tadukoo.aome.character.Inventory;
+import com.github.tadukoo.aome.character.Player;
+import com.github.tadukoo.aome.construct.Item;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

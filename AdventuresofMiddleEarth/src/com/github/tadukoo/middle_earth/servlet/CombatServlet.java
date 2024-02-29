@@ -1,6 +1,6 @@
 package com.github.tadukoo.middle_earth.servlet;
 
-import com.github.tadukoo.middle_earth.model.Characters.Character;
+import com.github.tadukoo.aome.character.Character;
 import com.github.tadukoo.middle_earth.controller.Game;
 
 import java.io.IOException;

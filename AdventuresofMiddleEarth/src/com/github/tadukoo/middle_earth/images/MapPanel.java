@@ -3,7 +3,7 @@ package com.github.tadukoo.middle_earth.images;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
-import com.github.tadukoo.middle_earth.model.Constructs.MapTile;
+import com.github.tadukoo.aome.construct.MapTile;
 
 import java.awt.*;
 import java.awt.image.*;

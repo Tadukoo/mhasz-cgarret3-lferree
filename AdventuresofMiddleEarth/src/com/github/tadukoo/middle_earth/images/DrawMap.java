@@ -2,7 +2,7 @@ package com.github.tadukoo.middle_earth.images;
 
 import javax.swing.JFrame;
 
-import com.github.tadukoo.middle_earth.model.Constructs.MapTile;
+import com.github.tadukoo.aome.construct.MapTile;
 
 public class DrawMap {
 	

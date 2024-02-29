@@ -2,7 +2,8 @@ package com.github.tadukoo.middle_earth.model.Characters;
 
 import java.util.ArrayList;
 
-import com.github.tadukoo.middle_earth.model.Quest;
+import com.github.tadukoo.aome.character.Player;
+import com.github.tadukoo.aome.Quest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

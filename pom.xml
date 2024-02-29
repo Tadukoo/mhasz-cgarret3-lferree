@@ -14,6 +14,7 @@
 	<packaging>pom</packaging>
 	<description>Utilities for making forms</description>
 	<modules>
+		<module>AOMEAPI</module>
 		<module>AdventuresofMiddleEarth</module>
 		<module>AdventuresOfMiddleEarthDBSetup</module>
 	</modules>
@@ -64,6 +65,12 @@
 				<groupId>${tomcat.jstl.groupID}</groupId>
 				<artifactId>${tomcat.jstl.artifactID}</artifactId>
 				<version>${tomcat.jstl.version}</version>
+			</dependency>
+			<!-- Project Dependency -->
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>AOMEAPI</artifactId>
+				<version>${project.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

@@ -2,7 +2,8 @@ package com.github.tadukoo.middle_earth.model.Characters;
 
 import java.util.HashMap;
 
-import com.github.tadukoo.middle_earth.model.Constructs.Item;
+import com.github.tadukoo.aome.character.Character;
+import com.github.tadukoo.aome.construct.Item;
 
 public class Vendor extends Character{
 	private HashMap<Item, Integer> item_prices;

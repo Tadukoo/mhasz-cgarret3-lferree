@@ -1,9 +1,9 @@
-package com.github.tadukoo.middle_earth.model.Characters;
+package com.github.tadukoo.aome.character;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.github.tadukoo.middle_earth.model.Constructs.Item;
+import com.github.tadukoo.aome.construct.Item;
 
 public class Inventory{
 	private List<Item> items;

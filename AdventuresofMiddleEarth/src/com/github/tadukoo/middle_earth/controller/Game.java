@@ -6,14 +6,14 @@ import java.util.Random;
 
 import javax.swing.JFrame;
 
-import com.github.tadukoo.middle_earth.model.Constructs.GameObject;
+import com.github.tadukoo.aome.construct.GameObject;
 import com.github.tadukoo.middle_earth.images.MapPanel;
 import com.github.tadukoo.middle_earth.model.CombatSituation;
-import com.github.tadukoo.middle_earth.model.Quest;
-import com.github.tadukoo.middle_earth.model.Characters.Character;
-import com.github.tadukoo.middle_earth.model.Constructs.Item;
-import com.github.tadukoo.middle_earth.model.Constructs.ItemType;
-import com.github.tadukoo.middle_earth.model.Constructs.Map;
+import com.github.tadukoo.aome.Quest;
+import com.github.tadukoo.aome.character.Character;
+import com.github.tadukoo.aome.construct.Item;
+import com.github.tadukoo.aome.construct.ItemType;
+import com.github.tadukoo.aome.construct.Map;
 import com.github.tadukoo.middle_earth.persist.DatabaseProvider;
 import com.github.tadukoo.middle_earth.persist.IDatabase;
 

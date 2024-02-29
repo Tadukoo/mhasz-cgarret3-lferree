@@ -1,9 +1,9 @@
-package com.github.tadukoo.middle_earth.model.Characters;
+package com.github.tadukoo.aome.character;
+
+import com.github.tadukoo.aome.Quest;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import com.github.tadukoo.middle_earth.model.Quest;
 
 public class Player extends Character{
 	private int experience;

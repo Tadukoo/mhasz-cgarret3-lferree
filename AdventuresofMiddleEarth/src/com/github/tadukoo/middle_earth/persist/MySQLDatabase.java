@@ -1,26 +1,29 @@
 package com.github.tadukoo.middle_earth.persist;
 
+import com.github.tadukoo.aome.User;
 import com.github.tadukoo.database.mysql.Database;
 import com.github.tadukoo.middle_earth.controller.Game;
-import com.github.tadukoo.middle_earth.model.Characters.Character;
-import com.github.tadukoo.middle_earth.model.Characters.Enemy;
-import com.github.tadukoo.middle_earth.model.Characters.Inventory;
-import com.github.tadukoo.middle_earth.model.Characters.Player;
-import com.github.tadukoo.middle_earth.model.Constructs.Item;
-import com.github.tadukoo.middle_earth.model.Constructs.Map;
-import com.github.tadukoo.middle_earth.model.Constructs.MapTile;
-import com.github.tadukoo.middle_earth.model.Constructs.GameObject;
-import com.github.tadukoo.middle_earth.model.Quest;
+import com.github.tadukoo.aome.character.Character;
+import com.github.tadukoo.aome.character.Enemy;
+import com.github.tadukoo.aome.character.Inventory;
+import com.github.tadukoo.aome.character.Player;
+import com.github.tadukoo.aome.construct.Item;
+import com.github.tadukoo.aome.construct.Map;
+import com.github.tadukoo.aome.construct.MapTile;
+import com.github.tadukoo.aome.construct.GameObject;
+import com.github.tadukoo.aome.Quest;
 import com.github.tadukoo.middle_earth.persist.pojo.DatabaseResult;
-import com.github.tadukoo.middle_earth.persist.pojo.User;
 import com.github.tadukoo.util.ListUtil;
 import com.github.tadukoo.util.LoggerUtil;
 import com.github.tadukoo.util.logger.EasyLogger;
+import jakarta.servlet.ServletContext;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.logging.Level;
 
 /**
@@ -36,18 +39,24 @@ public class MySQLDatabase implements IDatabase{
 	private final EasyLogger logger;
 	
 	/**
-	 * Creates a new MySQL Database with the given {@link DatabaseSettings settings}
+	 * Creates a new MySQL Database with the given {@link ServletContext}
 	 *
-	 * @param settings The {@link DatabaseSettings settings} to use for the database
+	 * @param servletContext The {@link ServletContext} to use to find the properties file for settings
 	 * @throws IOException If anything goes wrong around setting up the {@link EasyLogger logger}
 	 */
-	public MySQLDatabase(DatabaseSettings settings) throws IOException{
+	public MySQLDatabase(ServletContext servletContext) throws IOException{
+		Properties prop = new Properties();
+		InputStream is = servletContext.getResourceAsStream("WEB-INF/config/database.properties");
+		prop.load(is);
 		logger = new EasyLogger(
 				LoggerUtil.createFileLogger("mysql-database.log", Level.INFO));
 		database = Database.builder()
 				.logger(logger)
-				.host(settings.host()).port(settings.port()).databaseName(settings.databaseName())
-				.username(settings.username()).password(settings.password())
+				.host(prop.getProperty("host"))
+				.port(Integer.parseInt(prop.getProperty("port")))
+				.databaseName(prop.getProperty("database-name"))
+				.username(prop.getProperty("username"))
+				.password(prop.getProperty("password"))
 				.build();
 	}
 	

@@ -1,4 +1,4 @@
-package persist.dbmod;
+package com.github.tadukoo.aome;
 
 public class ObjectIDCommandResponse {
 	private int objectID;

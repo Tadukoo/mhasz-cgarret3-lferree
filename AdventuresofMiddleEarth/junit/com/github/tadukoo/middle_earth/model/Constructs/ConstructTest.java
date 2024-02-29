@@ -1,5 +1,6 @@
 package com.github.tadukoo.middle_earth.model.Constructs;
 
+import com.github.tadukoo.aome.construct.Construct;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

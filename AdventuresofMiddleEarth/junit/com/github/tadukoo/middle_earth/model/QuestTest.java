@@ -3,8 +3,9 @@ package com.github.tadukoo.middle_earth.model;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.github.tadukoo.middle_earth.model.Characters.NPC;
-import com.github.tadukoo.middle_earth.model.Constructs.Item;
+import com.github.tadukoo.aome.Quest;
+import com.github.tadukoo.aome.character.NPC;
+import com.github.tadukoo.aome.construct.Item;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

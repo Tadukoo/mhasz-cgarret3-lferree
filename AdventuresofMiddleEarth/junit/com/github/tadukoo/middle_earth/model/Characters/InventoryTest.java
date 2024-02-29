@@ -2,7 +2,8 @@ package com.github.tadukoo.middle_earth.model.Characters;
 
 import java.util.ArrayList;
 
-import com.github.tadukoo.middle_earth.model.Constructs.Item;
+import com.github.tadukoo.aome.character.Inventory;
+import com.github.tadukoo.aome.construct.Item;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

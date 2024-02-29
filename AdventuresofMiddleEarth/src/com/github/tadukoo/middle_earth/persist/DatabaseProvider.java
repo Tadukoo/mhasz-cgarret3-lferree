@@ -12,7 +12,7 @@ public class DatabaseProvider{
 	}
 	
 	public static void initDefaultDatabase(ServletContext servletContext) throws IOException{
-		setInstance(new MySQLDatabase(DatabaseSettings.loadFromConfig(servletContext)));
+		setInstance(new MySQLDatabase(servletContext));
 	}
 	
 	public static IDatabase getInstance(){

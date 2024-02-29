@@ -1,10 +1,9 @@
-package com.github.tadukoo.aome;
+package com.github.tadukoo.dbsetup;
 
+import com.github.tadukoo.aome.InitialData;
+import com.github.tadukoo.aome.User;
+import com.github.tadukoo.aome.construct.Item;
 import com.github.tadukoo.database.mysql.Database;
-import com.github.tadukoo.middle_earth.model.Constructs.Item;
-import com.github.tadukoo.middle_earth.persist.DatabaseSettings;
-import com.github.tadukoo.middle_earth.persist.InitialData;
-import com.github.tadukoo.middle_earth.persist.pojo.User;
 import com.github.tadukoo.util.LoggerUtil;
 import com.github.tadukoo.util.logger.EasyLogger;
 
@@ -25,15 +24,12 @@ public class SetupDatabase{
 	 */
 	public static void main(String[] args) throws IOException, SQLException{
 		// TODO: Put this configuration somewhere
-		DatabaseSettings settings = new DatabaseSettings(
-				"localhost", 3306, "middle-earth",
-				"root", "");
 		EasyLogger logger = new EasyLogger(
 				LoggerUtil.createFileLogger("mysql-database.log", Level.INFO));
 		database = Database.builder()
 				.logger(logger)
-				.host(settings.host()).port(settings.port()).databaseName(settings.databaseName())
-				.username(settings.username()).password(settings.password())
+				.host("localhost").port(3306).databaseName("middle-earth")
+				.username("root").password("")
 				.build();
 		createTables();
 		loadInitialData();

@@ -1,8 +1,8 @@
 package com.github.tadukoo.middle_earth.servlet;
 
 import com.github.tadukoo.middle_earth.controller.Game;
-import com.github.tadukoo.middle_earth.model.Characters.Character;
-import com.github.tadukoo.middle_earth.model.Constructs.Item;
+import com.github.tadukoo.aome.character.Character;
+import com.github.tadukoo.aome.construct.Item;
 
 import java.io.IOException;
 import java.util.ArrayList;

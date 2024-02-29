@@ -1,7 +1,7 @@
 package com.github.tadukoo.middle_earth.servlet;
 
 import com.github.tadukoo.middle_earth.controller.Game;
-import com.github.tadukoo.middle_earth.model.Constructs.Item;
+import com.github.tadukoo.aome.construct.Item;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;

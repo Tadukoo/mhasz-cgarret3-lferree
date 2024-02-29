@@ -1,6 +1,6 @@
 package com.github.tadukoo.middle_earth.model.Characters;
 
-import com.github.tadukoo.middle_earth.model.Constructs.Item;
+import com.github.tadukoo.aome.construct.Item;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

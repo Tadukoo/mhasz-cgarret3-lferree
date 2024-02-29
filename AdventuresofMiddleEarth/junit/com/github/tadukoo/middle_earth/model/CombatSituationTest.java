@@ -3,11 +3,11 @@ package com.github.tadukoo.middle_earth.model;
 import java.util.ArrayList;
 
 import com.github.tadukoo.middle_earth.controller.Game;
-import com.github.tadukoo.middle_earth.model.Characters.Character;
-import com.github.tadukoo.middle_earth.model.Characters.Enemy;
-import com.github.tadukoo.middle_earth.model.Characters.Player;
-import com.github.tadukoo.middle_earth.model.Constructs.Item;
-import com.github.tadukoo.middle_earth.model.Constructs.ItemType;
+import com.github.tadukoo.aome.character.Character;
+import com.github.tadukoo.aome.character.Enemy;
+import com.github.tadukoo.aome.character.Player;
+import com.github.tadukoo.aome.construct.Item;
+import com.github.tadukoo.aome.construct.ItemType;
 import com.github.tadukoo.middle_earth.persist.DatabaseProvider;
 import com.github.tadukoo.middle_earth.persist.FakeDatabase;
 import org.junit.jupiter.api.BeforeEach;

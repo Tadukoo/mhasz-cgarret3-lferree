@@ -1,4 +1,6 @@
-package com.github.tadukoo.middle_earth.model.Characters;
+package com.github.tadukoo.aome.character;
+
+import com.github.tadukoo.aome.character.Character;
 
 public class NPC extends Character{
 	

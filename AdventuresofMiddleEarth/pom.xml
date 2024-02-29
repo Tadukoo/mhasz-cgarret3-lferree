@@ -12,12 +12,8 @@
 	<packaging>war</packaging>
 	<dependencies>
 		<dependency>
-			<groupId>${tadukoo.util.groupID}</groupId>
-			<artifactId>${tadukoo.util.lang.artifactID}</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>${tadukoo.database.groupID}</groupId>
-			<artifactId>${tadukoo.database.mysql.artifactID}</artifactId>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>AOMEAPI</artifactId>
 		</dependency>
 		<!-- Tomcat Related Dependencies -->
 		<dependency>

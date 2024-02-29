@@ -1,4 +1,4 @@
-package com.github.tadukoo.middle_earth.model.Constructs;
+package com.github.tadukoo.aome.construct;
 
 import java.util.ArrayList;
 import java.util.HashMap;

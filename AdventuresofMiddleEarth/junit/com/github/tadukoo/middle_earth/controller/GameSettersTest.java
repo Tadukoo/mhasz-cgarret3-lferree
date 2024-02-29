@@ -9,7 +9,7 @@ import com.github.tadukoo.middle_earth.model.Characters.Player;
 import com.github.tadukoo.middle_earth.model.Constructs.Item;
 import com.github.tadukoo.middle_earth.model.Constructs.Map;
 import com.github.tadukoo.middle_earth.model.Constructs.MapTile;
-import com.github.tadukoo.middle_earth.model.Constructs.Object;
+import com.github.tadukoo.middle_earth.model.Constructs.GameObject;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -144,8 +144,8 @@ public class GameSettersTest{
 	@Test
 	public void testsetObjects(){
 		Game game = new Game();
-		ArrayList<Object> objs = new ArrayList<>();
-		Object bloop = new Object();
+		ArrayList<GameObject> objs = new ArrayList<>();
+		GameObject bloop = new GameObject();
 		objs.add(bloop);
 		game.setobjects(objs);
 		
@@ -156,17 +156,17 @@ public class GameSettersTest{
 	@Test
 	public void testResetObjects(){
 		Game game = new Game();
-		ArrayList<Object> objs = new ArrayList<>();
-		Object bloop = new Object();
+		ArrayList<GameObject> objs = new ArrayList<>();
+		GameObject bloop = new GameObject();
 		objs.add(bloop);
 		game.setobjects(objs);
 		
 		assertEquals(1, game.getobjects().size());
 		assertEquals(bloop, game.getobjects().get(0));
 		
-		ArrayList<Object> objs2 = new ArrayList<>();
-		Object bloop2 = new Object();
-		Object derpy = new Object();
+		ArrayList<GameObject> objs2 = new ArrayList<>();
+		GameObject bloop2 = new GameObject();
+		GameObject derpy = new GameObject();
 		objs2.add(bloop2);
 		objs2.add(derpy);
 		game.setobjects(objs2);

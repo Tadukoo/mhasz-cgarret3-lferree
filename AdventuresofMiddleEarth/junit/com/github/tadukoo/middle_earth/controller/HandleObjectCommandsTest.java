@@ -7,7 +7,7 @@ import com.github.tadukoo.middle_earth.model.Characters.Character;
 import com.github.tadukoo.middle_earth.model.Characters.Player;
 import com.github.tadukoo.middle_earth.model.Constructs.Map;
 import com.github.tadukoo.middle_earth.model.Constructs.MapTile;
-import com.github.tadukoo.middle_earth.model.Constructs.Object;
+import com.github.tadukoo.middle_earth.model.Constructs.GameObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -49,14 +49,14 @@ public class HandleObjectCommandsTest{
 		game.setmap(map);
 		
 		// Create a tree
-		Object IDontKnowAnymore = new Object();
+		GameObject IDontKnowAnymore = new GameObject();
 		IDontKnowAnymore.setName("Tree");
 		HashMap<String, String> commandResponses = new HashMap<>();
 		commandResponses.put("climb", "Hello now");
 		IDontKnowAnymore.setCommandResponses(commandResponses);
 		
 		// Create an Objects Array with the Tree included
-		ArrayList<Object> objs = new ArrayList<>();
+		ArrayList<GameObject> objs = new ArrayList<>();
 		objs.add(IDontKnowAnymore);
 		
 		// Set the Objects Array to the MapTile

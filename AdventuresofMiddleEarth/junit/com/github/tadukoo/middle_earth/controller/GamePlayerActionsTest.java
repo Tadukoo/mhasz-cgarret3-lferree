@@ -9,7 +9,7 @@ import com.github.tadukoo.middle_earth.model.Characters.Player;
 import com.github.tadukoo.middle_earth.model.Constructs.Item;
 import com.github.tadukoo.middle_earth.model.Constructs.Map;
 import com.github.tadukoo.middle_earth.model.Constructs.MapTile;
-import com.github.tadukoo.middle_earth.model.Constructs.Object;
+import com.github.tadukoo.middle_earth.model.Constructs.GameObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -18,8 +18,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class GamePlayerActionsTest{
 	private Game game;
 	private Player player;
-	private Object tree;
-	private Object ladder;
+	private GameObject tree;
+	private GameObject ladder;
 	private MapTile starting;
 	private MapTile northOfStarting;
 	private MapTile northEastOfStarting;
@@ -41,18 +41,18 @@ public class GamePlayerActionsTest{
 		sword = new Item();
 		sword.setName("Sword");
 		sword.setLongDescription("A Long sword. Probably stolen from a giant golem or something.");
-		sword.setItemWeight((float) 9.6);
-		sword.setIsQuestItem(false);
+		sword.setWeight((float) 9.6);
+		sword.setQuestItem(false);
 		helmet = new Item();
 		helmet.setName("Helmet");
 		helmet.setLongDescription("A helmet forged in the hot, hot fires of Mordor.");
-		helmet.setItemWeight((float) 29.3);
-		helmet.setIsQuestItem(false);
+		helmet.setWeight((float) 29.3);
+		helmet.setQuestItem(false);
 		key = new Item();
 		key.setName("Key");
 		key.setLongDescription("A key to treasure too expensive to buy with Bill Gates' salary. (Believe it)");
-		key.setItemWeight((float) 93.1);
-		key.setIsQuestItem(true);
+		key.setWeight((float) 93.1);
+		key.setQuestItem(true);
 		playerItems.add(sword);
 		playerItems.add(helmet);
 		playerItems.add(key);
@@ -60,7 +60,7 @@ public class GamePlayerActionsTest{
 		inventory.setitems(playerItems);
 		player.setinventory(inventory);
 		
-		tree = new Object();
+		tree = new GameObject();
 		tree.setName("Tree");
 		HashMap<String, String> responses = new HashMap<>();
 		responses.put("climb", "It's high up here!");
@@ -90,9 +90,9 @@ public class GamePlayerActionsTest{
 		items.add(wood);
 		game.setitems(items);
 		
-		ArrayList<Object> objs = new ArrayList<>();
+		ArrayList<GameObject> objs = new ArrayList<>();
 		objs.add(tree);
-		Object derp = new Object();
+		GameObject derp = new GameObject();
 		ArrayList<Item> its = new ArrayList<>();
 		its.add(wood);
 		derp.setItems(its);

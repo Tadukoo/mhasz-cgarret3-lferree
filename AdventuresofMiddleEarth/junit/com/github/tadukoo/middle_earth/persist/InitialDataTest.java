@@ -21,13 +21,13 @@ public class InitialDataTest{
 			item.setName(tuple.get(0));
 			item.setLongDescription(tuple.get(1));
 			item.setShortDescription(tuple.get(2));
-			item.setdescription_update(tuple.get(3));
-			item.setattack_bonus(Integer.parseInt(tuple.get(4)));
-			item.setdefense_bonus(Integer.parseInt(tuple.get(5)));
-			item.sethp_bonus(Integer.parseInt(tuple.get(6)));
-			item.setItemWeight(Integer.parseInt(tuple.get(7)));
-			item.setItemType(ItemType.valueOf(tuple.get(8)));
-			item.setlvl_requirement(Integer.parseInt(tuple.get(9)));
+			item.setDescriptionUpdate(tuple.get(3));
+			item.setAttackBonus(Integer.parseInt(tuple.get(4)));
+			item.setDefenseBonus(Integer.parseInt(tuple.get(5)));
+			item.setHPBonus(Integer.parseInt(tuple.get(6)));
+			item.setWeight(Integer.parseInt(tuple.get(7)));
+			item.setType(ItemType.valueOf(tuple.get(8)));
+			item.setLevelRequirement(Integer.parseInt(tuple.get(9)));
 			
 			tuple = itemsReader.next();
 		}

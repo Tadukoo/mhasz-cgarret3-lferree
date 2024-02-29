@@ -3,15 +3,20 @@ package com.github.tadukoo.middle_earth.model.Constructs;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Object extends Construct{
+public class GameObject extends Construct{
 	private HashMap<String, String> commandResponses;
 	private ArrayList<Item> items;
 	private String description_update;
 	
 	// TODO: Figure out how to put location in here???
-	public Object() {
-		items = new ArrayList<Item>();
-		commandResponses = new HashMap<String, String>();
+	public GameObject(){
+		items = new ArrayList<>();
+		commandResponses = new HashMap<>();
+	}
+	
+	@Override
+	public String getTableName(){
+		return "Objects";
 	}
 	
 	public void setCommandResponses(HashMap<String, String> commandResponses) {

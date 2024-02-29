@@ -10,7 +10,7 @@ import com.github.tadukoo.middle_earth.model.Characters.Player;
 import com.github.tadukoo.middle_earth.model.Constructs.Item;
 import com.github.tadukoo.middle_earth.model.Constructs.Map;
 import com.github.tadukoo.middle_earth.model.Constructs.MapTile;
-import com.github.tadukoo.middle_earth.model.Constructs.Object;
+import com.github.tadukoo.middle_earth.model.Constructs.GameObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -30,8 +30,8 @@ public class GameHandleCommandTest{
 	private Item helmet;
 	private Item key;
 	private Item wood;
-	private Object tree;
-	private Object ladder;
+	private GameObject tree;
+	private GameObject ladder;
 	private MapTile starting;
 	private MapTile northOfStarting;
 	private MapTile northEastOfStarting;
@@ -51,18 +51,18 @@ public class GameHandleCommandTest{
 		sword = new Item();
 		sword.setName("Sword");
 		sword.setLongDescription("A Long sword. Probably stolen from a giant golem or something.");
-		sword.setItemWeight((float) 9.6);
-		sword.setIsQuestItem(false);
+		sword.setWeight((float) 9.6);
+		sword.setQuestItem(false);
 		helmet = new Item();
 		helmet.setName("Helmet");
 		helmet.setLongDescription("A helmet forged in the hot, hot fires of Mordor.");
-		helmet.setItemWeight((float) 29.3);
-		helmet.setIsQuestItem(false);
+		helmet.setWeight((float) 29.3);
+		helmet.setQuestItem(false);
 		key = new Item();
 		key.setName("Key");
 		key.setLongDescription("A key to treasure too expensive to buy with Bill Gates' salary. (Believe it)");
-		key.setItemWeight((float) 93.1);
-		key.setIsQuestItem(true);
+		key.setWeight((float) 93.1);
+		key.setQuestItem(true);
 		playerItems.add(sword);
 		playerItems.add(helmet);
 		playerItems.add(key);
@@ -96,12 +96,12 @@ public class GameHandleCommandTest{
 		map.addMapTile(northEastOfStarting);
 		game.setmap(map);
 		
-		ladder = new Object();
+		ladder = new GameObject();
 		ladder.setName("Ladder");
 		HashMap<String, String> responses2 = new HashMap<>();
 		responses2.put("climb", "It's not so high up here...");
 		ladder.setCommandResponses(responses2);
-		ArrayList<Object> objs2 = new ArrayList<>();
+		ArrayList<GameObject> objs2 = new ArrayList<>();
 		objs2.add(ladder);
 		northOfStarting.setObjects(objs2);
 		
@@ -112,15 +112,15 @@ public class GameHandleCommandTest{
 		items.add(wood);
 		
 		// Object burple holds wood
-		Object burple = new Object();
+		GameObject burple = new GameObject();
 		burple.setItems(items);
 		
-		tree = new Object();
+		tree = new GameObject();
 		tree.setName("Tree");
 		HashMap<String, String> responses = new HashMap<>();
 		responses.put("climb", "It's high up here!");
 		tree.setCommandResponses(responses);
-		ArrayList<Object> objs = new ArrayList<>();
+		ArrayList<GameObject> objs = new ArrayList<>();
 		objs.add(tree);
 		objs.add(burple);
 		starting.setObjects(objs);
@@ -256,8 +256,8 @@ public class GameHandleCommandTest{
 		Item item = sword;
 		
 		// Check that response is correct
-		assertEquals(item.getName() + ": " + item.getLongDescription() + ";Weight: " + item.getItemWeight() + 
-				";Quest item: " + item.getIsQuestItem(), response);
+		assertEquals(item.getName() + ": " + item.getLongDescription() + ";Weight: " + item.getWeight() +
+				";Quest item: " + item.isQuestItem(), response);
 	}
 	
 	@Test
@@ -272,8 +272,8 @@ public class GameHandleCommandTest{
 		Item item = helmet;
 		
 		// Check that response is correct
-		assertEquals(item.getName() + ": " + item.getLongDescription() + ";Weight: " + item.getItemWeight() + 
-				";Quest item: " + item.getIsQuestItem(), response);
+		assertEquals(item.getName() + ": " + item.getLongDescription() + ";Weight: " + item.getWeight() +
+				";Quest item: " + item.isQuestItem(), response);
 	}
 	
 	@Test
@@ -288,8 +288,8 @@ public class GameHandleCommandTest{
 		Item item = key;
 		
 		// Check that response is correct
-		assertEquals(item.getName() + ": " + item.getLongDescription() + ";Weight: " + item.getItemWeight() + 
-				";Quest item: " + item.getIsQuestItem(), response);
+		assertEquals(item.getName() + ": " + item.getLongDescription() + ";Weight: " + item.getWeight() +
+				";Quest item: " + item.isQuestItem(), response);
 	}
 	
 	/* 
@@ -376,8 +376,8 @@ public class GameHandleCommandTest{
 	public void testTakeCommandItemNotOnTile(){
 		// Set location of wood to a different tile than starting.
 		starting.setObjects(null);
-		ArrayList<Object> objs = new ArrayList<>();
-		Object derp = new Object();
+		ArrayList<GameObject> objs = new ArrayList<>();
+		GameObject derp = new GameObject();
 		ArrayList<Item> items = new ArrayList<>();
 		items.add(wood);
 		derp.setItems(items);

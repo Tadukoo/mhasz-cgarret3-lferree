@@ -1,6 +1,7 @@
 package com.github.tadukoo.aome;
 
 import com.github.tadukoo.database.mysql.Database;
+import com.github.tadukoo.middle_earth.model.Constructs.Item;
 import com.github.tadukoo.middle_earth.persist.DatabaseSettings;
 import com.github.tadukoo.middle_earth.persist.InitialData;
 import com.github.tadukoo.middle_earth.persist.pojo.User;
@@ -47,6 +48,10 @@ public class SetupDatabase{
 		// Create Users table
 		User user = new User();
 		user.createTable(database);
+		
+		// Create Items table
+		Item item = new Item();
+		item.createTable(database);
 	}
 	
 	/*
@@ -246,9 +251,15 @@ public class SetupDatabase{
 	 */
 	private static void loadInitialData() throws IOException, SQLException{
 		// Load Users
-		List<User> users = InitialData.getUserPojos();
+		List<User> users = InitialData.getUsers();
 		for(User user: users){
 			user.storeValues(database, false);
+		}
+		
+		// Load Items
+		List<Item> items = InitialData.getItems();
+		for(Item item: items){
+			item.storeValues(database, false);
 		}
 	}
 }

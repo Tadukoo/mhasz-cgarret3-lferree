@@ -6,7 +6,7 @@ import java.util.Random;
 
 import javax.swing.JFrame;
 
-import com.github.tadukoo.middle_earth.model.Constructs.Object;
+import com.github.tadukoo.middle_earth.model.Constructs.GameObject;
 import com.github.tadukoo.middle_earth.images.MapPanel;
 import com.github.tadukoo.middle_earth.model.CombatSituation;
 import com.github.tadukoo.middle_earth.model.Quest;
@@ -21,7 +21,7 @@ public class Game implements Engine{
 	private Map map;
 	private ArrayList<Quest> quests;
 	private ArrayList<Character> characters;
-	private ArrayList<Object> objects;
+	private ArrayList<GameObject> objects;
 	private ArrayList<Item> items;
 	private ArrayList<String> dialog;
 	private String mode;
@@ -119,11 +119,11 @@ public class Game implements Engine{
 		this.characters = characters;
 	}
 	
-	public ArrayList<Object> getobjects(){
+	public ArrayList<GameObject> getobjects(){
 		return objects;
 	}
 	
-	public void setobjects(ArrayList<Object> objects){
+	public void setobjects(ArrayList<GameObject> objects){
 		this.objects = objects;
 	}
 	
@@ -136,10 +136,10 @@ public class Game implements Engine{
 	}
 	
 	public String getmapTile_longDescription(){
-		ArrayList<Object> objects = map.getMapTiles().get(getplayer().getlocation()).getObjects();
+		ArrayList<GameObject> objects = map.getMapTiles().get(getplayer().getlocation()).getObjects();
 		String objectUpdate = "";
 		if (objects != null) {
-			for (Object object : objects) {
+			for (GameObject object : objects) {
 				if (object.getdescription_update() != null) {
 					objectUpdate = object.getdescription_update();
 				}
@@ -336,25 +336,25 @@ public class Game implements Engine{
 							returnMessage = "Sorry you dont have an item at that index";
 						} else {
 							Item item = getplayer().getinventory().getitems().get(Item_num);
-							if (item.getItemType() == ItemType.HELM) {
+							if (item.getType() == ItemType.HELM) {
 								getplayer().sethelm(item);
 								returnMessage = "You have equiped " + item.getName();
-							} else if (item.getItemType() == ItemType.BOOTS) {
+							} else if (item.getType() == ItemType.BOOTS) {
 								getplayer().setboots(item);
 								returnMessage = "You have equiped " + item.getName();
-							} else if (item.getItemType() == ItemType.BRACES) {
+							} else if (item.getType() == ItemType.BRACES) {
 								getplayer().setbraces(item);
 								returnMessage = "You have equiped " + item.getName();
-							} else if (item.getItemType() == ItemType.CHEST) {
+							} else if (item.getType() == ItemType.CHEST) {
 								getplayer().setchest(item);
 								returnMessage = "You have equiped " + item.getName();
-							} else if (item.getItemType() == ItemType.L_HAND) {
+							} else if (item.getType() == ItemType.L_HAND) {
 								getplayer().setl_hand(item);
 								returnMessage = "You have equiped " + item.getName();
-							} else if (item.getItemType() == ItemType.R_HAND) {
+							} else if (item.getType() == ItemType.R_HAND) {
 								getplayer().setr_hand(item);
 								returnMessage = "You have equiped " + item.getName();
-							} else if (item.getItemType() == ItemType.LEGS) {
+							} else if (item.getType() == ItemType.LEGS) {
 								getplayer().setlegs(item);
 								returnMessage = "You have equiped " + item.getName();
 							}
@@ -386,12 +386,12 @@ public class Game implements Engine{
 			return false;
 		}
 		
-		Object action_object = null;
-		ArrayList<Object> objects = map.getMapTiles().get(getplayer().getlocation()).getObjects();
+		GameObject action_object = null;
+		ArrayList<GameObject> objects = map.getMapTiles().get(getplayer().getlocation()).getObjects();
 		if(objects == null){
 			return false;
 		}
-		for (Object object : objects){
+		for (GameObject object : objects){
 			// TODO: NOTE: This doesn't account for capitals (e.g. if someone types Climb instead of climb)
 			// I would change it, but it's 9:11 PM the night before Milestone 3 so I'm afraid of breaking stuff
 			command = command.toLowerCase();
@@ -405,7 +405,7 @@ public class Game implements Engine{
 		if (action_object != null) {
 			String string = action_object.getCommandResponses().get(command);
 			for (Item item : action_object.getItems()) {
-				string = string + " " + item.getdescription_update();
+				string = string + " " + item.getDescriptionUpdate();
 			}
 			dialog.add(string);
 		}
@@ -443,7 +443,7 @@ public class Game implements Engine{
 	public String item_details(int item_num){
 		Item item = getplayer().getinventory().getitems().get(item_num);
 		//Item item = items.get(item_num);
-		return item.getName() + ": " + item.getLongDescription() + ";Weight: " + item.getItemWeight() + ";Quest item: " + String.valueOf(item.getIsQuestItem());
+		return item.getName() + ": " + item.getLongDescription() + ";Weight: " + item.getWeight() + ";Quest item: " + String.valueOf(item.isQuestItem());
 	}
 	/*
 	 * Player-Specific Actions
@@ -452,10 +452,10 @@ public class Game implements Engine{
 	@Override
 	public void take(String name){
 		int location = getplayer().getlocation();
-		Object holder = new Object();
+		GameObject holder = new GameObject();
 		if (map.getMapTiles().get(location).getObjects() != null) {
 			Item lookFor = null;
-			for (Object object : map.getMapTiles().get(location).getObjects()) {
+			for (GameObject object : map.getMapTiles().get(location).getObjects()) {
 				ArrayList<Item> items = object.getItems();
 				for (Item item : items) {
 					if (item.getName().toLowerCase().contains(name.toLowerCase())) {
@@ -516,7 +516,7 @@ public class Game implements Engine{
 				String string = map.getMapTiles().get(player.getlocation()).getLongDescription();
 				
 				if (map.getMapTileByID(player.getlocation()).getObjects() != null) {
-					for (Object object : map.getMapTileByID(player.getlocation()).getObjects()){
+					for (GameObject object : map.getMapTileByID(player.getlocation()).getObjects()){
 						string = string + " " + object.getLongDescription();
 						
 					}

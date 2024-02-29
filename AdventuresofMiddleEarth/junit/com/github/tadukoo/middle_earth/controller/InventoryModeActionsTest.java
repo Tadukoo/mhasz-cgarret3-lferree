@@ -28,18 +28,18 @@ public class InventoryModeActionsTest{
 		sword = new Item();
 		sword.setName("Sword");
 		sword.setLongDescription("A Long sword. Probably stolen from a giant golem or something.");
-		sword.setItemWeight((float) 9.6);
-		sword.setIsQuestItem(false);
+		sword.setWeight((float) 9.6);
+		sword.setQuestItem(false);
 		helmet = new Item();
 		helmet.setName("Helmet");
 		helmet.setLongDescription("A helmet forged in the hot, hot fires of Mordor.");
-		helmet.setItemWeight((float) 29.3);
-		helmet.setIsQuestItem(false);
+		helmet.setWeight((float) 29.3);
+		helmet.setQuestItem(false);
 		key = new Item();
 		key.setName("Key");
 		key.setLongDescription("A key to treasure too expensive to buy with Bill Gates' salary. (Believe it)");
-		key.setItemWeight((float) 93.1);
-		key.setIsQuestItem(true);
+		key.setWeight((float) 93.1);
+		key.setQuestItem(true);
 		playerItems.add(sword);
 		playerItems.add(helmet);
 		playerItems.add(key);
@@ -68,8 +68,8 @@ public class InventoryModeActionsTest{
 		Item item = sword;
 		
 		// Check that response is correct
-		assertEquals(item.getName() + ": " + item.getLongDescription() + ";Weight: " + item.getItemWeight() + 
-				";Quest item: " + item.getIsQuestItem(), response);
+		assertEquals(item.getName() + ": " + item.getLongDescription() + ";Weight: " + item.getWeight() +
+				";Quest item: " + item.isQuestItem(), response);
 	}
 	
 	@Test
@@ -81,8 +81,8 @@ public class InventoryModeActionsTest{
 		Item item = helmet;
 		
 		// Check that response is correct
-		assertEquals(item.getName() + ": " + item.getLongDescription() + ";Weight: " + item.getItemWeight() + 
-				";Quest item: " + item.getIsQuestItem(), response);
+		assertEquals(item.getName() + ": " + item.getLongDescription() + ";Weight: " + item.getWeight() +
+				";Quest item: " + item.isQuestItem(), response);
 	}
 	
 	@Test
@@ -94,7 +94,7 @@ public class InventoryModeActionsTest{
 		Item item = key;
 		
 		// Check that response is correct
-		assertEquals(item.getName() + ": " + item.getLongDescription() + ";Weight: " + item.getItemWeight() + 
-				";Quest item: " + item.getIsQuestItem(), response);
+		assertEquals(item.getName() + ": " + item.getLongDescription() + ";Weight: " + item.getWeight() +
+				";Quest item: " + item.isQuestItem(), response);
 	}
 }

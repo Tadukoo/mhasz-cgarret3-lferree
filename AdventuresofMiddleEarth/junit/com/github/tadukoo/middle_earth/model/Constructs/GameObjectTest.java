@@ -9,12 +9,12 @@ import java.util.HashMap;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class ObjectTest{
-	private Object object;
+public class GameObjectTest{
+	private GameObject object;
 	
 	@BeforeEach
 	public void setup(){
-		object = new Object();
+		object = new GameObject();
 	}
 	
 	@Test
@@ -45,10 +45,10 @@ public class ObjectTest{
 	public void testAddItem(){
 		Item sword = new Item();
 		sword.setName("Sword");
-		sword.setItemType(ItemType.R_HAND);
+		sword.setType(ItemType.R_HAND);
 		Item helmet = new Item();
 		helmet.setName("Helmet");
-		helmet.setItemType(ItemType.HELM);
+		helmet.setType(ItemType.HELM);
 		
 		assertEquals(0, object.getItems().size());
 		

@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
@@ -12,14 +13,22 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 public class ConstructTest{
 	private Construct construct;
 	
+	private static class ConstructImpl extends Construct{
+		
+		@Override
+		public String getTableName(){
+			return "Test";
+		}
+	}
+	
 	@BeforeEach
 	public void setup(){
-		construct = new Construct();
+		construct = new ConstructImpl();
 	}
 	
 	@Test
 	public void testSetID(){
-		assertEquals(0, construct.getID());
+		assertFalse(construct.hasItem(Construct.ID_COLUMN_NAME));
 		
 		construct.setID(1);
 		

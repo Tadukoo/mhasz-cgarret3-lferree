@@ -4,7 +4,7 @@ import com.github.tadukoo.middle_earth.model.Constructs.ItemType;
 import com.github.tadukoo.middle_earth.model.Constructs.Map;
 import com.github.tadukoo.middle_earth.model.Constructs.MapTile;
 import com.github.tadukoo.middle_earth.model.Constructs.Item;
-import com.github.tadukoo.middle_earth.model.Constructs.Object;
+import com.github.tadukoo.middle_earth.model.Constructs.GameObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,12 +23,21 @@ import com.github.tadukoo.middle_earth.persist.pojo.User;
 import com.github.tadukoo.util.StringUtil;
 import persist.dbmod.StringPair;
 
+/**
+ * A Fake Database implementation of {@link IDatabase}, mostly to use for testing purposes
+ *
+ * @author Logan Ferree (Tadukoo)
+ * @author Chris Garrety (cgarret3)
+ * @author Matt Hasz (mhasz239)
+ * @version 2.0
+ * @since 1.0 or earlier
+ */
 public class FakeDatabase implements IDatabase{
 	
 	private final Random random;
 	private final Map map;
 	private final List<MapTile> mapTileList;
-	private final List<Object> objectList;
+	private final List<GameObject> objectList;
 	private final List<Item> itemList;
 	private final List<Quest> questList;
 	private final List<Character> characterList;
@@ -51,7 +60,7 @@ public class FakeDatabase implements IDatabase{
 			//inventoryList.addAll(InitialData.getItemsToInventories()); TODO: Fix?
 			inventoryList = new ArrayList<>();
 			playerList = InitialData.getPlayers();
-			users = InitialData.getUserPojos();
+			users = InitialData.getUsers();
 			enemies = InitialData.getEnemies();
 			nameGenders = InitialData.getNameGenderList();
 		}catch(IOException e){
@@ -101,9 +110,9 @@ public class FakeDatabase implements IDatabase{
 	}
 	
 	@Override
-	public List<Object> getAllObjects() {
+	public List<GameObject> getAllObjects() {
 		
-		for(Object object : objectList) {
+		for(GameObject object : objectList) {
 			if(object.getItems() != null) {
 				for(Item item : object.getItems()) {
 					for(Item listedItem : itemList) {
@@ -111,8 +120,8 @@ public class FakeDatabase implements IDatabase{
 							item.setName(listedItem.getName());
 							item.setLongDescription(listedItem.getLongDescription());
 							item.setShortDescription(listedItem.getShortDescription());
-							item.setItemWeight(listedItem.getItemWeight());
-							item.setIsQuestItem(listedItem.getIsQuestItem());
+							item.setWeight(listedItem.getWeight());
+							item.setQuestItem(listedItem.isQuestItem());
 							break;
 						}
 					}
@@ -128,8 +137,8 @@ public class FakeDatabase implements IDatabase{
 		
 		for (MapTile mapTile :mapTileList) {
 			if (mapTile.getObjects() != null) {
-				for (Object object : mapTile.getObjects()) {
-					for (Object listedObject : getAllObjects()) {
+				for (GameObject object : mapTile.getObjects()) {
+					for (GameObject listedObject : getAllObjects()) {
 						if (object.getID() == listedObject.getID()) {
 							object.setCommandResponses(listedObject.getCommandResponses());
 							object.setItems(listedObject.getItems());
@@ -202,8 +211,8 @@ public class FakeDatabase implements IDatabase{
 							item.setName(listedItem.getName());
 							item.setLongDescription(listedItem.getLongDescription());
 							item.setShortDescription(listedItem.getShortDescription());
-							item.setItemWeight(listedItem.getItemWeight());
-							item.setIsQuestItem(listedItem.getIsQuestItem());
+							item.setWeight(listedItem.getWeight());
+							item.setQuestItem(listedItem.isQuestItem());
 							break;
 						}
 					}
@@ -228,8 +237,8 @@ public class FakeDatabase implements IDatabase{
 	}
 	
 	@Override
-	public Object getObjectByID(int objectID) {
-		for(Object object : objectList) {
+	public GameObject getObjectByID(int objectID) {
+		for(GameObject object : objectList) {
 			if(object.getID() == objectID) {
 				return object;
 			}
@@ -275,7 +284,7 @@ public class FakeDatabase implements IDatabase{
 	}
 
 	@Override
-	public Item removeItemFromObject(Item item, Object object) {
+	public Item removeItemFromObject(Item item, GameObject object) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -286,7 +295,7 @@ public class FakeDatabase implements IDatabase{
 	}
 
 	@Override
-	public void addItemToObject(Item item, Object object) {
+	public void addItemToObject(Item item, GameObject object) {
 		// TODO Auto-generated method stub
 	}
 
@@ -332,7 +341,7 @@ public class FakeDatabase implements IDatabase{
 	public Item getHandHeldItem(){
 		List<Item> handHeldItems = itemList.stream()
 				.filter(item -> {
-					ItemType type = item.getItemType();
+					ItemType type = item.getType();
 					return (type == ItemType.L_HAND || type == ItemType.R_HAND) &&
 							!item.getLongDescription().startsWith("LEGENDARY");
 				})
@@ -350,7 +359,7 @@ public class FakeDatabase implements IDatabase{
 	public Item getArmorItem(){
 		List<Item> armorItems = itemList.stream()
 				.filter(item -> {
-					ItemType type = item.getItemType();
+					ItemType type = item.getType();
 					return (type == ItemType.CHEST || type == ItemType.BRACES ||
 							type == ItemType.LEGS || type == ItemType.BOOTS) &&
 							!item.getLongDescription().startsWith("LEGENDARY");

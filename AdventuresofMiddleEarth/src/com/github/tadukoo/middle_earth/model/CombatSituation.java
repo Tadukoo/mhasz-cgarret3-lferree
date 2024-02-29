@@ -255,25 +255,25 @@ public class CombatSituation{
 		Character chr = game.getcharacters().get(character);
 		int attack = chr.getattack();
 		if(chr.gethelm() != null){
-			attack += chr.gethelm().getattack_bonus();
+			attack += chr.gethelm().getAttackBonus();
 		}
 		if(chr.getbraces() != null){
-			attack += chr.getbraces().getattack_bonus();
+			attack += chr.getbraces().getAttackBonus();
 		}
 		if(chr.getchest() != null){
-			attack += chr.getchest().getattack_bonus();
+			attack += chr.getchest().getAttackBonus();
 		}
 		if(chr.getlegs() != null){
-			attack += chr.getlegs().getattack_bonus();
+			attack += chr.getlegs().getAttackBonus();
 		}
 		if(chr.getboots() != null){
-			attack += chr.getboots().getattack_bonus();
+			attack += chr.getboots().getAttackBonus();
 		}
 		if(chr.getl_hand() != null){
-			attack += chr.getl_hand().getattack_bonus();
+			attack += chr.getl_hand().getAttackBonus();
 		}
 		if(chr.getr_hand() != null){
-			attack += chr.getr_hand().getattack_bonus();
+			attack += chr.getr_hand().getAttackBonus();
 		}
 		int range = (int) (attack*0.2);
 		attack = (int) (attack + (random.nextInt(range+1) - range/2.0));
@@ -284,25 +284,25 @@ public class CombatSituation{
 		Character chr = game.getcharacters().get(character);
 		int defense = chr.getdefense();
 		if(chr.gethelm() != null){
-			defense += chr.gethelm().getdefense_bonus();
+			defense += chr.gethelm().getDefenseBonus();
 		}
 		if(chr.getbraces() != null){
-			defense += chr.getbraces().getdefense_bonus();
+			defense += chr.getbraces().getDefenseBonus();
 		}
 		if(chr.getchest() != null){
-			defense += chr.getchest().getdefense_bonus();
+			defense += chr.getchest().getDefenseBonus();
 		}
 		if(chr.getlegs() != null){
-			defense += chr.getlegs().getdefense_bonus();
+			defense += chr.getlegs().getDefenseBonus();
 		}
 		if(chr.getboots() != null){
-			defense += chr.getboots().getdefense_bonus();
+			defense += chr.getboots().getDefenseBonus();
 		}
 		if(chr.getl_hand() != null){
-			defense += chr.getl_hand().getdefense_bonus();
+			defense += chr.getl_hand().getDefenseBonus();
 		}
 		if(chr.getr_hand() != null){
-			defense += chr.getr_hand().getdefense_bonus();
+			defense += chr.getr_hand().getDefenseBonus();
 		}
 		return defense;
 	}

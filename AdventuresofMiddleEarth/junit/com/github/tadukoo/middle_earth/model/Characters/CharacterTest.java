@@ -234,7 +234,7 @@ public class CharacterTest{
 	public void testsetHelm(){
 		// Create Helmet
 		Item helmet = new Item();
-		helmet.setItemType(ItemType.HELM);
+		helmet.setType(ItemType.HELM);
 		helmet.setName("Iron Helm");
 		
 		// Set the Helmet
@@ -245,7 +245,7 @@ public class CharacterTest{
 		
 		// Create another Helmet
 		Item helmet2 = new Item();
-		helmet2.setItemType(ItemType.HELM);
+		helmet2.setType(ItemType.HELM);
 		helmet2.setName("Golden Helmet");
 		
 		// Set the new helmet
@@ -259,7 +259,7 @@ public class CharacterTest{
 	public void testsetHelmNotHelm(){
 		// Create fake helmet
 		Item notHelmet = new Item();
-		notHelmet.setItemType(ItemType.MISC);
+		notHelmet.setType(ItemType.MISC);
 		
 		// Ensure an IllegalArgumentException
 		try{
@@ -274,7 +274,7 @@ public class CharacterTest{
 	public void testsetBraces(){
 		// Create Braces
 		Item braces = new Item();
-		braces.setItemType(ItemType.BRACES);
+		braces.setType(ItemType.BRACES);
 		braces.setName("Iron Braces");
 		
 		// Set the Braces
@@ -285,7 +285,7 @@ public class CharacterTest{
 		
 		// Create another Braces
 		Item braces2 = new Item();
-		braces2.setItemType(ItemType.BRACES);
+		braces2.setType(ItemType.BRACES);
 		braces2.setName("Golden Braces");
 		
 		// Set the new braces
@@ -299,7 +299,7 @@ public class CharacterTest{
 	public void testsetBracesNotBraces(){
 		// Create fake braces
 		Item notBraces = new Item();
-		notBraces.setItemType(ItemType.MISC);
+		notBraces.setType(ItemType.MISC);
 		
 		// Ensure an IllegalArgumentException
 		try{
@@ -314,7 +314,7 @@ public class CharacterTest{
 	public void testsetChest(){
 		// Create Chest
 		Item chest = new Item();
-		chest.setItemType(ItemType.CHEST);
+		chest.setType(ItemType.CHEST);
 		chest.setName("Iron Chest");
 		
 		// Set the Chest
@@ -325,7 +325,7 @@ public class CharacterTest{
 		
 		// Create another Chest
 		Item chest2 = new Item();
-		chest2.setItemType(ItemType.CHEST);
+		chest2.setType(ItemType.CHEST);
 		chest2.setName("Golden Chest");
 		
 		// Set the new chest
@@ -339,7 +339,7 @@ public class CharacterTest{
 	public void testsetChestNotChest(){
 		// Create fake chest
 		Item notChest = new Item();
-		notChest.setItemType(ItemType.MISC);
+		notChest.setType(ItemType.MISC);
 		
 		// Ensure an IllegalArgumentException
 		try{
@@ -354,7 +354,7 @@ public class CharacterTest{
 	public void testsetLegs(){
 		// Create Legs
 		Item legs = new Item();
-		legs.setItemType(ItemType.LEGS);
+		legs.setType(ItemType.LEGS);
 		legs.setName("Iron Legs");
 		
 		// Set the Legs
@@ -365,7 +365,7 @@ public class CharacterTest{
 		
 		// Create another Legs
 		Item legs2 = new Item();
-		legs2.setItemType(ItemType.LEGS);
+		legs2.setType(ItemType.LEGS);
 		legs2.setName("Golden Legs");
 		
 		// Set the new legs
@@ -379,7 +379,7 @@ public class CharacterTest{
 	public void testsetLegsNotLegs(){
 		// Create fake legs
 		Item notLegs = new Item();
-		notLegs.setItemType(ItemType.MISC);
+		notLegs.setType(ItemType.MISC);
 		
 		// Ensure an IllegalArgumentException
 		try{
@@ -394,7 +394,7 @@ public class CharacterTest{
 	public void testsetBoots(){
 		// Create Boots
 		Item boots = new Item();
-		boots.setItemType(ItemType.BOOTS);
+		boots.setType(ItemType.BOOTS);
 		boots.setName("Iron Boots");
 		
 		// Set the Boots
@@ -405,7 +405,7 @@ public class CharacterTest{
 		
 		// Create another Boots
 		Item boots2 = new Item();
-		boots2.setItemType(ItemType.BOOTS);
+		boots2.setType(ItemType.BOOTS);
 		boots2.setName("Golden Boots");
 		
 		// Set the new boots
@@ -419,7 +419,7 @@ public class CharacterTest{
 	public void testsetBootsNotBoots(){
 		// Create fake boots
 		Item notBoots = new Item();
-		notBoots.setItemType(ItemType.MISC);
+		notBoots.setType(ItemType.MISC);
 		
 		// Ensure an IllegalArgumentException
 		try{
@@ -434,7 +434,7 @@ public class CharacterTest{
 	public void testsetL_Hand(){
 		// Create hand
 		Item hand = new Item();
-		hand.setItemType(ItemType.L_HAND);
+		hand.setType(ItemType.L_HAND);
 		hand.setName("Iron Shield");
 		
 		// Set the Hand
@@ -445,7 +445,7 @@ public class CharacterTest{
 		
 		// Create another hand
 		Item hand2 = new Item();
-		hand2.setItemType(ItemType.L_HAND);
+		hand2.setType(ItemType.L_HAND);
 		hand2.setName("Golden Shield");
 		
 		// Set the new hand
@@ -459,7 +459,7 @@ public class CharacterTest{
 	public void testsetL_HandNotHand(){
 		// Create fake hand
 		Item notHand = new Item();
-		notHand.setItemType(ItemType.MISC);
+		notHand.setType(ItemType.MISC);
 		
 		// Ensure an IllegalArgumentException
 		try{
@@ -474,7 +474,7 @@ public class CharacterTest{
 	public void testsetR_Hand(){
 		// Create hand
 		Item hand = new Item();
-		hand.setItemType(ItemType.R_HAND);
+		hand.setType(ItemType.R_HAND);
 		hand.setName("Iron Sword");
 		
 		// Set the Hand
@@ -485,7 +485,7 @@ public class CharacterTest{
 		
 		// Create another hand
 		Item hand2 = new Item();
-		hand2.setItemType(ItemType.R_HAND);
+		hand2.setType(ItemType.R_HAND);
 		hand2.setName("Golden Sword");
 		
 		// Set the new hand
@@ -499,7 +499,7 @@ public class CharacterTest{
 	public void testsetR_HandNotHand(){
 		// Create fake hand
 		Item notHand = new Item();
-		notHand.setItemType(ItemType.MISC);
+		notHand.setType(ItemType.MISC);
 		
 		// Ensure an IllegalArgumentException
 		try{

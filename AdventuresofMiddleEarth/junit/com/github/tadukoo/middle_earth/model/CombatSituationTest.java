@@ -121,9 +121,9 @@ public class CombatSituationTest{
 	public void testCalculateAttackPlayerHelmet(){
 		// Create Helmet
 		Item helmet = new Item();
-		helmet.setItemType(ItemType.HELM);
+		helmet.setType(ItemType.HELM);
 		helmet.setName("Generic Helmet");
-		helmet.setattack_bonus(10);
+		helmet.setAttackBonus(10);
 		
 		// Give the Player the Helmet
 		player.sethelm(helmet);
@@ -141,9 +141,9 @@ public class CombatSituationTest{
 	public void testCalculateAttackPlayerBraces(){
 		// Create Braces
 		Item braces = new Item();
-		braces.setItemType(ItemType.BRACES);
+		braces.setType(ItemType.BRACES);
 		braces.setName("Generic Braces");
-		braces.setattack_bonus(10);
+		braces.setAttackBonus(10);
 		
 		// Give the Player the Braces
 		player.setbraces(braces);
@@ -161,9 +161,9 @@ public class CombatSituationTest{
 	public void testCalculateAttackPlayerChest(){
 		// Create Chest
 		Item chest = new Item();
-		chest.setItemType(ItemType.CHEST);
+		chest.setType(ItemType.CHEST);
 		chest.setName("Generic Chest");
-		chest.setattack_bonus(10);
+		chest.setAttackBonus(10);
 		
 		// Give the Player the Chest
 		player.setchest(chest);
@@ -181,9 +181,9 @@ public class CombatSituationTest{
 	public void testCalculateAttackPlayerLegs(){
 		// Create Legs
 		Item legs = new Item();
-		legs.setItemType(ItemType.LEGS);
+		legs.setType(ItemType.LEGS);
 		legs.setName("Generic Legs");
-		legs.setattack_bonus(10);
+		legs.setAttackBonus(10);
 		
 		// Give the Player the Legs
 		player.setlegs(legs);
@@ -201,9 +201,9 @@ public class CombatSituationTest{
 	public void testCalculateAttackPlayerBoots(){
 		// Create Boots
 		Item boots = new Item();
-		boots.setItemType(ItemType.BOOTS);
+		boots.setType(ItemType.BOOTS);
 		boots.setName("Generic Boots");
-		boots.setattack_bonus(10);
+		boots.setAttackBonus(10);
 		
 		// Give the Player the Boots
 		player.setboots(boots);
@@ -221,9 +221,9 @@ public class CombatSituationTest{
 	public void testCalculateAttackPlayerLHand(){
 		// Create Shield
 		Item shield = new Item();
-		shield.setItemType(ItemType.L_HAND);
+		shield.setType(ItemType.L_HAND);
 		shield.setName("Generic Shield");
-		shield.setattack_bonus(10);
+		shield.setAttackBonus(10);
 		
 		// Give the Player the Shield
 		player.setl_hand(shield);
@@ -241,9 +241,9 @@ public class CombatSituationTest{
 	public void testCalculateAttackPlayerRHand(){
 		// Create Sword
 		Item sword = new Item();
-		sword.setItemType(ItemType.R_HAND);
+		sword.setType(ItemType.R_HAND);
 		sword.setName("Generic Sword");
-		sword.setattack_bonus(10);
+		sword.setAttackBonus(10);
 		
 		// Give the Player the Sword
 		player.setr_hand(sword);
@@ -261,63 +261,63 @@ public class CombatSituationTest{
 	public void testCalculateAttackPlayerFullArmorAndHands(){
 		// Create Helmet
 		Item helmet = new Item();
-		helmet.setItemType(ItemType.HELM);
+		helmet.setType(ItemType.HELM);
 		helmet.setName("Generic Helmet");
-		helmet.setattack_bonus(10);
+		helmet.setAttackBonus(10);
 		
 		// Give the Player the Helmet
 		player.sethelm(helmet);
 		
 		// Create Braces
 		Item braces = new Item();
-		braces.setItemType(ItemType.BRACES);
+		braces.setType(ItemType.BRACES);
 		braces.setName("Generic Braces");
-		braces.setattack_bonus(10);
+		braces.setAttackBonus(10);
 		
 		// Give the Player the Braces
 		player.setbraces(braces);
 		
 		// Create Chest
 		Item chest = new Item();
-		chest.setItemType(ItemType.CHEST);
+		chest.setType(ItemType.CHEST);
 		chest.setName("Generic Chest");
-		chest.setattack_bonus(10);
+		chest.setAttackBonus(10);
 		
 		// Give the Player the Chest
 		player.setchest(chest);
 		
 		// Create Legs
 		Item legs = new Item();
-		legs.setItemType(ItemType.LEGS);
+		legs.setType(ItemType.LEGS);
 		legs.setName("Generic Legs");
-		legs.setattack_bonus(10);
+		legs.setAttackBonus(10);
 		
 		// Give the Player the Legs
 		player.setlegs(legs);
 		
 		// Create Boots
 		Item boots = new Item();
-		boots.setItemType(ItemType.BOOTS);
+		boots.setType(ItemType.BOOTS);
 		boots.setName("Generic Boots");
-		boots.setattack_bonus(10);
+		boots.setAttackBonus(10);
 		
 		// Give the Player the Boots
 		player.setboots(boots);
 		
 		// Create Shield
 		Item shield = new Item();
-		shield.setItemType(ItemType.L_HAND);
+		shield.setType(ItemType.L_HAND);
 		shield.setName("Generic Shield");
-		shield.setattack_bonus(10);
+		shield.setAttackBonus(10);
 		
 		// Give the Player the Shield
 		player.setl_hand(shield);
 
 		// Create Sword
 		Item sword = new Item();
-		sword.setItemType(ItemType.R_HAND);
+		sword.setType(ItemType.R_HAND);
 		sword.setName("Generic Sword");
-		sword.setattack_bonus(10);
+		sword.setAttackBonus(10);
 		
 		// Give the Player the Sword
 		player.setr_hand(sword);
@@ -347,9 +347,9 @@ public class CombatSituationTest{
 	public void testCalculateDefensePlayerWithHelmet(){
 		// Create Helmet
 		Item helmet = new Item();
-		helmet.setItemType(ItemType.HELM);
+		helmet.setType(ItemType.HELM);
 		helmet.setName("Generic Helmet");
-		helmet.setdefense_bonus(10);
+		helmet.setDefenseBonus(10);
 		
 		// Give Helmet to Player
 		player.sethelm(helmet);
@@ -362,9 +362,9 @@ public class CombatSituationTest{
 	public void testCalculateDefensePlayerWithBraces(){
 		// Create Braces
 		Item braces = new Item();
-		braces.setItemType(ItemType.BRACES);
+		braces.setType(ItemType.BRACES);
 		braces.setName("Generic Braces");
-		braces.setdefense_bonus(10);
+		braces.setDefenseBonus(10);
 		
 		// Give Braces to Player
 		player.setbraces(braces);
@@ -377,9 +377,9 @@ public class CombatSituationTest{
 	public void testCalculateDefensePlayerWithChest(){
 		// Create Chest
 		Item chest = new Item();
-		chest.setItemType(ItemType.CHEST);
+		chest.setType(ItemType.CHEST);
 		chest.setName("Generic Chest");
-		chest.setdefense_bonus(10);
+		chest.setDefenseBonus(10);
 		
 		// Give Chest to Player
 		player.setchest(chest);
@@ -392,9 +392,9 @@ public class CombatSituationTest{
 	public void testCalculateDefensePlayerWithLegs(){
 		// Create Legs
 		Item legs = new Item();
-		legs.setItemType(ItemType.LEGS);
+		legs.setType(ItemType.LEGS);
 		legs.setName("Generic Legs");
-		legs.setdefense_bonus(10);
+		legs.setDefenseBonus(10);
 		
 		// Give Legs to Player
 		player.setlegs(legs);
@@ -407,9 +407,9 @@ public class CombatSituationTest{
 	public void testCalculateDefensePlayerWithBoots(){
 		// Create Boots
 		Item boots = new Item();
-		boots.setItemType(ItemType.BOOTS);
+		boots.setType(ItemType.BOOTS);
 		boots.setName("Generic Boots");
-		boots.setdefense_bonus(10);
+		boots.setDefenseBonus(10);
 		
 		// Give Boots to Player
 		player.setboots(boots);
@@ -422,9 +422,9 @@ public class CombatSituationTest{
 	public void testCalculateDefensePlayerWithShield(){
 		// Create Shield
 		Item shield = new Item();
-		shield.setItemType(ItemType.L_HAND);
+		shield.setType(ItemType.L_HAND);
 		shield.setName("Generic Shield");
-		shield.setdefense_bonus(10);
+		shield.setDefenseBonus(10);
 		
 		// Give Shield to Player
 		player.setl_hand(shield);
@@ -437,9 +437,9 @@ public class CombatSituationTest{
 	public void testCalculateDefensePlayerWithSword(){
 		// Create Sword
 		Item sword = new Item();
-		sword.setItemType(ItemType.R_HAND);
+		sword.setType(ItemType.R_HAND);
 		sword.setName("Generic Sword");
-		sword.setdefense_bonus(10);
+		sword.setDefenseBonus(10);
 		
 		// Give Sword to Player
 		player.setr_hand(sword);
@@ -452,63 +452,63 @@ public class CombatSituationTest{
 	public void testCalculateDefensePlayerFullArmor(){
 		// Create Helmet
 		Item helmet = new Item();
-		helmet.setItemType(ItemType.HELM);
+		helmet.setType(ItemType.HELM);
 		helmet.setName("Generic Helmet");
-		helmet.setdefense_bonus(10);
+		helmet.setDefenseBonus(10);
 		
 		// Give Helmet to Player
 		player.sethelm(helmet);
 		
 		// Create Braces
 		Item braces = new Item();
-		braces.setItemType(ItemType.BRACES);
+		braces.setType(ItemType.BRACES);
 		braces.setName("Generic Braces");
-		braces.setdefense_bonus(10);
+		braces.setDefenseBonus(10);
 		
 		// Give Braces to Player
 		player.setbraces(braces);
 		
 		// Create Chest
 		Item chest = new Item();
-		chest.setItemType(ItemType.CHEST);
+		chest.setType(ItemType.CHEST);
 		chest.setName("Generic Chest");
-		chest.setdefense_bonus(10);
+		chest.setDefenseBonus(10);
 		
 		// Give Chest to Player
 		player.setchest(chest);
 		
 		// Create Legs
 		Item legs = new Item();
-		legs.setItemType(ItemType.LEGS);
+		legs.setType(ItemType.LEGS);
 		legs.setName("Generic Legs");
-		legs.setdefense_bonus(10);
+		legs.setDefenseBonus(10);
 		
 		// Give Legs to Player
 		player.setlegs(legs);
 		
 		// Create Boots
 		Item boots = new Item();
-		boots.setItemType(ItemType.BOOTS);
+		boots.setType(ItemType.BOOTS);
 		boots.setName("Generic Boots");
-		boots.setdefense_bonus(10);
+		boots.setDefenseBonus(10);
 		
 		// Give Boots to Player
 		player.setboots(boots);
 		
 		// Create Shield
 		Item shield = new Item();
-		shield.setItemType(ItemType.L_HAND);
+		shield.setType(ItemType.L_HAND);
 		shield.setName("Generic Shield");
-		shield.setdefense_bonus(10);
+		shield.setDefenseBonus(10);
 		
 		// Give Shield to Player
 		player.setl_hand(shield);
 
 		// Create Sword
 		Item sword = new Item();
-		sword.setItemType(ItemType.R_HAND);
+		sword.setType(ItemType.R_HAND);
 		sword.setName("Generic Sword");
-		sword.setdefense_bonus(10);
+		sword.setDefenseBonus(10);
 		
 		// Give Helmet to Player
 		player.setr_hand(sword);

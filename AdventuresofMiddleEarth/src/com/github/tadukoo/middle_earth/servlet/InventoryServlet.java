@@ -17,50 +17,51 @@ public class InventoryServlet extends HttpServlet{
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException{
-        System.out.println("Inventory Servlet: doGet");
+		System.out.println("Inventory Servlet: doGet");
 		
-        //Load data for the initial call to the inventory jsp
+		//Load data for the initial call to the inventory jsp
 		
-        Game game = (Game) req.getSession().getAttribute("game");
-        String command = (String) req.getSession().getAttribute("command");
-        int counter = 1;
-        
-        List<Item> itemlist = game.getplayer().getinventory().getitems();
-        ArrayList<Item> cleanList = new ArrayList<>();
-	    for(Item item: itemlist){
-		    cleanList.add(new Item(item.getItemWeight(), item.getattack_bonus(), item.getdefense_bonus(),
-				    item.gethp_bonus(), item.getlvl_requirement(), item.getItemType(),
-				    item.getName(), item.getID(), item.getShortDescription(), item.getLongDescription(),
-				    item.getName().replaceAll(" ", "_")));
-	    }
-        
-        req.setAttribute(("itemTest"), cleanList);
-        
-        req.setAttribute("numItems", counter);
-        
-        game.setmode("inventory");
-        List<Item> inventory_list =  game.getplayer().getinventory().getitems();
-        StringBuilder inventory_display_list = new StringBuilder();
-	    for(Item item: inventory_list){
-		    inventory_display_list.append(item.getName()).append(": ")
-				    .append(item.getShortDescription()).append(";");
-	    }
-        	
-        if(command == null){
-        	req.setAttribute("inventory", inventory_display_list.toString());
-        }else{
-	        //Parses the command line and calls appropriate commands, returns the information requested in inventory, or the error messages associated with wrong calls.
-        	String inventory_dialog = game.handle_command(command);
+		Game game = (Game) req.getSession().getAttribute("game");
+		String command = (String) req.getSession().getAttribute("command");
+		int counter = 1;
+		
+		List<Item> itemlist = game.getplayer().getinventory().getitems();
+		ArrayList<Item> cleanList = new ArrayList<>();
+		for(Item item: itemlist){
+			cleanList.add(new Item(
+					item.getID(), item.getName(), item.getShortDescription(), item.getLongDescription(),
+					item.getName().replaceAll(" ", "_"),
+					item.getType(), item.getLevelRequirement(),
+					item.getAttackBonus(), item.getDefenseBonus(), item.getHPBonus(), item.getWeight()));
+		}
+		
+		req.setAttribute(("itemTest"), cleanList);
+		
+		req.setAttribute("numItems", counter);
+		
+		game.setmode("inventory");
+		List<Item> inventory_list =  game.getplayer().getinventory().getitems();
+		StringBuilder inventory_display_list = new StringBuilder();
+		for(Item item: inventory_list){
+			inventory_display_list.append(item.getName()).append(": ")
+					.append(item.getShortDescription()).append(";");
+		}
+		
+		if(command == null){
+			req.setAttribute("inventory", inventory_display_list.toString());
+		}else{
+			//Parses the command line and calls appropriate commands, returns the information requested in inventory, or the error messages associated with wrong calls.
+			String inventory_dialog = game.handle_command(command);
 			
 			req.setAttribute("inventory", inventory_display_list.toString());
-        	req.setAttribute("inventory_dialog", inventory_dialog);
-        }
-        	// call JSP to generate the inventory page
-        	req.getRequestDispatcher("/_view/inventory.jsp").forward(req, resp);
-    }
+			req.setAttribute("inventory_dialog", inventory_dialog);
+		}
+			// call JSP to generate the inventory page
+			req.getRequestDispatcher("/_view/inventory.jsp").forward(req, resp);
+	}
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException{
 		System.out.println("Inventory Servlet: doPost");
 		
@@ -71,10 +72,10 @@ public class InventoryServlet extends HttpServlet{
 		
 		//Inventory is split into two display sections, the inventory list, then the responses to the commands in inventory
 		StringBuilder inventory_display_list = new StringBuilder();
-	    
-	    for(Item item: inventory_list){
-		    inventory_display_list.append(item.getName()).append(": ")
-				    .append(item.getShortDescription()).append(";");
+		
+		for(Item item: inventory_list){
+			inventory_display_list.append(item.getName()).append(": ")
+					.append(item.getShortDescription()).append(";");
 		}
 		
 		String command = (String) req.getSession().getAttribute("command");
@@ -106,5 +107,5 @@ public class InventoryServlet extends HttpServlet{
 				// now call the JSP to render the new page
 				req.getRequestDispatcher("/_view/inventory.jsp").forward(req, resp);
 		}
-    }
+	}
 }

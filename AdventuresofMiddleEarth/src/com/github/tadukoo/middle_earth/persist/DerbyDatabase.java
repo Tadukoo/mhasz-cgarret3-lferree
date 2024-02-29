@@ -20,9 +20,8 @@ import com.github.tadukoo.middle_earth.model.Characters.Inventory;
 import com.github.tadukoo.middle_earth.model.Characters.Player;
 import com.github.tadukoo.middle_earth.model.Constructs.Item;
 import com.github.tadukoo.middle_earth.model.Constructs.ItemType;
-import com.github.tadukoo.middle_earth.model.Constructs.Object;
+import com.github.tadukoo.middle_earth.model.Constructs.GameObject;
 import com.github.tadukoo.middle_earth.persist.pojo.DatabaseResult;
-import persist.dbmod.IntPair;
 import persist.dbmod.ObjectIDCommandResponse;
 import persist.dbmod.StringPair;
 import com.github.tadukoo.middle_earth.model.Constructs.Map;
@@ -39,12 +38,12 @@ public class DerbyDatabase implements IDatabase {
 	}
 	
 	private interface Transaction<ResultType> {
-		public ResultType execute(Connection conn) throws SQLException;
+		ResultType execute(Connection conn) throws SQLException;
 	}
 
 	private static final int MAX_ATTEMPTS = 10;
 
-	public<ResultType> ResultType executeTransaction(Transaction<ResultType> txn) {
+	private <ResultType> ResultType executeTransaction(Transaction<ResultType> txn) {
 		try {
 			return doExecuteTransaction(txn);
 		} catch (SQLException e) {
@@ -52,7 +51,7 @@ public class DerbyDatabase implements IDatabase {
 		}
 	}
 	
-	public<ResultType> ResultType doExecuteTransaction(Transaction<ResultType> txn) throws SQLException {
+	private <ResultType> ResultType doExecuteTransaction(Transaction<ResultType> txn) throws SQLException {
 		Connection conn = connect();
 		
 		try {
@@ -109,17 +108,18 @@ public class DerbyDatabase implements IDatabase {
 		item.setLongDescription(resultSet.getString(index++));
 		item.setShortDescription(resultSet.getString(index++));
 		
-		item.setdescription_update(resultSet.getString(index++));
-		item.setattack_bonus(resultSet.getInt(index++));
-  		item.setdefense_bonus(resultSet.getInt(index++));
-  		item.sethp_bonus(resultSet.getInt(index++));	
+		item.setDescriptionUpdate(resultSet.getString(index++));
+		item.setAttackBonus(resultSet.getInt(index++));
+  		item.setDefenseBonus(resultSet.getInt(index++));
+  		item.setHPBonus(resultSet.getInt(index++));
 
-		item.setItemWeight(resultSet.getFloat(index++));	
-		item.setItemType(ItemType.valueOf(resultSet.getString(index++))); 
-		item.setlvl_requirement(resultSet.getInt(index));
+		item.setWeight(resultSet.getFloat(index++));
+		item.setType(ItemType.valueOf(resultSet.getString(index++)));
+		item.setLevelRequirement(resultSet.getInt(index));
 	}
 	
-	private void loadObject(Object object, ResultSet resultSet, int index) throws SQLException {
+	private void loadObject(GameObject object, ResultSet resultSet) throws SQLException{
+		int index = 1;
 		object.setID(resultSet.getInt(index++));
 		object.setName(resultSet.getString(index++));
 		object.setLongDescription(resultSet.getString(index++));
@@ -130,8 +130,7 @@ public class DerbyDatabase implements IDatabase {
 		try {
 			objectCommandResponse.put(resultSet.getString(1), resultSet.getString(2));
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new UnsupportedOperationException("Derby Database no longer supported!");
 		}
 	}
 	
@@ -146,7 +145,8 @@ public class DerbyDatabase implements IDatabase {
 		mapTileConnections.put("northwest", resultSet.getInt(index));
 	}
 	
-	private void loadMapTile(MapTile mapTile, ResultSet resultSet, int index) throws SQLException {
+	private void loadMapTile(MapTile mapTile, ResultSet resultSet) throws SQLException{
+		int index = 1;
 		mapTile.setID(resultSet.getInt(index++));
 		mapTile.setName(resultSet.getString(index++));
 		mapTile.setLongDescription(resultSet.getString(index++));
@@ -154,7 +154,8 @@ public class DerbyDatabase implements IDatabase {
 		mapTile.setAreaDifficulty(resultSet.getInt(index));
 	}
 	 
-	private void loadMap(Map map, ResultSet resultSet, int index) throws SQLException {
+	private void loadMap(Map map, ResultSet resultSet) throws SQLException{
+		int index = 1;
 		map.setID(resultSet.getInt(index++));
 		map.setName(resultSet.getString(index++));
 		map.setLongDescription(resultSet.getString(index++));
@@ -177,12 +178,14 @@ public class DerbyDatabase implements IDatabase {
 		enemy.setspecial_defense(resultSet.getInt(index));
 	}
 	
-	private void loadNameGender(StringPair nameGender, ResultSet resultSet, int index) throws SQLException {
+	private void loadNameGender(StringPair nameGender, ResultSet resultSet) throws SQLException{
+		int index = 1;
 		nameGender.setString1(resultSet.getString(index++));
 		nameGender.setString2(resultSet.getString(index));
 	}
 	
-	private void loadPlayer(Player player, ResultSet resultSet, int index) {
+	private void loadPlayer(Player player, ResultSet resultSet){
+		int index = 1;
 		try {
 		player.setrace(resultSet.getString(index++));
 		player.setname(resultSet.getString(index++));
@@ -205,18 +208,18 @@ public class DerbyDatabase implements IDatabase {
 		
 		// Sum up inventory weight
 		for(Item item : player.getinventory().getitems()){
-			carryWeight += item.getItemWeight();
+			carryWeight += item.getWeight();
 		}
 
 		Item emptyItemSlot = new Item();
-		emptyItemSlot.setattack_bonus(0);
-		emptyItemSlot.setdefense_bonus(0);
-		emptyItemSlot.setdescription_update("You haven't equipped one");
-		emptyItemSlot.sethp_bonus(0);
-		emptyItemSlot.setlvl_requirement(0);
+		emptyItemSlot.setAttackBonus(0);
+		emptyItemSlot.setDefenseBonus(0);
+		emptyItemSlot.setDescriptionUpdate("You haven't equipped one");
+		emptyItemSlot.setHPBonus(0);
+		emptyItemSlot.setLevelRequirement(0);
 		emptyItemSlot.setID(0);
-		emptyItemSlot.setIsQuestItem(false);
-		emptyItemSlot.setItemWeight(0);
+		emptyItemSlot.setQuestItem(false);
+		emptyItemSlot.setWeight(0);
 		emptyItemSlot.setLongDescription("Empty Slot");
 		emptyItemSlot.setShortDescription("Empty Slot");
 		emptyItemSlot.setName("Empty Slot");
@@ -225,65 +228,65 @@ public class DerbyDatabase implements IDatabase {
 		
 		// helm
 		if((itemID = resultSet.getInt(index++)) == 0) {
-			emptyItemSlot.setItemType(ItemType.HELM);
+			emptyItemSlot.setType(ItemType.HELM);
 			player.sethelm(emptyItemSlot);
 		} else {
 			player.sethelm(getItemByID(itemID));
-			carryWeight += player.gethelm().getItemWeight();
+			carryWeight += player.gethelm().getWeight();
 		}
 		
 		// braces
 		if((itemID = resultSet.getInt(index++)) == 0) {
-			emptyItemSlot.setItemType(ItemType.BRACES);
+			emptyItemSlot.setType(ItemType.BRACES);
 			player.setbraces(emptyItemSlot);
 		} else {
 			player.setbraces(getItemByID(itemID));
-			carryWeight += player.getbraces().getItemWeight();
+			carryWeight += player.getbraces().getWeight();
 		}		
 		
 		// chest
 		if((itemID = resultSet.getInt(index++)) == 0) {
-			emptyItemSlot.setItemType(ItemType.CHEST);
+			emptyItemSlot.setType(ItemType.CHEST);
 			player.setchest(emptyItemSlot);
 		} else {
 			player.setchest(getItemByID(itemID));
-			carryWeight += player.getchest().getItemWeight();
+			carryWeight += player.getchest().getWeight();
 		}
 		
 		// legs
 		if((itemID = resultSet.getInt(index++)) == 0) {
-			emptyItemSlot.setItemType(ItemType.LEGS);
+			emptyItemSlot.setType(ItemType.LEGS);
 			player.setlegs(emptyItemSlot);
 		} else {
 			player.setlegs(getItemByID(itemID));
-			carryWeight += player.getlegs().getItemWeight();
+			carryWeight += player.getlegs().getWeight();
 		}
 		
 		// boots
 		if((itemID = resultSet.getInt(index++)) == 0) {
-			emptyItemSlot.setItemType(ItemType.BOOTS);
+			emptyItemSlot.setType(ItemType.BOOTS);
 			player.setboots(emptyItemSlot);
 		} else {
 			player.setboots(getItemByID(itemID));
-			carryWeight += player.getboots().getItemWeight();
+			carryWeight += player.getboots().getWeight();
 		}
 		
 		// l_hand
 		if((itemID = resultSet.getInt(index++)) == 0) {
-			emptyItemSlot.setItemType(ItemType.L_HAND);
+			emptyItemSlot.setType(ItemType.L_HAND);
 			player.setl_hand(emptyItemSlot);
 		} else {
 			player.setl_hand(getItemByID(itemID));
-			carryWeight += player.getl_hand().getItemWeight();
+			carryWeight += player.getl_hand().getWeight();
 		}
 		
 		// r_hand
 		if((itemID = resultSet.getInt(index++)) == 0) {
-			emptyItemSlot.setItemType(ItemType.R_HAND);
+			emptyItemSlot.setType(ItemType.R_HAND);
 			player.setr_hand(emptyItemSlot);
 		} else {
 			player.setr_hand(getItemByID(itemID));
-			carryWeight += player.getr_hand().getItemWeight();
+			carryWeight += player.getr_hand().getWeight();
 		}
 		
 		player.setcarry_weight(index++);
@@ -296,272 +299,7 @@ public class DerbyDatabase implements IDatabase {
 			System.out.println(e.getMessage());
 		}
 	}
-
-	/**************************************************************************************************
-	 * 										Building the Database
-	 **************************************************************************************************/
-		
-	public void loadInitialData() {
-		executeTransaction(conn -> {
-			ArrayList<Item> itemList;
-			ArrayList<Object> objectList;
-			ArrayList<IntPair> itemsToObjectsList;
-			ArrayList<ObjectIDCommandResponse> objectCommandResponseList;
-			ArrayList<HashMap<String, Integer>> mapTileConnectionsList;
-			ArrayList<MapTile> mapTileList;
-			ArrayList<IntPair> objectsToMapTilesList;
-			ArrayList<IntPair> itemsToInventoriesList;
-			ArrayList<Player> playerList;
-			ArrayList<Map> mapList;
-			ArrayList<IntPair> mapTilesToMapsList;
-			ArrayList<Enemy> enemyList;
-			ArrayList<StringPair> nameGenderList;
-			
-			try {
-				itemList = InitialData.getItems();
-				objectList = InitialData.getObjects();
-				itemsToObjectsList = InitialData.getItemsToObjects();
-				objectCommandResponseList = InitialData.getObjectCommandResponses();
-				mapTileConnectionsList = InitialData.getMapTileConnections();
-				mapTileList = InitialData.getMapTiles();
-				objectsToMapTilesList = InitialData.getObjectsToMapTiles();
-				itemsToInventoriesList = InitialData.getItemsToInventories();
-				playerList = InitialData.getPlayers();
-				mapList = InitialData.getMaps();
-				mapTilesToMapsList = InitialData.getMapTilesToMaps();
-				enemyList = InitialData.getEnemies();
-				nameGenderList = InitialData.getNameGenderList();
-				
-			} catch (IOException e) {
-				throw new SQLException("Couldn't read initial data", e);
-			}
-
-			PreparedStatement insertItem = null;
-			PreparedStatement insertObject = null;
-			PreparedStatement insertItemsToObjects = null;
-			PreparedStatement insertMapTileConnections = null;
-			PreparedStatement insertMapTile = null;
-			PreparedStatement insertObjectsToMapTiles = null;
-			PreparedStatement insertItemsToInventories = null;
-			PreparedStatement insertPlayers = null;
-			PreparedStatement insertMaps = null;
-			PreparedStatement insertMapTilesToMaps = null;
-			PreparedStatement insertObjectCommandResponses = null;
-			PreparedStatement insertEnemies = null;
-			PreparedStatement insertNames = null;
-
-			try {
-				insertItem = conn.prepareStatement("insert into items (itemname, longdescription, shortdescription, "
-						+ "descriptionupdate, attackbonus, defensebonus, hpbonus, "
-						+ "weight, itemtype, levelreq) "
-						+ "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-				for (Item item : itemList) {
-					insertItem.setString(1, item.getName());
-					insertItem.setString(2, item.getLongDescription());
-					insertItem.setString(3, item.getShortDescription());
-					insertItem.setString(4, item.getdescription_update());
-					insertItem.setInt(5, item.getattack_bonus());
-					insertItem.setInt(6, item.getdefense_bonus());
-					insertItem.setInt(7, item.gethp_bonus());
-					insertItem.setFloat(8,  item.getItemWeight());
-					insertItem.setString(9, String.valueOf(item.getItemType()));
-					insertItem.setInt(10, item.getlvl_requirement());
-					
-					insertItem.addBatch();
-				}
-				insertItem.executeBatch();
-				
-				insertObject = conn.prepareStatement("insert into objects (objectname, longdescription, shortdescription) values (?, ?, ?)");
-				for (Object object : objectList) {
-					insertObject.setString(1, object.getName());
-					insertObject.setString(2, object.getLongDescription());
-					insertObject.setString(3, object.getShortDescription());
 	
-					insertObject.addBatch();
-				}
-				insertObject.executeBatch();
-				
-				insertItemsToObjects = conn.prepareStatement("insert into itemstoobjects (item_id, object_id) values (?, ?)");
-				for(IntPair intPair : itemsToObjectsList) {
-					insertItemsToObjects.setInt(1, intPair.getInt1());
-					insertItemsToObjects.setInt(2, intPair.getInt2());
-					insertItemsToObjects.addBatch();
-				}
-				insertItemsToObjects.executeBatch();
-				
-				insertMapTileConnections = conn.prepareStatement("insert into maptileconnections "
-						+ "("
-						+ "north,"
-						+ "northeast,"
-						+ "east,"
-						+ "southeast,"
-						+ "south,"
-						+ "southwest,"
-						+ "west,"
-						+ "northwest)"
-						+ " values (?,?,?,?,?,?,?,?)");
-				
-				for(HashMap<String, Integer> mapTileConnections : mapTileConnectionsList) {
-					int i = 1;
-					
-					insertMapTileConnections.setInt(i++, mapTileConnections.get("north"));
-					insertMapTileConnections.setInt(i++, mapTileConnections.get("northeast"));
-					insertMapTileConnections.setInt(i++, mapTileConnections.get("east"));
-					insertMapTileConnections.setInt(i++, mapTileConnections.get("southeast"));
-					insertMapTileConnections.setInt(i++, mapTileConnections.get("south"));
-					insertMapTileConnections.setInt(i++, mapTileConnections.get("southwest"));
-					insertMapTileConnections.setInt(i++, mapTileConnections.get("west"));
-					insertMapTileConnections.setInt(i++, mapTileConnections.get("northwest"));
-					
-					insertMapTileConnections.addBatch();
-				}
-				insertMapTileConnections.executeBatch();
-				
-				insertMapTile = conn.prepareStatement("insert into maptiles (maptilename, longdescription, shortdescription, difficulty) values (?, ?, ?, ?)");
-				for (MapTile mapTile : mapTileList) {
-					insertMapTile.setString(1, mapTile.getName());
-					insertMapTile.setString(2, mapTile.getLongDescription());
-					insertMapTile.setString(3, mapTile.getShortDescription());
-					insertMapTile.setInt(4, mapTile.getAreaDifficulty());
-					
-					insertMapTile.addBatch();
-				}
-				insertMapTile.executeBatch();
-				
-				insertObjectsToMapTiles = conn.prepareStatement("insert into objectstomaptiles (object_id, maptile_id) values (?, ?)");
-				for(IntPair intPair : objectsToMapTilesList) {
-					insertObjectsToMapTiles.setInt(1, intPair.getInt1());
-					insertObjectsToMapTiles.setInt(2, intPair.getInt2());
-					
-					insertObjectsToMapTiles.addBatch();
-				}
-				insertObjectsToMapTiles.executeBatch();
-				
-				insertItemsToInventories = conn.prepareStatement("insert into itemstoinventories (item_id, inventory_id) values (?, ?)");
-				for(IntPair intPair : itemsToInventoriesList) {
-					insertItemsToInventories.setInt(1, intPair.getInt1());
-					insertItemsToInventories.setInt(2, intPair.getInt2());
-					
-					insertItemsToInventories.addBatch();
-				}
-				insertItemsToInventories.executeBatch();
-				
-				insertPlayers = conn.prepareStatement("insert into players ("
-						+ "race, name, gender, level, hit_points, "
-						+ "magic_points, attack, defense, sp_attack, sp_defense, "
-						+ "coins, map_location, inventory_id, helm_item_id, braces_item_id, "
-						+ "chest_item_id, legs_item_id, boots_item_id, l_hand_item_id, r_hand_item_id,"
-						+ "experience, carry_weight) "
-						+ "values("
-						+ "?, ?, ?, ?, ?,"
-						+ "?, ?, ?, ?, ?,"
-						+ "?, ?, ?, ?, ?,"
-						+ "?, ?, ?, ?, ?,"
-						+ "?, ?)" );
-				for(Player player : playerList) {
-					int i = 1;
-					insertPlayers.setString(i++, player.getrace());
-					insertPlayers.setString(i++, player.getname());
-					insertPlayers.setString(i++, player.getgender());
-					insertPlayers.setInt(i++, player.getlevel());
-					insertPlayers.setInt(i++, player.gethit_points());
-					
-					insertPlayers.setInt(i++, player.getmagic_points());
-					insertPlayers.setInt(i++, player.getattack());
-					insertPlayers.setInt(i++, player.getdefense());
-					insertPlayers.setInt(i++, player.getspecial_attack());
-					insertPlayers.setInt(i++, player.getspecial_defense());
-					
-					insertPlayers.setInt(i++, player.getcoins());
-					insertPlayers.setInt(i++, player.getlocation());
-					insertPlayers.setInt(i++, player.getinventory_id());
-					insertPlayers.setInt(i++, player.gethelm().getID());
-					insertPlayers.setInt(i++, player.getbraces().getID());
-					
-					insertPlayers.setInt(i++, player.getchest().getID());
-					insertPlayers.setInt(i++, player.getlegs().getID());
-					insertPlayers.setInt(i++, player.getboots().getID());
-					insertPlayers.setInt(i++, player.getl_hand().getID());
-					insertPlayers.setInt(i++, player.getr_hand().getID());
-					
-					insertPlayers.setInt(i++, player.getexperience());
-					insertPlayers.setInt(i++, player.getcarry_weight());
-					
-					insertPlayers.addBatch();
-				}
-				insertPlayers.executeBatch();
-				
-				insertMaps = conn.prepareStatement("insert into maps (mapname, longdescription, shortdescription) values (?, ?, ?)");
-				for (Map map : mapList) {
-					insertMaps.setString(1, map.getName());
-					insertMaps.setString(2, map.getLongDescription());
-					insertMaps.setString(3, map.getShortDescription());
-					
-					insertMaps.addBatch();
-				}
-				insertMaps.executeBatch();
-				
-				insertMapTilesToMaps = conn.prepareStatement(" insert into maptilestomaps (maptile_id, map_id) values (?, ?)");
-				for(IntPair intPair : mapTilesToMapsList) {
-					insertMapTilesToMaps.setInt(1, intPair.getInt1());
-					insertMapTilesToMaps.setInt(2, intPair.getInt2());
-					
-					insertMapTilesToMaps.addBatch();
-				}
-				insertMapTilesToMaps.executeBatch();
-				
-				insertObjectCommandResponses = conn.prepareStatement(" insert into objectCommandResponses (object_id, command, response) values (?, ?, ?)");
-				for(ObjectIDCommandResponse objectCommandResponse : objectCommandResponseList) {
-					insertObjectCommandResponses.setInt(1, objectCommandResponse.getObjectID());
-					insertObjectCommandResponses.setString(2, objectCommandResponse.getCommand());
-					insertObjectCommandResponses.setString(3, objectCommandResponse.getResponse());
-					
-					insertObjectCommandResponses.addBatch();
-				}
-				insertObjectCommandResponses.executeBatch();
-				
-				// Removed Inserting Users
-				
-				insertEnemies = conn.prepareStatement(" insert into enemies (race, hp, mp, attack, defense, sp_atk, sp_def) values (?, ?, ?, ?, ?, ?, ?)");
-				for(Enemy enemy : enemyList) {
-					insertEnemies.setString(1, enemy.getrace());
-					insertEnemies.setInt(2, enemy.gethit_points());
-					insertEnemies.setInt(3, enemy.getmagic_points());
-					insertEnemies.setInt(4, enemy.getattack());
-					insertEnemies.setInt(5, enemy.getdefense());
-					insertEnemies.setInt(6, enemy.getspecial_attack());
-					insertEnemies.setInt(7, enemy.getspecial_defense());
-					
-					insertEnemies.addBatch();
-				}
-				insertEnemies.executeBatch();
-				
-				insertNames = conn.prepareStatement(" insert into names (name, gender) values(?, ?)");
-				for(StringPair nameGender : nameGenderList) {
-					insertNames.setString(1, nameGender.getString1());
-					insertNames.setString(2, nameGender.getString2());
-					
-					insertNames.addBatch();
-				}
-				insertNames.executeBatch();
-				
-				return true;
-			} finally {
-				DBUtil.closeQuietly(insertMaps);
-				DBUtil.closeQuietly(insertPlayers);
-				DBUtil.closeQuietly(insertItemsToInventories);
-				DBUtil.closeQuietly(insertObjectsToMapTiles);
-				DBUtil.closeQuietly(insertMapTile);
-				DBUtil.closeQuietly(insertMapTileConnections);
-				DBUtil.closeQuietly(insertItemsToObjects);
-				DBUtil.closeQuietly(insertObject);
-				DBUtil.closeQuietly(insertItem);
-				DBUtil.closeQuietly(insertEnemies);
-				DBUtil.closeQuietly(insertNames);
-			}
-		});
-	}
-
 	/**************************************************************************************************
 	 * 										Get Methods
 	 **************************************************************************************************/
@@ -594,7 +332,7 @@ public class DerbyDatabase implements IDatabase {
 				
 				while(resultSetMap.next()){
 					found = true;
-					loadMap(map, resultSetMap, 1);
+					loadMap(map, resultSetMap);
 					
 					stmt = conn.prepareStatement(
 							" select maptiles.* "
@@ -628,32 +366,6 @@ public class DerbyDatabase implements IDatabase {
 		});
 	}
 	
-	private ArrayList<String> getAllMapNames() {
-		return executeTransaction(conn -> {
-			PreparedStatement stmt = null;
-			ResultSet resultSet = null;
-			
-			ArrayList<String> mapNameList = new ArrayList<>();
-			try{
-				
-				stmt = conn.prepareStatement(
-						"select maps.name from maps"
-				);
-				resultSet = stmt.executeQuery();
-				
-				int i = 1;
-				while(resultSet.next()){
-					mapNameList.add(resultSet.getString(i++));
-				}
-				return mapNameList;
-			}finally{
-				DBUtil.closeQuietly(conn);
-				DBUtil.closeQuietly(resultSet);
-				DBUtil.closeQuietly(stmt);
-			}
-		});
-	}
-
 	///////////////////////////////////////////////////////////////////////////////////////
 	//  								MapTiles 
 	///////////////////////////////////////////////////////////////////////////////////////
@@ -686,7 +398,7 @@ public class DerbyDatabase implements IDatabase {
 					found = true;
 					
 					MapTile mapTile = new MapTile();
-					loadMapTile(mapTile, resultSetMapTiles, 1);
+					loadMapTile(mapTile, resultSetMapTiles);
 					
 					// remember to skip an index for the repeated maptile_id from the connections table
 					loadMapTileConnections(mapTile.getConnections(), resultSetMapTiles, 7);
@@ -700,13 +412,13 @@ public class DerbyDatabase implements IDatabase {
 					);
 					
 					stmt.setInt(1, mapTile.getID());
-					ArrayList<Object> resultObjects = new ArrayList<>();
+					ArrayList<GameObject> resultObjects = new ArrayList<>();
 					
 					resultSetObjects = stmt.executeQuery();
 					
 					while(resultSetObjects.next()){
-						Object object = new Object();
-						loadObject(object, resultSetObjects, 1);
+						GameObject object = new GameObject();
+						loadObject(object, resultSetObjects);
 						
 						// Now get the commandResponses
 						stmt2 = conn.prepareStatement(
@@ -813,7 +525,7 @@ public class DerbyDatabase implements IDatabase {
 				while(resultSetMapTiles.next()){
 					found = true;
 					
-					loadMapTile(mapTile, resultSetMapTiles, 1);
+					loadMapTile(mapTile, resultSetMapTiles);
 					loadMapTileConnections(mapTile.getConnections(), resultSetMapTiles, 7);
 					
 					// Now get all objects associated with the mapTile
@@ -825,13 +537,13 @@ public class DerbyDatabase implements IDatabase {
 					);
 					
 					stmt.setInt(1, mapTile.getID());
-					ArrayList<Object> resultObjects = new ArrayList<>();
+					ArrayList<GameObject> resultObjects = new ArrayList<>();
 					
 					resultSetObjects = stmt.executeQuery();
 					
 					while(resultSetObjects.next()){
-						Object object = new Object();
-						loadObject(object, resultSetObjects, 1);
+						GameObject object = new GameObject();
+						loadObject(object, resultSetObjects);
 						
 						// Now get the commandResponses
 						stmt2 = conn.prepareStatement(
@@ -910,7 +622,7 @@ public class DerbyDatabase implements IDatabase {
 	//  								Objects 
 	///////////////////////////////////////////////////////////////////////////////////////
 	@Override
-	public ArrayList<Object> getAllObjects() {
+	public ArrayList<GameObject> getAllObjects() {
 		return executeTransaction(conn -> {
 			PreparedStatement stmt = null;
 			PreparedStatement stmt2 = null;
@@ -925,7 +637,7 @@ public class DerbyDatabase implements IDatabase {
 								"  from objects "
 				);
 				
-				ArrayList<Object> resultObjects = new ArrayList<>();
+				ArrayList<GameObject> resultObjects = new ArrayList<>();
 				resultSetObjects = stmt.executeQuery();
 				
 				// for testing that a result was returned
@@ -933,8 +645,8 @@ public class DerbyDatabase implements IDatabase {
 				while(resultSetObjects.next()){
 					found = true;
 					
-					Object object = new Object();
-					loadObject(object, resultSetObjects, 1);
+					GameObject object = new GameObject();
+					loadObject(object, resultSetObjects);
 					
 					// Now get the commandResponses
 					stmt2 = conn.prepareStatement(
@@ -1005,7 +717,7 @@ public class DerbyDatabase implements IDatabase {
 	}
 
 	@Override
-	public Object getObjectByID(int objectID) {
+	public GameObject getObjectByID(int objectID) {
 		return executeTransaction(conn -> {
 			
 			PreparedStatement stmt1 = null;
@@ -1026,7 +738,7 @@ public class DerbyDatabase implements IDatabase {
 				
 				resultSet = stmt1.executeQuery();
 				
-				Object resultObject = new Object();
+				GameObject resultObject = new GameObject();
 				
 				// for testing that a result was returned
 				boolean found = false;
@@ -1034,7 +746,7 @@ public class DerbyDatabase implements IDatabase {
 				while(resultSet.next()){
 					found = true;
 					
-					loadObject(resultObject, resultSet, 1);
+					loadObject(resultObject, resultSet);
 					
 					// Now get the commandResponses
 					stmt2 = conn.prepareStatement(
@@ -1403,7 +1115,7 @@ public class DerbyDatabase implements IDatabase {
 				while(resultSet.next()){
 					found = true;
 					
-					loadPlayer(result, resultSet, 1);
+					loadPlayer(result, resultSet);
 				}
 				
 				if(!found){
@@ -1550,7 +1262,7 @@ public class DerbyDatabase implements IDatabase {
 				
 				while(resultSet.next()){
 					found = true;
-					loadNameGender(nameGender, resultSet, 1);
+					loadNameGender(nameGender, resultSet);
 				}
 				
 				if(!found){
@@ -1587,13 +1299,12 @@ public class DerbyDatabase implements IDatabase {
 				
 				Inventory inventory = new Inventory();
 				ArrayList<Item> itemList = new ArrayList<>();
-				Item item = new Item();
 				
 				boolean found = false;
 				while(resultSet.next()){
 					found = true;
 					
-					item = getItemByID(resultSet.getInt(1));
+					Item item = getItemByID(resultSet.getInt(1));
 					itemList.add(item);
 				}
 				if(!found){
@@ -1628,13 +1339,12 @@ public class DerbyDatabase implements IDatabase {
 				
 				Inventory inventory = new Inventory();
 				ArrayList<Item> itemList = new ArrayList<>();
-				Item item = new Item();
 				
 				boolean found = false;
 				while(resultSet.next()){
 					found = true;
 					
-					item = getItemByID(resultSet.getInt(1));
+					Item item = getItemByID(resultSet.getInt(1));
 					itemList.add(item);
 				}
 				if(!found){
@@ -1795,12 +1505,13 @@ public class DerbyDatabase implements IDatabase {
 				DBUtil.closeQuietly(resultSet);
 				DBUtil.closeQuietly(stmt);
 				DBUtil.closeQuietly(stmt2);
+				DBUtil.closeQuietly(stmt3);
 			}
 		});
 	}
 	
-	private Boolean createWorldForNewGame(String playerName) { 
-		return executeTransaction(conn -> {
+	private void createWorldForNewGame(String playerName) {
+		executeTransaction(conn -> {
 			PreparedStatement insertMapTile = null;
 			PreparedStatement insertMapTileConnections = null;
 			PreparedStatement insertObject = null;
@@ -1857,12 +1568,12 @@ public class DerbyDatabase implements IDatabase {
 					insertMapTileConnections.setInt(i++, mapTile.getConnections().get("south"));
 					insertMapTileConnections.setInt(i++, mapTile.getConnections().get("southwest"));
 					insertMapTileConnections.setInt(i++, mapTile.getConnections().get("west"));
-					insertMapTileConnections.setInt(i++, mapTile.getConnections().get("northwest"));
+					insertMapTileConnections.setInt(i, mapTile.getConnections().get("northwest"));
 					insertMapTileConnections.addBatch();
 					
 					// If there are objects on the maptile, add them
 					if(mapTile.getObjects() != null){
-						for(Object object: mapTile.getObjects()){
+						for(GameObject object: mapTile.getObjects()){
 							insertObject.setString(1, object.getName());
 							insertObject.setString(2, object.getLongDescription());
 							insertObject.setString(3, object.getShortDescription());
@@ -1889,7 +1600,6 @@ public class DerbyDatabase implements IDatabase {
 				
 				return true;
 			}catch(IOException e){
-				e.printStackTrace();
 				return false;
 			}finally{
 				DBUtil.closeQuietly(conn);
@@ -1902,8 +1612,8 @@ public class DerbyDatabase implements IDatabase {
 		});
 	}
 	
-	private Boolean insertPlayer(Player player) {
-		return executeTransaction(conn -> {
+	private void insertPlayer(Player player) {
+		executeTransaction(conn -> {
 			PreparedStatement insertPlayer = null;
 			try{
 				insertPlayer = conn.prepareStatement("insert into players ("
@@ -1959,8 +1669,8 @@ public class DerbyDatabase implements IDatabase {
 		});
 	}
 	
-	private Boolean createWildcardMapTileTable(String playerName) {
-		return executeTransaction(conn -> {
+	private void createWildcardMapTileTable(String playerName) {
+		executeTransaction(conn -> {
 			PreparedStatement stmt = null;
 			try{
 				stmt = conn.prepareStatement(
@@ -1983,8 +1693,8 @@ public class DerbyDatabase implements IDatabase {
 		});
 	}
 	
-	private Boolean createWildcardMapTileConnectionsTable(String playerName) {
-		return executeTransaction(conn -> {
+	private void createWildcardMapTileConnectionsTable(String playerName) {
+		executeTransaction(conn -> {
 			PreparedStatement stmt = null;
 			
 			try{
@@ -2013,8 +1723,8 @@ public class DerbyDatabase implements IDatabase {
 		});
 	}
 	
-	private Boolean createWildcardObjectsTable(String playerName) {
-		return executeTransaction(conn -> {
+	private void createWildcardObjectsTable(String playerName) {
+		executeTransaction(conn -> {
 			PreparedStatement stmt = null;
 			try{
 				stmt = conn.prepareStatement(
@@ -2036,8 +1746,8 @@ public class DerbyDatabase implements IDatabase {
 		});
 	}
 	
-	private Boolean createWildcardItemsToObjectsTable(String playerName) {
-		return executeTransaction(conn -> {
+	private void createWildcardItemsToObjectsTable(String playerName) {
+		executeTransaction(conn -> {
 			PreparedStatement stmt = null;
 			
 			try{
@@ -2057,8 +1767,8 @@ public class DerbyDatabase implements IDatabase {
 		});
 	}
 	
-	private Boolean createWildcardObjectCommandResponseTable(String playerName) {
-		return executeTransaction(conn -> {
+	private void createWildcardObjectCommandResponseTable(String playerName) {
+		executeTransaction(conn -> {
 			PreparedStatement stmt = null;
 			
 			try{
@@ -2079,8 +1789,8 @@ public class DerbyDatabase implements IDatabase {
 		});
 	}
 	
-	private Boolean createWildcardItemsToInventoriesTable(String playerName) {
-		return executeTransaction(conn -> {
+	private void createWildcardItemsToInventoriesTable(String playerName) {
+		executeTransaction(conn -> {
 			PreparedStatement stmt = null;
 			
 			try{
@@ -2130,43 +1840,43 @@ public class DerbyDatabase implements IDatabase {
 		int carryWeight = 0;
 
 		Item emptyItemSlot = new Item();
-		emptyItemSlot.setattack_bonus(0);
-		emptyItemSlot.setdefense_bonus(0);
-		emptyItemSlot.setdescription_update("You haven't equipped one");
-		emptyItemSlot.sethp_bonus(0);
-		emptyItemSlot.setlvl_requirement(0);
+		emptyItemSlot.setAttackBonus(0);
+		emptyItemSlot.setDefenseBonus(0);
+		emptyItemSlot.setDescriptionUpdate("You haven't equipped one");
+		emptyItemSlot.setHPBonus(0);
+		emptyItemSlot.setLevelRequirement(0);
 		emptyItemSlot.setID(0);
-		emptyItemSlot.setIsQuestItem(false);
-		emptyItemSlot.setItemWeight(0);
+		emptyItemSlot.setQuestItem(false);
+		emptyItemSlot.setWeight(0);
 		emptyItemSlot.setLongDescription("Empty Slot");
 		emptyItemSlot.setShortDescription("Empty Slot");
 		emptyItemSlot.setName("Empty Slot");
 		
 		// helm
-		emptyItemSlot.setItemType(ItemType.HELM);
+		emptyItemSlot.setType(ItemType.HELM);
 		player.sethelm(emptyItemSlot);
 		
 		// braces
-		emptyItemSlot.setItemType(ItemType.BRACES);
+		emptyItemSlot.setType(ItemType.BRACES);
 		player.setbraces(emptyItemSlot);
 		
 		// chest
-		emptyItemSlot.setItemType(ItemType.CHEST);
+		emptyItemSlot.setType(ItemType.CHEST);
 		player.setchest(emptyItemSlot);
 		
-		emptyItemSlot.setItemType(ItemType.LEGS);
+		emptyItemSlot.setType(ItemType.LEGS);
 		player.setlegs(emptyItemSlot);
 		
 		// boots
-		emptyItemSlot.setItemType(ItemType.BOOTS);
+		emptyItemSlot.setType(ItemType.BOOTS);
 		player.setboots(emptyItemSlot);
 		
 		// l_hand
-		emptyItemSlot.setItemType(ItemType.L_HAND);
+		emptyItemSlot.setType(ItemType.L_HAND);
 		player.setl_hand(emptyItemSlot);
 		
 		// r_hand
-		emptyItemSlot.setItemType(ItemType.R_HAND);
+		emptyItemSlot.setType(ItemType.R_HAND);
 		player.setr_hand(emptyItemSlot);
 		
 		player.setcarry_weight(20);
@@ -2208,22 +1918,8 @@ public class DerbyDatabase implements IDatabase {
 		// adds every object in the maptile.getObjects() objectList
 		// to the objectstomaptiles table
 		if (mapTile.getObjects() != null) {
-			for (Object object : mapTile.getObjects()) {
+			for (GameObject object : mapTile.getObjects()) {
 				addObjectToMapTile(object.getID(), mapTile.getID());
-			}
-		}
-	}
-	
-	private void updateObject(final Object object) {
-		
-		// removes all items from itemstoobjects table
-		removeAllItemsFromObject(object.getID());		
-		
-		// adds every item in the current object.getItems() itemList
-		// to the itemstoobjects table
-		if (!object.getItems().isEmpty()) {
-			for(Item item : object.getItems()) {
-				addItemToObject(item, object);
 			}
 		}
 	}
@@ -2290,7 +1986,7 @@ public class DerbyDatabase implements IDatabase {
 					stmtUpdatePlayer.setInt(i++, player.getl_hand().getID());
 					stmtUpdatePlayer.setInt(i++, player.getr_hand().getID());
 					stmtUpdatePlayer.setInt(i++, player.getexperience());
-					stmtUpdatePlayer.setInt(i++, player.getcarry_weight());
+					stmtUpdatePlayer.setInt(i, player.getcarry_weight());
 					
 					stmtUpdatePlayer.addBatch();
 					stmtUpdatePlayer.executeBatch();
@@ -2344,34 +2040,6 @@ public class DerbyDatabase implements IDatabase {
 		});
 	}
 	
-	/**	This should only be called after checking if item exists in items table already **/
-	private void insertItem(Item item) {		
-		executeTransaction(conn -> {
-			PreparedStatement insertItem = null;
-			try {
-				insertItem = conn.prepareStatement("insert into items (itemname, longdescription, shortdescription, "
-						+ "descriptionupdate, attackbonus, defensebonus, hpbonus, "
-						+ "weight, itemtype, levelreq) "
-						+ "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-					insertItem.setString(1, item.getName());
-					insertItem.setString(2, item.getLongDescription());
-					insertItem.setString(3, item.getShortDescription());
-					insertItem.setString(4, item.getdescription_update());
-					insertItem.setInt(5, item.getattack_bonus());
-					insertItem.setInt(6, item.getdefense_bonus());
-					insertItem.setInt(7, item.gethp_bonus());
-					insertItem.setFloat(8,  item.getItemWeight());
-					insertItem.setString(9, String.valueOf(item.getItemType()));
-					insertItem.setInt(10, item.getlvl_requirement());
-					insertItem.addBatch();
-				insertItem.executeBatch();
-				return true;
-			} finally {
-				DBUtil.closeQuietly(conn);
-				DBUtil.closeQuietly(insertItem);
-			}
-		});
-	}
 	/*******************************************************************************************************
 	 * 											addToConstruct Methods
 	 *******************************************************************************************************/
@@ -2400,7 +2068,7 @@ public class DerbyDatabase implements IDatabase {
 	
 	// Adds an association in the itemstoobjects table and adds the item to the 
 	// object's itemList.
-	public void addItemToObject(final Item item, Object object) {
+	public void addItemToObject(final Item item, GameObject object) {
 		executeTransaction(conn -> {
 			PreparedStatement stmt = null;
 			try {
@@ -2413,51 +2081,6 @@ public class DerbyDatabase implements IDatabase {
 				object.addItem(item);
 				return true;
 			} finally {
-				DBUtil.closeQuietly(stmt);
-				DBUtil.closeQuietly(conn);
-			}
-		});
-	}	
-	
-	private void addCommandResponsesToObject(HashMap<String, String> commandResponses, int objectID) {
-		executeTransaction(conn -> {
-			PreparedStatement stmt = null;
-			ResultSet resultSet = null;
-			
-			try {
-				stmt = conn.prepareStatement(" insert into objectCommandResponses (object_id, command, response) values (?, ?, ?)");
-						for(String key : commandResponses.keySet()) {
-							stmt.setInt(1, objectID);
-							stmt.setString(2, key);
-							stmt.setString(3, commandResponses.get(key));
-							stmt.addBatch();
-						}
-						stmt.executeBatch();
-				
-				return true;
-			} finally {
-				DBUtil.closeQuietly(resultSet);
-				DBUtil.closeQuietly(stmt);
-				DBUtil.closeQuietly(conn);
-			}
-		});
-	}
-	
-	public String addUser(final String userName, final String password, final String email) {
-		return executeTransaction(conn -> {
-			PreparedStatement stmt = null;
-			
-			try{
-				stmt = conn.prepareStatement(
-						"insert int users (userName, password, email) "
-								+ "values (?, ?, ?)");
-				stmt.setString(1, userName);
-				stmt.setString(2, password);
-				stmt.setString(3, email);
-				stmt.executeUpdate();
-				
-				return userName;
-			}finally{
 				DBUtil.closeQuietly(stmt);
 				DBUtil.closeQuietly(conn);
 			}
@@ -2516,7 +2139,7 @@ public class DerbyDatabase implements IDatabase {
 	
 	// Removes the item from the object.  Deletes the association in the
 	// itemstoobjects table in Derby.  Returns the same item given to it
- 	public Item removeItemFromObject(final Item item, Object object) {
+ 	public Item removeItemFromObject(final Item item, GameObject object) {
 		return executeTransaction(conn -> {
 			PreparedStatement stmt = null;
 			
@@ -2534,64 +2157,6 @@ public class DerbyDatabase implements IDatabase {
 				return item;
 			}finally{
 				DBUtil.closeQuietly(stmt);
-				DBUtil.closeQuietly(conn);
-			}
-		});
-	}
- 	
-	private void removeAllItemsFromObject(final int objectID) {
-		executeTransaction(conn -> {
-			PreparedStatement removeItem = null;
-			try {
-				removeItem = conn.prepareStatement(
-						"delete from itemstoobjects "
-						+ "where itemstoobjects.objectID = ? "
-				);
-				removeItem.setInt(1, objectID);
-				
-				return true;
-			} finally {
-				DBUtil.closeQuietly(removeItem);
-				DBUtil.closeQuietly(conn);
-			}
-		});
-	}
-	
-	private void removeAllObjectCommandResponses(int objectID) {
-		executeTransaction(conn -> {
-			PreparedStatement stmt = null;
-			
-			try {
-				stmt = conn.prepareStatement(
-						"delete from objectcommandresponses "
-						+ "where objectcommandresponses.object_id = ? "
-				);
-				stmt.setInt(1, objectID);
-				stmt.executeUpdate();
-				
-				return true;
-			} finally {
-				DBUtil.closeQuietly(stmt);
-				DBUtil.closeQuietly(conn);
-			}
-		});
-	} 
-	
-	private void removeObjectCommandResponseByCommand(final String command, final int objectID) {
-		executeTransaction(conn -> {
-			PreparedStatement removeCommandResponse = null;
-			try {
-				removeCommandResponse = conn.prepareStatement(
-						"delete from objectcommandresponses "
-						+ "where objectcommandresponses.command = ? "
-						+ "AND objectcommandresponses.object_id = ? "
-				);
-				removeCommandResponse.setString(1, command);
-				removeCommandResponse.setInt(2, objectID);
-				
-				return true;
-			} finally {
-				DBUtil.closeQuietly(removeCommandResponse);
 				DBUtil.closeQuietly(conn);
 			}
 		});

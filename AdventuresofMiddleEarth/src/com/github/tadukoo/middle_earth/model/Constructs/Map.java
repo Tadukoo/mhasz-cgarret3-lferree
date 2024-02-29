@@ -5,8 +5,13 @@ import java.util.ArrayList;
 public class Map extends Construct{
 	private ArrayList<MapTile> mapTiles;
 	
-	public Map() {
-		mapTiles = new ArrayList<MapTile>();
+	public Map(){
+		mapTiles = new ArrayList<>();
+	}
+	
+	@Override
+	public String getTableName(){
+		return "Maps";
 	}
 	
 	public ArrayList<MapTile> getMapTiles(){

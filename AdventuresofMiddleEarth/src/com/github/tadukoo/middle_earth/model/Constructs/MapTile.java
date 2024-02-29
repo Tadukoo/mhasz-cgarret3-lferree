@@ -7,13 +7,13 @@ import java.util.HashMap;
 public class MapTile extends Construct{
 	private HashMap<String, Integer> connections;
 	//private ArrayList<CombatSituation> random_encounters;
-	private ArrayList<Object> objects;
+	private ArrayList<GameObject> objects;
 	private boolean visited;
 	private String enemyString;
 	private int areaDifficulty;
 	
-	public MapTile() {
-		connections = new HashMap<String, Integer>();
+	public MapTile(){
+		connections = new HashMap<>();
 		connections.put("north", 0);
 		connections.put("northeast", 0);
 		connections.put("east", 0);
@@ -24,16 +24,21 @@ public class MapTile extends Construct{
 		connections.put("northwest", 0);
 	}
 	
+	@Override
+	public String getTableName(){
+		return "map_tiles";
+	}
+	
 	// Note: Having setConnections(HashMap) causes us to lose the default values of 0.
 	public void setConnection(String direction, int weight){
 		connections.put(direction, weight);
 	}
 	
-	public void setObjects(ArrayList<Object> objects) {
+	public void setObjects(ArrayList<GameObject> objects) {
 		this.objects = objects;
 	}
 	
-	public ArrayList<Object> getObjects() {
+	public ArrayList<GameObject> getObjects() {
 		return objects;
 	}
 	

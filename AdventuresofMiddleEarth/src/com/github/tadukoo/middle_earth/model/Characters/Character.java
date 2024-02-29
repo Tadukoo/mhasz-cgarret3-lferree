@@ -144,7 +144,7 @@ public abstract class Character{
 	}
 	
 	public void sethelm(Item helm) {
-		if(helm.getItemType() != ItemType.HELM){
+		if(helm.getType() != ItemType.HELM){
 			throw new IllegalArgumentException("This must be a helm!");
 		}
 		this.helm = helm;
@@ -152,38 +152,38 @@ public abstract class Character{
 	
 	public void remove(String type){
 		Item emptyItemSlot = new Item();
-		emptyItemSlot.setattack_bonus(0);
-		emptyItemSlot.setdefense_bonus(0);
-		emptyItemSlot.setdescription_update("You haven't equipped one");
-		emptyItemSlot.sethp_bonus(0);
-		emptyItemSlot.setlvl_requirement(0);
+		emptyItemSlot.setAttackBonus(0);
+		emptyItemSlot.setDefenseBonus(0);
+		emptyItemSlot.setDescriptionUpdate("You haven't equipped one");
+		emptyItemSlot.setHPBonus(0);
+		emptyItemSlot.setLevelRequirement(0);
 		emptyItemSlot.setID(0);
-		emptyItemSlot.setIsQuestItem(false);
-		emptyItemSlot.setItemWeight(0);
+		emptyItemSlot.setQuestItem(false);
+		emptyItemSlot.setWeight(0);
 		emptyItemSlot.setLongDescription("Empty Slot");
 		emptyItemSlot.setShortDescription("Empty Slot");
 		emptyItemSlot.setName("Empty Slot");
 		
 		if (type.equalsIgnoreCase("head")) {
-			emptyItemSlot.setItemType(ItemType.HELM);
+			emptyItemSlot.setType(ItemType.HELM);
 			this.helm = emptyItemSlot;
 		} else if (type.equalsIgnoreCase("chest")) {
-			emptyItemSlot.setItemType(ItemType.CHEST);
+			emptyItemSlot.setType(ItemType.CHEST);
 			this.chest = emptyItemSlot;
 		} else if (type.equalsIgnoreCase("arms")) {
-			emptyItemSlot.setItemType(ItemType.BRACES);
+			emptyItemSlot.setType(ItemType.BRACES);
 			this.braces = emptyItemSlot;
 		} else if (type.equalsIgnoreCase("lhand")) {
-			emptyItemSlot.setItemType(ItemType.L_HAND);
+			emptyItemSlot.setType(ItemType.L_HAND);
 			this.l_hand = emptyItemSlot;
 		} else if (type.equalsIgnoreCase("rhand")) {
-			emptyItemSlot.setItemType(ItemType.R_HAND);
+			emptyItemSlot.setType(ItemType.R_HAND);
 			this.r_hand = emptyItemSlot;
 		} else if (type.equalsIgnoreCase("legs")) {
-			emptyItemSlot.setItemType(ItemType.LEGS);
+			emptyItemSlot.setType(ItemType.LEGS);
 			this.legs = emptyItemSlot;
 		} else if (type.equalsIgnoreCase("boots")) {
-			emptyItemSlot.setItemType(ItemType.BOOTS);
+			emptyItemSlot.setType(ItemType.BOOTS);
 			this.boots = emptyItemSlot;
 		}
 	}
@@ -193,7 +193,7 @@ public abstract class Character{
 	}
 	
 	public void setbraces(Item braces) {
-		if(braces.getItemType() != ItemType.BRACES){
+		if(braces.getType() != ItemType.BRACES){
 			throw new IllegalArgumentException("This must be braces!");
 		}
 		this.braces = braces;
@@ -205,7 +205,7 @@ public abstract class Character{
 	}
 	
 	public void setchest(Item chest) {
-		if(chest.getItemType() != ItemType.CHEST){
+		if(chest.getType() != ItemType.CHEST){
 			throw new IllegalArgumentException("This must be a chest!");
 		}
 		this.chest = chest;
@@ -216,7 +216,7 @@ public abstract class Character{
 	}
 	
 	public void setlegs(Item legs) {
-		if(legs.getItemType() != ItemType.LEGS){
+		if(legs.getType() != ItemType.LEGS){
 			throw new IllegalArgumentException("This must be legs!");
 		}
 		this.legs = legs;
@@ -227,7 +227,7 @@ public abstract class Character{
 	}
 	
 	public void setboots(Item boots) {
-		if(boots.getItemType() != ItemType.BOOTS){
+		if(boots.getType() != ItemType.BOOTS){
 			throw new IllegalArgumentException("This must be boots!");
 		}
 		this.boots = boots;
@@ -238,7 +238,7 @@ public abstract class Character{
 	}
 	
 	public void setl_hand(Item l_hand) {
-		if(l_hand.getItemType() != ItemType.L_HAND){
+		if(l_hand.getType() != ItemType.L_HAND){
 			// TODO: Maybe just HAND?
 			throw new IllegalArgumentException("This must be a HAND type!");
 		}
@@ -250,7 +250,7 @@ public abstract class Character{
 	}
 	
 	public void setr_hand(Item r_hand) {
-		if(r_hand.getItemType() != ItemType.R_HAND){
+		if(r_hand.getType() != ItemType.R_HAND){
 			// TODO: Maybe just HAND?
 			throw new IllegalArgumentException("This must be a HAND type!");
 		}

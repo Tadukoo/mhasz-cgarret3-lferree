@@ -9,7 +9,7 @@ import com.github.tadukoo.middle_earth.model.Characters.Player;
 import com.github.tadukoo.middle_earth.model.Constructs.Item;
 import com.github.tadukoo.middle_earth.model.Constructs.Map;
 import com.github.tadukoo.middle_earth.model.Constructs.MapTile;
-import com.github.tadukoo.middle_earth.model.Constructs.Object;
+import com.github.tadukoo.middle_earth.model.Constructs.GameObject;
 import com.github.tadukoo.middle_earth.model.Quest;
 import com.github.tadukoo.middle_earth.persist.pojo.DatabaseResult;
 import com.github.tadukoo.middle_earth.persist.pojo.User;
@@ -23,6 +23,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
+/**
+ * Represents a MySQL database implementation of {@link IDatabase}
+ *
+ * @author Logan Ferree (Tadukoo)
+ * @version 2.0
+ */
 public class MySQLDatabase implements IDatabase{
 	/** The backing {@link Database} for this {@link MySQLDatabase} */
 	private final Database database;
@@ -137,7 +143,7 @@ public class MySQLDatabase implements IDatabase{
 	}
 	
 	@Override
-	public List<Object> getAllObjects(){
+	public List<GameObject> getAllObjects(){
 		return null;
 	}
 	
@@ -162,7 +168,7 @@ public class MySQLDatabase implements IDatabase{
 	}
 	
 	@Override
-	public Object getObjectByID(int objectID){
+	public GameObject getObjectByID(int objectID){
 		return null;
 	}
 	
@@ -187,7 +193,7 @@ public class MySQLDatabase implements IDatabase{
 	}
 	
 	@Override
-	public Item removeItemFromObject(Item item, Object object){
+	public Item removeItemFromObject(Item item, GameObject object){
 		return null;
 	}
 	
@@ -197,7 +203,7 @@ public class MySQLDatabase implements IDatabase{
 	}
 	
 	@Override
-	public void addItemToObject(Item item, Object object){
+	public void addItemToObject(Item item, GameObject object){
 	
 	}
 	

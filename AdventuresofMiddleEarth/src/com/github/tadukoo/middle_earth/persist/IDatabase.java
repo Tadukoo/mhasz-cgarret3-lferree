@@ -10,7 +10,7 @@ import com.github.tadukoo.middle_earth.model.Quest;
 import com.github.tadukoo.middle_earth.model.Characters.Character;
 import com.github.tadukoo.middle_earth.model.Characters.Enemy;
 import com.github.tadukoo.middle_earth.model.Constructs.Item;
-import com.github.tadukoo.middle_earth.model.Constructs.Object;
+import com.github.tadukoo.middle_earth.model.Constructs.GameObject;
 import com.github.tadukoo.middle_earth.model.Constructs.Map;
 import com.github.tadukoo.middle_earth.model.Constructs.MapTile;
 import com.github.tadukoo.middle_earth.persist.pojo.DatabaseResult;
@@ -29,23 +29,23 @@ public interface IDatabase{
 	Player getPlayer();
 	
 	List<Item> getAllItems();
-	List<Object> getAllObjects();
+	List<GameObject> getAllObjects();
 	List<MapTile> getAllMapTiles();
 	List<Character> getAllCharacters();
 	List<Quest> getAllQuests();
 	
 	Item getItemByID(int itemID);
-	Object getObjectByID(int objectID);
+	GameObject getObjectByID(int objectID);
 	MapTile getMapTileByID(int mapTileID);
 	Inventory getInventoryByID(int inventoryID);
 	
 	Character getCharacterByName(String characterName);
 	
 	Item removeItemFromInventory(Item item, Inventory inventory);
-	Item removeItemFromObject(Item item, Object object);
+	Item removeItemFromObject(Item item, GameObject object);
 	
 	void addItemToInventory(Item item, Inventory inventory);
-	void addItemToObject(Item item, Object object);
+	void addItemToObject(Item item, GameObject object);
 	
 	Game loadGame(int gameID);
 	void saveGame(Game game);

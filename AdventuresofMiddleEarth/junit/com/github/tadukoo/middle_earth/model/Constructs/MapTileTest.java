@@ -59,10 +59,10 @@ public class MapTileTest{
 	@Test
 	public void testSetObjects(){
 		// Create an ArrayList of Objects
-		ArrayList<Object> objs = new ArrayList<>();
-		Object derp = new Object();
+		ArrayList<GameObject> objs = new ArrayList<>();
+		GameObject derp = new GameObject();
 		derp.setName("Derpykins");
-		Object pling = new Object();
+		GameObject pling = new GameObject();
 		pling.setName("Mine");
 		objs.add(derp);
 		objs.add(pling);
@@ -76,12 +76,12 @@ public class MapTileTest{
 		assertEquals(pling, tile.getObjects().get(1));
 		
 		// Create another ArrayList
-		ArrayList<Object> objs2 = new ArrayList<>();
-		Object ploppy = new Object();
+		ArrayList<GameObject> objs2 = new ArrayList<>();
+		GameObject ploppy = new GameObject();
 		ploppy.setName("IDK");
-		Object sloppy = new Object();
+		GameObject sloppy = new GameObject();
 		sloppy.setName("Hopefully not too much");
-		Object eh = new Object();
+		GameObject eh = new GameObject();
 		eh.setName("Nah");
 		objs2.add(ploppy);
 		objs2.add(sloppy);

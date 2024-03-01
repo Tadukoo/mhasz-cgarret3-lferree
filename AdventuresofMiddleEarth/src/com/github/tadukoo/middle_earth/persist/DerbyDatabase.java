@@ -1656,7 +1656,7 @@ public class DerbyDatabase implements IDatabase {
 				insertPlayer.setInt(i++, player.getr_hand().getID());
 				
 				insertPlayer.setInt(i++, player.getexperience());
-				insertPlayer.setInt(i++, player.getcarry_weight());
+				insertPlayer.setInt(i, player.getcarry_weight());
 				
 				insertPlayer.addBatch();
 				

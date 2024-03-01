@@ -2,6 +2,7 @@ package com.github.tadukoo.dbsetup;
 
 import com.github.tadukoo.aome.InitialData;
 import com.github.tadukoo.aome.User;
+import com.github.tadukoo.aome.construct.GameObject;
 import com.github.tadukoo.aome.construct.Item;
 import com.github.tadukoo.database.mysql.Database;
 import com.github.tadukoo.util.LoggerUtil;
@@ -48,22 +49,15 @@ public class SetupDatabase{
 		// Create Items table
 		Item item = new Item();
 		item.createTable(database);
+		
+		// Create GameObject table
+		GameObject object = new GameObject();
+		object.createTable(database);
 	}
 	
 	/*
 	 * Other Tables Creation to be moved
-	 * ===== Objects Table =====
-				stmt2 = conn.prepareStatement(
-						"create table objects (" +
-						"	object_id integer primary key " +
-						"		generated always as identity (start with 1, increment by 1), " +
-						"	objectname varchar(40)," +
-						"	longdescription varchar(200)," +
-						"	shortdescription varchar(100)" +
-						")"
-				);
-				stmt2.executeUpdate();
-				
+	 *
 				stmt3 = conn.prepareStatement(
 						"create table itemstoobjects (" +
 						"   item_id int," +
@@ -242,6 +236,12 @@ public class SetupDatabase{
 		List<Item> items = InitialData.getItems();
 		for(Item item: items){
 			item.storeValues(database, false);
+		}
+		
+		// Load Objects
+		List<GameObject> objects = InitialData.getObjects();
+		for(GameObject object: objects){
+			object.storeValues(database, false);
 		}
 	}
 }

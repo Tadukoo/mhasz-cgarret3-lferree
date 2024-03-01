@@ -40,8 +40,8 @@ public class InitialDataTest{
 	
 	@Test
 	public void testGetItems() throws Exception{
-		ArrayList<Item> actualItems = getActualItems();
-		ArrayList<Item> testItems = InitialData.getItems();
+		List<Item> actualItems = getActualItems();
+		List<Item> testItems = InitialData.getItems();
 		for(int i = 0; i < actualItems.size(); i++){
 			assertEquals(actualItems.get(i), testItems.get(i));
 		}

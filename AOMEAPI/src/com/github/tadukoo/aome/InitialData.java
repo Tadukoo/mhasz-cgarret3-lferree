@@ -14,7 +14,78 @@ import com.github.tadukoo.aome.construct.MapTile;
 import com.github.tadukoo.aome.construct.Item;
 import com.github.tadukoo.aome.construct.ItemType;
 
-public class InitialData {
+public class InitialData{
+	
+	public static List<User> getUsers() throws IOException{
+		List<User> users = new ArrayList<>();
+		// Read users from the CSV
+		try(ReadCSV readUsers = new ReadCSV("users.csv")){
+			List<String> tuple = readUsers.next();
+			while(tuple != null){
+				// Grab the parts of the user
+				String username = tuple.get(0);
+				String password = tuple.get(1);
+				String email = tuple.get(2);
+				
+				// Create the user and add it to the List
+				users.add(new User(username, password, email));
+				
+				// Grab next tuple
+				tuple = readUsers.next();
+			}
+			return users;
+		}
+	}
+	
+	public static List<Item> getItems() throws IOException{
+		List<Item> itemList = new ArrayList<>();
+		try(ReadCSV readItems = new ReadCSV("items.csv")){
+			while(true){
+				List<String> tuple = readItems.next();
+				if(tuple == null){
+					break;
+				}
+				Iterator<String> i = tuple.iterator();
+				Item item = new Item();
+				
+				item.setName(i.next());
+				item.setLongDescription(i.next());
+				item.setShortDescription(i.next());
+				item.setDescriptionUpdate(i.next());
+				item.setAttackBonus(Integer.parseInt(i.next()));
+				item.setDefenseBonus(Integer.parseInt(i.next()));
+				item.setHPBonus(Integer.parseInt(i.next()));
+				item.setWeight(Integer.parseInt(i.next()));
+				item.setType(ItemType.valueOf(i.next()));
+				item.setLevelRequirement(Integer.parseInt(i.next()));
+				
+				itemList.add(item);
+			}
+			return itemList;
+		}
+	}
+	
+	public static List<GameObject> getObjects() throws IOException{
+		List<GameObject> objectList = new ArrayList<>();
+		// Read Objects from the CSV
+		try(ReadCSV readObjects = new ReadCSV("objects.csv")){
+			List<String> tuple = readObjects.next();
+			while(tuple != null){
+				// Grab the parts of the object
+				GameObject object = new GameObject();
+				object.setName(tuple.get(0));
+				object.setLongDescription(tuple.get(1));
+				object.setShortDescription(tuple.get(2));
+				
+				objectList.add(object);
+				
+				// Grab next tuple
+				tuple = readObjects.next();
+			}
+			return objectList;
+		}
+	}
+	
 /*
 	public static ArrayList<Integer> getInventoriesToPlayers() throws IOException {
 		ArrayList<Integer> inventoriesToPlayersList = new ArrayList<Integer>();
@@ -97,34 +168,6 @@ public class InitialData {
 				enemyList.add(enemy);
 			}
 			return enemyList;
-		}
-	}
-	
-	public static ArrayList<Item> getItems() throws IOException {
-		ArrayList<Item> itemList = new ArrayList<>();
-		try(ReadCSV readItems = new ReadCSV("items.csv")){
-			while(true){
-				List<String> tuple = readItems.next();
-				if(tuple == null){
-					break;
-				}
-				Iterator<String> i = tuple.iterator();
-				Item item = new Item();
-				
-				item.setName(i.next());
-				item.setLongDescription(i.next());
-				item.setShortDescription(i.next());
-				item.setDescriptionUpdate(i.next());
-				item.setAttackBonus(Integer.parseInt(i.next()));
-				item.setDefenseBonus(Integer.parseInt(i.next()));
-				item.setHPBonus(Integer.parseInt(i.next()));
-				item.setWeight(Integer.parseInt(i.next()));
-				item.setType(ItemType.valueOf(i.next()));
-				item.setLevelRequirement(Integer.parseInt(i.next()));
-				
-				itemList.add(item);
-			}
-			return itemList;
 		}
 	}
 		
@@ -287,29 +330,6 @@ public class InitialData {
 		}
 	}
 	
-	public static ArrayList<GameObject> getObjects() throws IOException {
-		ArrayList<GameObject> objectList = new ArrayList<>();
-		
-		try(ReadCSV readObjects = new ReadCSV("objects.csv")){
-			while(true){
-				List<String> tuple = readObjects.next();
-				if(tuple == null){
-					break;
-				}
-				Iterator<String> i = tuple.iterator();
-				
-				GameObject object = new GameObject();
-				
-				object.setName(i.next());
-				object.setLongDescription(i.next());
-				object.setShortDescription(i.next());
-				
-				objectList.add(object);
-			}
-			return objectList;
-		}
-	} 
-	
 	public static ArrayList<IntPair> getObjectsToMapTiles() throws IOException {
 		ArrayList<IntPair> objectsToMapTilesList = new ArrayList<>();
 		try(ReadCSV readObjectsToMapTiles = new ReadCSV("objectstomaptiles.csv")){
@@ -447,27 +467,6 @@ public class InitialData {
 				questList.add(quest);
 			}
 			return questList;
-		}
-	}
-	
-	public static List<User> getUsers() throws IOException{
-		List<User> users = new ArrayList<>();
-		// Read users from the CSV
-		try(ReadCSV readUsers = new ReadCSV("users.csv")){
-			List<String> tuple = readUsers.next();
-			while(tuple != null){
-				// Grab the parts of the user
-				String username = tuple.get(0);
-				String password = tuple.get(1);
-				String email = tuple.get(2);
-				
-				// Create the user and add it to the List
-				users.add(new User(username, password, email));
-				
-				// Grab next tuple
-				tuple = readUsers.next();
-			}
-			return users;
 		}
 	}
 }

@@ -1,8 +1,20 @@
 package com.github.tadukoo.aome.construct;
 
+import com.github.tadukoo.database.mysql.pojo.SubPojoDefinition;
+import com.github.tadukoo.util.tuple.Pair;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * Represents an Object in the Game
+ *
+ * @author Logan Ferree (Tadukoo)
+ * @author Chris Garrety (cgarret3)
+ * @author Matt Hasz (mhasz239)
+ * @version 2.0
+ * @since 1.0 or earlier
+ */
 public class GameObject extends Construct{
 	private HashMap<String, String> commandResponses;
 	private ArrayList<Item> items;

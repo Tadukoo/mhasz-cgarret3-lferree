@@ -1,7 +1,16 @@
 package com.github.tadukoo.middle_earth.persist;
 
 import com.github.tadukoo.aome.User;
+import com.github.tadukoo.aome.construct.ItemType;
 import com.github.tadukoo.database.mysql.Database;
+import com.github.tadukoo.database.mysql.syntax.SQLSyntaxUtil;
+import com.github.tadukoo.database.mysql.syntax.conditional.Conditional;
+import com.github.tadukoo.database.mysql.syntax.conditional.ConditionalStatement;
+import com.github.tadukoo.database.mysql.syntax.conditional.SQLConjunctiveOperator;
+import com.github.tadukoo.database.mysql.syntax.conditional.SQLOperator;
+import com.github.tadukoo.database.mysql.syntax.reference.ColumnRef;
+import com.github.tadukoo.database.mysql.syntax.reference.TableRef;
+import com.github.tadukoo.database.mysql.syntax.statement.SQLSelectStatement;
 import com.github.tadukoo.middle_earth.controller.Game;
 import com.github.tadukoo.aome.character.Character;
 import com.github.tadukoo.aome.character.Enemy;
@@ -24,6 +33,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.Random;
 import java.util.logging.Level;
 
 /**
@@ -37,6 +47,8 @@ public class MySQLDatabase implements IDatabase{
 	private final Database database;
 	/** The {@link EasyLogger logger} to use for this {@link MySQLDatabase} */
 	private final EasyLogger logger;
+	/** Randomness */
+	private final Random random;
 	
 	/**
 	 * Creates a new MySQL Database with the given {@link ServletContext}
@@ -58,6 +70,7 @@ public class MySQLDatabase implements IDatabase{
 				.username(prop.getProperty("username"))
 				.password(prop.getProperty("password"))
 				.build();
+		random = new Random(System.currentTimeMillis());
 	}
 	
 	/*
@@ -136,6 +149,192 @@ public class MySQLDatabase implements IDatabase{
 		}
 	}
 	
+	/*
+	 * Item Related Queries
+	 */
+	
+	/** {@inheritDoc} */
+	@Override
+	public DatabaseResult<List<Item>> getAllItems(){
+		List<Item> results = null;
+		String error = null;
+		try{
+			Item item = new Item();
+			results = item.doSearch(database, Item.class, false);
+		}catch(SQLException e){
+			error = "Get All Items SQL Error";
+			logger.logError(error, e);
+		}
+		return new DatabaseResult<>(results, error);
+	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public DatabaseResult<Item> getItemByID(int id){
+		Item item = null;
+		String error = null;
+		try{
+			Item search = new Item();
+			search.setID(id);
+			List<Item> results = search.doSearch(database, Item.class, false);
+			if(ListUtil.isBlank(results)){
+				error = "No items match that ID number";
+			}else{
+				item = results.get(0);
+			}
+		}catch(SQLException e){
+			error = "Get Item By ID SQL Error";
+			logger.logError(error, e);
+		}
+		return new DatabaseResult<>(item, error);
+	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public DatabaseResult<Item> getLegendaryItem(ItemType type){
+		Item item = null;
+		String error = null;
+		try{
+			Item search = new Item();
+			search.setShortDescription("LEGENDARY");
+			search.setType(type);
+			List<Item> results = search.doSearch(database, Item.class, false);
+			if(ListUtil.isBlank(results)){
+				error = "No legendary items of that type";
+			}else if(results.size() == 1){
+				item = results.get(0);
+			}else{
+				item = results.get(random.nextInt(results.size()));
+			}
+		}catch(SQLException e){
+			error = "Get Legendary Item SQL Error";
+			logger.logError(error, e);
+		}
+		return new DatabaseResult<>(item, error);
+	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public DatabaseResult<Item> getHandheldItem(){
+		Item item = null;
+		String error = null;
+		try{
+			Item search = new Item();
+			List<ColumnRef> columnRefs = SQLSyntaxUtil.makeColumnRefs(search.getColumnDefKeys());
+			TableRef tableRef = TableRef.builder().tableName(search.getTableName()).build();
+			ColumnRef typeCol = SQLSyntaxUtil.makeColumnRef(Item.TYPE_COLUMN_NAME);
+			ColumnRef shortDescCol = SQLSyntaxUtil.makeColumnRef(Item.SHORT_DESCRIPTION_COLUMN_NAME);
+			Conditional condition = Conditional.builder()
+					.firstCond(Conditional.builder()
+							.firstCondStmt(ConditionalStatement.builder()
+									.column(typeCol)
+									.operator(SQLOperator.EQUAL)
+									.value(ItemType.L_HAND)
+									.build())
+							.operator(SQLConjunctiveOperator.OR)
+							.secondCondStmt(ConditionalStatement.builder()
+									.column(typeCol)
+									.operator(SQLOperator.EQUAL)
+									.value(ItemType.R_HAND)
+									.build())
+							.build())
+					.operator(SQLConjunctiveOperator.AND)
+					.secondCondStmt(ConditionalStatement.builder()
+							.column(shortDescCol)
+							.operator(SQLOperator.NOT_EQUAL)
+							.value("LEGENDARY")
+							.build())
+					.build();
+			List<Item> results = database.executeQuery("Get Handheld Item",
+					SQLSelectStatement.builder()
+							.returnColumns(columnRefs)
+							.fromTables(tableRef)
+							.whereStatement(condition)
+							.build().toString(),
+					search.getResultSetListFunc(Item.class));
+			if(ListUtil.isBlank(results)){
+				error = "No handheld items found";
+			}else if(results.size() == 1){
+				item = results.get(0);
+			}else{
+				item = results.get(random.nextInt(results.size()));
+			}
+		}catch(SQLException e){
+			error = "Get Handheld Item SQL Error";
+			logger.logError(error, e);
+		}
+		return new DatabaseResult<>(item, error);
+	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public DatabaseResult<Item> getArmorItem(){
+		Item item = null;
+		String error = null;
+		try{
+			Item search = new Item();
+			List<ColumnRef> columnRefs = SQLSyntaxUtil.makeColumnRefs(search.getColumnDefKeys());
+			TableRef tableRef = TableRef.builder().tableName(search.getTableName()).build();
+			ColumnRef typeCol = SQLSyntaxUtil.makeColumnRef(Item.TYPE_COLUMN_NAME);
+			ColumnRef shortDescCol = SQLSyntaxUtil.makeColumnRef(Item.SHORT_DESCRIPTION_COLUMN_NAME);
+			Conditional condition = Conditional.builder()
+					.firstCond(Conditional.builder()
+							.firstCond(Conditional.builder()
+									.firstCondStmt(ConditionalStatement.builder()
+											.column(typeCol)
+											.operator(SQLOperator.EQUAL)
+											.value(ItemType.HELM)
+											.build())
+									.operator(SQLConjunctiveOperator.OR)
+									.secondCondStmt(ConditionalStatement.builder()
+											.column(typeCol)
+											.operator(SQLOperator.EQUAL)
+											.value(ItemType.BRACES)
+											.build())
+									.build())
+							.operator(SQLConjunctiveOperator.OR)
+							.secondCond(Conditional.builder()
+									.firstCondStmt(ConditionalStatement.builder()
+											.column(typeCol)
+											.operator(SQLOperator.EQUAL)
+											.value(ItemType.LEGS)
+											.build())
+									.operator(SQLConjunctiveOperator.OR)
+									.secondCondStmt(ConditionalStatement.builder()
+											.column(typeCol)
+											.operator(SQLOperator.EQUAL)
+											.value(ItemType.BOOTS)
+											.build())
+									.build())
+							.build())
+					.operator(SQLConjunctiveOperator.AND)
+					.secondCondStmt(ConditionalStatement.builder()
+							.column(shortDescCol)
+							.operator(SQLOperator.NOT_EQUAL)
+							.value("LEGENDARY")
+							.build())
+					.build();
+			List<Item> results = database.executeQuery("Get Armor Item",
+					SQLSelectStatement.builder()
+							.returnColumns(columnRefs)
+							.fromTables(tableRef)
+							.whereStatement(condition)
+							.build().toString(),
+					search.getResultSetListFunc(Item.class));
+			if(ListUtil.isBlank(results)){
+				error = "No armor items found";
+			}else if(results.size() == 1){
+				item = results.get(0);
+			}else{
+				item = results.get(random.nextInt(results.size()));
+			}
+		}catch(SQLException e){
+			error = "Get Armor Item SQL Error";
+			logger.logError(error, e);
+		}
+		return new DatabaseResult<>(item, error);
+	}
+	
 	@Override
 	public Map getMap(){
 		return null;
@@ -143,11 +342,6 @@ public class MySQLDatabase implements IDatabase{
 	
 	@Override
 	public Player getPlayer(){
-		return null;
-	}
-	
-	@Override
-	public List<Item> getAllItems(){
 		return null;
 	}
 	
@@ -168,11 +362,6 @@ public class MySQLDatabase implements IDatabase{
 	
 	@Override
 	public List<Quest> getAllQuests(){
-		return null;
-	}
-	
-	@Override
-	public Item getItemByID(int itemID){
 		return null;
 	}
 	
@@ -248,36 +437,6 @@ public class MySQLDatabase implements IDatabase{
 	
 	@Override
 	public ArrayList<String> getAllEnemyRaces(){
-		return null;
-	}
-	
-	@Override
-	public Item getLegendaryItem(){
-		return null;
-	}
-	
-	@Override
-	public Item getLegendaryItem(String itemType){
-		return null;
-	}
-	
-	@Override
-	public Item getHandHeldItem(){
-		return null;
-	}
-	
-	@Override
-	public Item getHandHeldItem(String whichHand){
-		return null;
-	}
-	
-	@Override
-	public Item getArmorItem(){
-		return null;
-	}
-	
-	@Override
-	public Item getArmorItem(String armorType){
 		return null;
 	}
 }

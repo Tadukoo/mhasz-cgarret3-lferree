@@ -1,8 +1,5 @@
 package com.github.tadukoo.aome.construct;
 
-import com.github.tadukoo.aome.construct.Construct;
-import com.github.tadukoo.aome.construct.Item;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -17,6 +14,7 @@ public class GameObject extends Construct{
 		commandResponses = new HashMap<>();
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public String getTableName(){
 		return "Objects";

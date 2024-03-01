@@ -232,7 +232,7 @@ public class DerbyDatabase implements IDatabase {
 			emptyItemSlot.setType(ItemType.HELM);
 			player.sethelm(emptyItemSlot);
 		} else {
-			player.sethelm(getItemByID(itemID));
+			player.sethelm(getItemByID(itemID).result());
 			carryWeight += player.gethelm().getWeight();
 		}
 		
@@ -241,7 +241,7 @@ public class DerbyDatabase implements IDatabase {
 			emptyItemSlot.setType(ItemType.BRACES);
 			player.setbraces(emptyItemSlot);
 		} else {
-			player.setbraces(getItemByID(itemID));
+			player.setbraces(getItemByID(itemID).result());
 			carryWeight += player.getbraces().getWeight();
 		}		
 		
@@ -250,7 +250,7 @@ public class DerbyDatabase implements IDatabase {
 			emptyItemSlot.setType(ItemType.CHEST);
 			player.setchest(emptyItemSlot);
 		} else {
-			player.setchest(getItemByID(itemID));
+			player.setchest(getItemByID(itemID).result());
 			carryWeight += player.getchest().getWeight();
 		}
 		
@@ -259,7 +259,7 @@ public class DerbyDatabase implements IDatabase {
 			emptyItemSlot.setType(ItemType.LEGS);
 			player.setlegs(emptyItemSlot);
 		} else {
-			player.setlegs(getItemByID(itemID));
+			player.setlegs(getItemByID(itemID).result());
 			carryWeight += player.getlegs().getWeight();
 		}
 		
@@ -268,7 +268,7 @@ public class DerbyDatabase implements IDatabase {
 			emptyItemSlot.setType(ItemType.BOOTS);
 			player.setboots(emptyItemSlot);
 		} else {
-			player.setboots(getItemByID(itemID));
+			player.setboots(getItemByID(itemID).result());
 			carryWeight += player.getboots().getWeight();
 		}
 		
@@ -277,7 +277,7 @@ public class DerbyDatabase implements IDatabase {
 			emptyItemSlot.setType(ItemType.L_HAND);
 			player.setl_hand(emptyItemSlot);
 		} else {
-			player.setl_hand(getItemByID(itemID));
+			player.setl_hand(getItemByID(itemID).result());
 			carryWeight += player.getl_hand().getWeight();
 		}
 		
@@ -286,7 +286,7 @@ public class DerbyDatabase implements IDatabase {
 			emptyItemSlot.setType(ItemType.R_HAND);
 			player.setr_hand(emptyItemSlot);
 		} else {
-			player.setr_hand(getItemByID(itemID));
+			player.setr_hand(getItemByID(itemID).result());
 			carryWeight += player.getr_hand().getWeight();
 		}
 		
@@ -820,281 +820,28 @@ public class DerbyDatabase implements IDatabase {
 	//  								Items 
 	///////////////////////////////////////////////////////////////////////////////////////
 	@Override
-	public ArrayList<Item> getAllItems() {
-		return executeTransaction(conn -> {
-			PreparedStatement stmt = null;
-			ResultSet resultSet = null;
-			
-			try{
-				// retrieve all attributes
-				stmt = conn.prepareStatement(
-						"select * " +
-								"  from items "
-				);
-				
-				ArrayList<Item> result = new ArrayList<>();
-				
-				resultSet = stmt.executeQuery();
-				
-				// for testing that a result was returned
-				boolean found = false;
-				
-				while(resultSet.next()){
-					found = true;
-					
-					Item item = new Item();
-					loadItem(item, resultSet);
-					
-					result.add(item);
-				}
-				
-				// check if the items were found
-				if(!found){
-					System.out.println("<items> table is empty");
-				}
-				
-				return result;
-			}finally{
-				DBUtil.closeQuietly(resultSet);
-				DBUtil.closeQuietly(stmt);
-				DBUtil.closeQuietly(conn);
-			}
-		});
+	public DatabaseResult<List<Item>> getAllItems(){
+		throw new UnsupportedOperationException("DerbyDatabase not supported anymore!");
 	}
 	
 	@Override
-	public Item getItemByID(int itemID) {
-		return executeTransaction(conn -> {
-			PreparedStatement stmt = null;
-			ResultSet resultSet = null;
-			
-			try{
-				// retrieve all attributes
-				stmt = conn.prepareStatement(
-						"select * " +
-								"  from items "
-								+ "where items.item_id = ? "
-				);
-				stmt.setInt(1, itemID);
-				resultSet = stmt.executeQuery();
-				
-				Item result = new Item();
-				
-				// for testing that a result was returned
-				boolean found = false;
-				
-				while(resultSet.next()){
-					found = true;
-					loadItem(result, resultSet);
-				}
-				
-				// check if the item was found
-				if(!found){
-					System.out.println("no items with that id");
-				}
-				
-				return result;
-			}finally{
-				DBUtil.closeQuietly(resultSet);
-				DBUtil.closeQuietly(stmt);
-				DBUtil.closeQuietly(conn);
-			}
-		});
-	}
-
-	@Override
-	public Item getLegendaryItem() {
-		return executeTransaction(conn -> {
-			ResultSet resultSet = null;
-			PreparedStatement stmt = null;
-			try{
-				stmt = conn.prepareStatement(
-						"select items.item_id "
-								+ "from items "
-								+ "where items.longdescription = 'LEGENDARY'"
-				);
-				resultSet = stmt.executeQuery();
-				
-				Random rand = new Random();
-				
-				ArrayList<Integer> itemIDList = new ArrayList<>();
-				
-				while(resultSet.next()){
-					itemIDList.add(resultSet.getInt(1));
-				}
-				
-				return getItemByID(itemIDList.get(rand.nextInt(itemIDList.size())));
-				
-			}finally{
-				DBUtil.closeQuietly(conn);
-				DBUtil.closeQuietly(resultSet);
-				DBUtil.closeQuietly(stmt);
-			}
-		});
-	}
-
-	@Override
-	public Item getLegendaryItem(String itemType) {
-		return executeTransaction(conn -> {
-			ResultSet resultSet = null;
-			PreparedStatement stmt = null;
-			try{
-				stmt = conn.prepareStatement(
-						"select items.item_id "
-								+ "from items "
-								+ "where items.shortdescription = 'LEGENDARY'"
-								+ "AND items.itemtype = ?"
-				);
-				stmt.setString(1, itemType);
-				resultSet = stmt.executeQuery();
-				
-				Random rand = new Random();
-				
-				ArrayList<Integer> itemIDList = new ArrayList<>();
-				
-				while(resultSet.next()){
-					itemIDList.add(resultSet.getInt(1));
-				}
-				
-				return getItemByID(itemIDList.get(rand.nextInt(itemIDList.size())));
-				
-			}finally{
-				DBUtil.closeQuietly(conn);
-				DBUtil.closeQuietly(resultSet);
-				DBUtil.closeQuietly(stmt);
-			}
-		});
+	public DatabaseResult<Item> getItemByID(int itemID){
+		throw new UnsupportedOperationException("DerbyDatabase not supported anymore!");
 	}
 	
 	@Override
-	public Item getHandHeldItem() {
-		return executeTransaction(conn -> {
-			ResultSet resultSet = null;
-			PreparedStatement stmt = null;
-			try{
-				stmt = conn.prepareStatement(
-						"select items.item_id "
-								+ "from items "
-								+ "where (items.itemtype = 'L_HAND' "
-								+ "OR items.itemtype = 'R_HAND') "
-								+ "AND NOT items.longdescription = 'LEGENDARY'"
-				);
-				resultSet = stmt.executeQuery();
-				
-				Random rand = new Random();
-				
-				ArrayList<Integer> itemIDList = new ArrayList<>();
-				
-				while(resultSet.next()){
-					itemIDList.add(resultSet.getInt(1));
-				}
-				
-				return getItemByID(itemIDList.get(rand.nextInt(itemIDList.size())));
-				
-			}finally{
-				DBUtil.closeQuietly(conn);
-				DBUtil.closeQuietly(resultSet);
-				DBUtil.closeQuietly(stmt);
-			}
-		});
-	}	
-	
-	@Override
-	public Item getHandHeldItem(String whichHand) {
-		return executeTransaction(conn -> {
-			ResultSet resultSet = null;
-			PreparedStatement stmt = null;
-			try{
-				stmt = conn.prepareStatement(
-						"select items.item_id "
-								+ "from items "
-								+ "where items.itemtype = ? "
-								+ "AND NOT items.longdescription = 'LEGENDARY'"
-				);
-				stmt.setString(1, whichHand);
-				resultSet = stmt.executeQuery();
-				Random rand = new Random();
-				
-				ArrayList<Integer> itemIDList = new ArrayList<>();
-				
-				while(resultSet.next()){
-					itemIDList.add(resultSet.getInt(1));
-				}
-				
-				return getItemByID(itemIDList.get(rand.nextInt(itemIDList.size())));
-				
-			}finally{
-				DBUtil.closeQuietly(conn);
-				DBUtil.closeQuietly(resultSet);
-				DBUtil.closeQuietly(stmt);
-			}
-		});
+	public DatabaseResult<Item> getLegendaryItem(ItemType itemType){
+		throw new UnsupportedOperationException("DerbyDatabase not supported anymore!");
 	}
 	
 	@Override
-	public Item getArmorItem() {
-		return executeTransaction(conn -> {
-			ResultSet resultSet = null;
-			PreparedStatement stmt = null;
-			try{
-				stmt = conn.prepareStatement(
-						"select items.item_id "
-								+ "from items "
-								+ "where (items.itemtype = 'CHEST' "
-								+ "OR items.itemtype = 'BRACES' "
-								+ "OR items.itemtype = 'LEGS' "
-								+ "OR items.itemtype = 'BOOTS') "
-								+ "AND NOT items.longdescription = 'LEGENDARY'"
-				);
-				resultSet = stmt.executeQuery();
-				Random rand = new Random();
-				
-				ArrayList<Integer> itemIDList = new ArrayList<>();
-				
-				while(resultSet.next()){
-					itemIDList.add(resultSet.getInt(1));
-				}
-				
-				return getItemByID(itemIDList.get(rand.nextInt(itemIDList.size())));
-				
-			}finally{
-				DBUtil.closeQuietly(conn);
-				DBUtil.closeQuietly(resultSet);
-				DBUtil.closeQuietly(stmt);
-			}
-		});
+	public DatabaseResult<Item> getHandheldItem(){
+		throw new UnsupportedOperationException("DerbyDatabase not supported anymore!");
 	}
 	
 	@Override
-	public Item getArmorItem(String armorType) {
-		return executeTransaction(conn -> {
-			ResultSet resultSet = null;
-			PreparedStatement stmt = null;
-			try{
-				stmt = conn.prepareStatement(
-						"select items.item_id "
-								+ "from items "
-								+ "where items.itemtype = ? "
-								+ "AND NOT items.longdescription = 'LEGENDARY'"
-				);
-				stmt.setString(1, armorType);
-				resultSet = stmt.executeQuery();
-				Random rand = new Random();
-				
-				ArrayList<Integer> itemIDList = new ArrayList<>();
-				
-				while(resultSet.next()){
-					itemIDList.add(resultSet.getInt(1));
-				}
-				
-				return getItemByID(itemIDList.get(rand.nextInt(itemIDList.size())));
-				
-			}finally{
-				DBUtil.closeQuietly(conn);
-				DBUtil.closeQuietly(resultSet);
-				DBUtil.closeQuietly(stmt);
-			}
-		});
+	public DatabaseResult<Item> getArmorItem(){
+		throw new UnsupportedOperationException("DerbyDatabase not supported anymore!");
 	}
 	
 	///////////////////////////////////////////////////////////////////////////////////////
@@ -1305,7 +1052,7 @@ public class DerbyDatabase implements IDatabase {
 				while(resultSet.next()){
 					found = true;
 					
-					Item item = getItemByID(resultSet.getInt(1));
+					Item item = getItemByID(resultSet.getInt(1)).result();
 					itemList.add(item);
 				}
 				if(!found){
@@ -1345,7 +1092,7 @@ public class DerbyDatabase implements IDatabase {
 				while(resultSet.next()){
 					found = true;
 					
-					Item item = getItemByID(resultSet.getInt(1));
+					Item item = getItemByID(resultSet.getInt(1)).result();
 					itemList.add(item);
 				}
 				if(!found){
@@ -1438,7 +1185,7 @@ public class DerbyDatabase implements IDatabase {
 		game.setmap(getMap());
 		
 		game.setobjects(getAllObjects());
-		game.setitems(getAllItems());
+		game.setitems(getAllItems().result());
 		ArrayList<Character> characterList = new ArrayList<>();
 		characterList.add(getPlayer());
 		characterList.get(0).setinventory(getInventory(characterList.get(0).getname(), characterList.get(0).getinventory_id()));

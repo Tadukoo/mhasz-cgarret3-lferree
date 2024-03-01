@@ -52,20 +52,6 @@ public class SetupDatabase{
 	
 	/*
 	 * Other Tables Creation to be moved
-	 * ===== Items Table =====
-	 * create table items (
-			item_id integer primary key generated always as identity (start with 1, increment by 1),
-			itemname varchar(40),
-			shortdescription varchar(100),
-			longdescription varchar(200),
-			descriptionupdate varchar(100),
-			attackbonus int,
-			defensebonus int,
-			hpbonus int,
-			weight float,
-			itemtype varchar(20),
-			levelreq int
-		)
 	 * ===== Objects Table =====
 				stmt2 = conn.prepareStatement(
 						"create table objects (" +

@@ -36,38 +36,42 @@ import com.github.tadukoo.aome.StringPair;
 public class FakeDatabase implements IDatabase{
 	
 	private final Random random;
-	private final Map map;
-	private final List<MapTile> mapTileList;
-	private final List<GameObject> objectList;
-	private final List<Item> itemList;
-	private final List<Quest> questList;
-	private final List<Character> characterList;
-	private final List<Inventory> inventoryList;
-	private final List<Player> playerList;
 	private final List<User> users;
+	private final List<Item> items;
+	private final Map map;
+	private final List<MapTile> mapTiles;
+	private final List<GameObject> objects;
+	private final List<Quest> quests;
+	private final List<Character> characters;
+	private final List<Inventory> inventories;
+	private final List<Player> players;
 	private final List<Enemy> enemies;
 	private final List<StringPair> nameGenders;
 	
 	public FakeDatabase(){
 		try{
 			random = new Random(System.currentTimeMillis());
+			users = InitialData.getUsers();
+			items = InitialData.getItems();
 			//map = InitialData.getMap(); TODO: Fix?
 			map = new Map();
-			mapTileList = InitialData.getMapTiles();
-			objectList = InitialData.getObjects();
-			itemList = InitialData.getItems();
-			questList = InitialData.getQuests();
-			characterList = new ArrayList<>(); // TODO: Load in InitialData?
+			mapTiles = InitialData.getMapTiles();
+			objects = InitialData.getObjects();
+			quests = InitialData.getQuests();
+			characters = new ArrayList<>(); // TODO: Load in InitialData?
 			//inventoryList.addAll(InitialData.getItemsToInventories()); TODO: Fix?
-			inventoryList = new ArrayList<>();
-			playerList = InitialData.getPlayers();
-			users = InitialData.getUsers();
+			inventories = new ArrayList<>();
+			players = InitialData.getPlayers();
 			enemies = InitialData.getEnemies();
 			nameGenders = InitialData.getNameGenderList();
 		}catch(IOException e){
 			throw new IllegalStateException("Couldn't read initial data", e);
 		}
 	}
+	
+	/*
+	 * Account Related Queries
+	 */
 	
 	/** {@inheritDoc} */
 	@Override
@@ -105,18 +109,87 @@ public class FakeDatabase implements IDatabase{
 		return new DatabaseResult<>(true, null);
 	}
 	
+	/*
+	 * Item Related Queries
+	 */
+	
+	/** {@inheritDoc} */
 	@Override
-	public List<Item> getAllItems() {
-		return itemList;
+	public DatabaseResult<List<Item>> getAllItems(){
+		return new DatabaseResult<>(items, null);
+	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public DatabaseResult<Item> getItemByID(int id){
+		return items.stream()
+				.filter(item -> item.getID() == id)
+				.map(item -> new DatabaseResult<>(item, null))
+				.findFirst().orElse(new DatabaseResult<>(null, "No items match that ID number"));
+	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public DatabaseResult<Item> getLegendaryItem(ItemType type){
+		List<Item> legendaryItems = items.stream()
+				.filter(item -> StringUtil.equals(item.getShortDescription(), "LEGENDARY") &&
+						item.getType() == type)
+				.toList();
+		if(legendaryItems.size() == 1){
+			return new DatabaseResult<>(legendaryItems.get(0), null);
+		}else if(legendaryItems.isEmpty()){
+			return new DatabaseResult<>(null, "No legendary items of that type");
+		}else{
+			return new DatabaseResult<>(legendaryItems.get(random.nextInt(legendaryItems.size())), null);
+		}
+	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public DatabaseResult<Item> getHandheldItem(){
+		List<Item> handheldItems = items.stream()
+				.filter(item -> {
+					ItemType type = item.getType();
+					return (type == ItemType.L_HAND || type == ItemType.R_HAND) &&
+							StringUtil.notEquals(item.getShortDescription(), "LEGENDARY");
+				})
+				.toList();
+		if(handheldItems.size() == 1){
+			return new DatabaseResult<>(handheldItems.get(0), null);
+		}else if(handheldItems.isEmpty()){
+			return new DatabaseResult<>(null, "Found no handheld items");
+		}else{
+			return new DatabaseResult<>(handheldItems.get(random.nextInt(handheldItems.size())), null);
+		}
+	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public DatabaseResult<Item> getArmorItem(){
+		List<Item> armorItems = items.stream()
+				.filter(item -> {
+					ItemType type = item.getType();
+					return (type == ItemType.CHEST || type == ItemType.BRACES ||
+							type == ItemType.LEGS || type == ItemType.BOOTS) &&
+							StringUtil.notEquals(item.getShortDescription(), "LEGENDARY");
+				})
+				.toList();
+		if(armorItems.size() == 1){
+			return new DatabaseResult<>(armorItems.get(0), null);
+		}else if(armorItems.isEmpty()){
+			return new DatabaseResult<>(null, "Found no armor items");
+		}else{
+			return new DatabaseResult<>(armorItems.get(random.nextInt(armorItems.size())), null);
+		}
 	}
 	
 	@Override
 	public List<GameObject> getAllObjects() {
 		
-		for(GameObject object : objectList) {
+		for(GameObject object : objects) {
 			if(object.getItems() != null) {
 				for(Item item : object.getItems()) {
-					for(Item listedItem : itemList) {
+					for(Item listedItem : items) {
 						if(item.getID() == listedItem.getID()) {
 							item.setName(listedItem.getName());
 							item.setLongDescription(listedItem.getLongDescription());
@@ -130,13 +203,13 @@ public class FakeDatabase implements IDatabase{
 			}
 		}
 			
-		return objectList;
+		return objects;
 	}
 	
 	@Override
 	public List<MapTile> getAllMapTiles() {
 		
-		for (MapTile mapTile :mapTileList) {
+		for (MapTile mapTile : mapTiles) {
 			if (mapTile.getObjects() != null) {
 				for (GameObject object : mapTile.getObjects()) {
 					for (GameObject listedObject : getAllObjects()) {
@@ -152,7 +225,7 @@ public class FakeDatabase implements IDatabase{
 				}
 			}
 		}
-		return mapTileList;
+		return mapTiles;
 	}
 	
 	@Override
@@ -160,7 +233,7 @@ public class FakeDatabase implements IDatabase{
 		getAllItems();
 		getAllObjects();
 		getAllMapTiles();
-		for(MapTile mapTile : mapTileList) {
+		for(MapTile mapTile : mapTiles) {
 			map.addMapTile(mapTile);
 		}
 		return map;
@@ -168,45 +241,26 @@ public class FakeDatabase implements IDatabase{
 	
 	@Override
 	public List<Character> getAllCharacters() {
-		return characterList;
+		return characters;
 	}
 	
 	@Override
 	public Player getPlayer() {
 		
-		for(Inventory inventory : inventoryList) {
-			if(inventory.getinventory_id() == playerList.get(0).getinventory_id()) {
-				playerList.get(0).setinventory(inventory);
+		for(Inventory inventory : inventories) {
+			if(inventory.getinventory_id() == players.get(0).getinventory_id()) {
+				players.get(0).setinventory(inventory);
 			}
 		}
-		return playerList.get(0);
+		return players.get(0);
 	}
 	
-/*	public ArrayList<Inventory> getAllInventories() {
-		for(Inventory inventory : inventoryList) {
-			for(Item item : inventory.getitems()) {
-				for(Item listedItem : itemList) {
-					if(item.getID() == listedItem.getID())
-					{
-						item.setName(listedItem.getName());
-						item.setLongDescription(listedItem.getLongDescription());
-						item.setShortDescription(listedItem.getShortDescription());
-						item.setItemWeight(listedItem.getItemWeight());
-						item.setIsQuestItem(listedItem.getIsQuestItem());
-						break;
-					}
-				}
-			}
-		}
-		return inventoryList;
-	}
-*/	
 	@Override
 	public List<Quest> getAllQuests() {
-		for(Quest quest : questList) {
+		for(Quest quest : quests) {
 			if(quest.getRewardItems() != null) {
 				for(Item item : quest.getRewardItems()) {
-					for(Item listedItem : itemList) {
+					for(Item listedItem : items) {
 						if(item.getID() == listedItem.getID())
 						{
 							item.setName(listedItem.getName());
@@ -220,26 +274,12 @@ public class FakeDatabase implements IDatabase{
 				}
 			}
 		}
-		return questList;
-	}
-	
-	
-	
-	@Override
-	public Item getItemByID(int itemID) {
-		for(Item item : itemList) {
-			if(item.getID() == itemID) {
-				return item;
-			}
-		}
-		
-		System.out.println("No items match that ID number");
-		return null;
+		return quests;
 	}
 	
 	@Override
 	public GameObject getObjectByID(int objectID) {
-		for(GameObject object : objectList) {
+		for(GameObject object : objects) {
 			if(object.getID() == objectID) {
 				return object;
 			}
@@ -251,7 +291,7 @@ public class FakeDatabase implements IDatabase{
 	
 	@Override
 	public MapTile getMapTileByID(int mapTileID) {
-		for(MapTile mapTile : mapTileList) {
+		for(MapTile mapTile : mapTiles) {
 			if(mapTile.getID() == mapTileID) {
 				return mapTile;
 			}
@@ -263,7 +303,7 @@ public class FakeDatabase implements IDatabase{
 	
 	@Override
 	public Character getCharacterByName(String characterName) {
-		for(Character character : characterList) {
+		for(Character character : characters) {
 			if(character.getname() == characterName) {
 				return character;
 			}
@@ -332,55 +372,6 @@ public class FakeDatabase implements IDatabase{
 				.toList());
 	}
 
-	@Override
-	public Item getLegendaryItem(String itemType) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Item getHandHeldItem(){
-		List<Item> handHeldItems = itemList.stream()
-				.filter(item -> {
-					ItemType type = item.getType();
-					return (type == ItemType.L_HAND || type == ItemType.R_HAND) &&
-							!item.getLongDescription().startsWith("LEGENDARY");
-				})
-				.toList();
-		return handHeldItems.get(random.nextInt(handHeldItems.size()));
-	}
-
-	@Override
-	public Item getHandHeldItem(String whichHand) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Item getArmorItem(){
-		List<Item> armorItems = itemList.stream()
-				.filter(item -> {
-					ItemType type = item.getType();
-					return (type == ItemType.CHEST || type == ItemType.BRACES ||
-							type == ItemType.LEGS || type == ItemType.BOOTS) &&
-							!item.getLongDescription().startsWith("LEGENDARY");
-				})
-				.toList();
-		return armorItems.get(random.nextInt(armorItems.size()));
-	}
-
-	@Override
-	public Item getArmorItem(String armorType) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Item getLegendaryItem() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
 	@Override
 	public Integer createNewGame(String username) {
 		// TODO Auto-generated method stub

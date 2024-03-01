@@ -22,7 +22,7 @@ public class Game implements Engine{
 	private ArrayList<Quest> quests;
 	private ArrayList<Character> characters;
 	private ArrayList<GameObject> objects;
-	private ArrayList<Item> items;
+	private List<Item> items;
 	private ArrayList<String> dialog;
 	private String mode;
 	private CombatSituation battle;
@@ -127,11 +127,11 @@ public class Game implements Engine{
 		this.objects = objects;
 	}
 	
-	public ArrayList<Item> getitems(){
+	public List<Item> getitems(){
 		return items;
 	}
 	
-	public void setitems(ArrayList<Item> items){
+	public void setitems(List<Item> items){
 		this.items = items;
 	}
 	
@@ -554,7 +554,7 @@ public class Game implements Engine{
 	public List<Item> cheatcode(){
 		IDatabase db = DatabaseProvider.getInstance();
 		
-		return db.getAllItems();
+		return db.getAllItems().result();
 	}
 	
 }

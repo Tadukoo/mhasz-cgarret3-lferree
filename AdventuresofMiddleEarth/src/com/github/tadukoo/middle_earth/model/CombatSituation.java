@@ -3,6 +3,7 @@ package com.github.tadukoo.middle_earth.model;
 import java.util.ArrayList;
 import java.util.Random;
 
+import com.github.tadukoo.aome.construct.ItemType;
 import com.github.tadukoo.middle_earth.controller.Game;
 import com.github.tadukoo.aome.character.Player;
 import com.github.tadukoo.aome.character.Character;
@@ -331,15 +332,15 @@ public class CombatSituation{
 		// Determine if boss fight or not (for legendary drop or not)
 		if(game.getcharacters().get(killedIndex).getrace().equalsIgnoreCase("Greater Demon")){
 			// Get a legendary hand
-			Item handReward = db.getLegendaryItem("R_HAND");
+			Item handReward = db.getLegendaryItem(ItemType.R_HAND).result();
 			
 			// Give player the hand
 			player.getinventory().getitems().add(handReward);
 			game.add_dialog("The Greater Demon dropped a " + handReward.getName() + "!");
 		}else{
 			// Get an armor and a hand
-			Item armorReward = db.getArmorItem();
-			Item handReward = db.getHandHeldItem();
+			Item armorReward = db.getArmorItem().result();
+			Item handReward = db.getHandheldItem().result();
 			
 			// Give items to player
 			player.getinventory().getitems().add(armorReward);

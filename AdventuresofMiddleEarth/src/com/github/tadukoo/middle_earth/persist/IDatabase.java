@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.github.tadukoo.aome.character.Inventory;
 import com.github.tadukoo.aome.character.Player;
+import com.github.tadukoo.aome.construct.ItemType;
 import com.github.tadukoo.middle_earth.controller.Game;
 import com.github.tadukoo.aome.Quest;
 import com.github.tadukoo.aome.character.Character;
@@ -15,6 +16,15 @@ import com.github.tadukoo.aome.construct.Map;
 import com.github.tadukoo.aome.construct.MapTile;
 import com.github.tadukoo.middle_earth.persist.pojo.DatabaseResult;
 
+/**
+ * An interface for database operations
+ *
+ * @author Logan Ferree (Tadukoo)
+ * @author Chris Garrety (cgarret3)
+ * @author Matt Hasz (mhasz239)
+ * @version 2.0
+ * @since 1.0 or earlier
+ */
 public interface IDatabase{
 	/*
 	 * Account related Queries
@@ -25,16 +35,24 @@ public interface IDatabase{
 	DatabaseResult<Boolean> isEmailInUse(String email);
 	DatabaseResult<Boolean> createNewUser(String username, String password, String email);
 	
+	/*
+	 * Item Related Queries
+	 */
+	
+	DatabaseResult<List<Item>> getAllItems();
+	DatabaseResult<Item> getItemByID(int id);
+	DatabaseResult<Item> getLegendaryItem(ItemType type);
+	DatabaseResult<Item> getHandheldItem();
+	DatabaseResult<Item> getArmorItem();
+	
 	Map getMap();
 	Player getPlayer();
 	
-	List<Item> getAllItems();
 	List<GameObject> getAllObjects();
 	List<MapTile> getAllMapTiles();
 	List<Character> getAllCharacters();
 	List<Quest> getAllQuests();
 	
-	Item getItemByID(int itemID);
 	GameObject getObjectByID(int objectID);
 	MapTile getMapTileByID(int mapTileID);
 	Inventory getInventoryByID(int inventoryID);
@@ -56,11 +74,4 @@ public interface IDatabase{
 	Enemy getEnemyByRace(String race);
 	ArrayList<Enemy> getAllEnemies();
 	ArrayList<String> getAllEnemyRaces();
-	
-	Item getLegendaryItem();
-	Item getLegendaryItem(String itemType);
-	Item getHandHeldItem();
-	Item getHandHeldItem(String whichHand);
-	Item getArmorItem();
-	Item getArmorItem(String armorType);
 }

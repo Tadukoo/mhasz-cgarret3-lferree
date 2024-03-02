@@ -1,9 +1,7 @@
-package com.github.tadukoo.middle_earth.model.Characters;
+package com.github.tadukoo.aome.character;
 
 import java.util.ArrayList;
 
-import com.github.tadukoo.aome.character.Character;
-import com.github.tadukoo.aome.character.Inventory;
 import com.github.tadukoo.aome.construct.Item;
 import com.github.tadukoo.aome.construct.ItemType;
 import org.junit.jupiter.api.BeforeEach;

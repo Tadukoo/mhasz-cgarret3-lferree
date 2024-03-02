@@ -1,7 +1,5 @@
-package com.github.tadukoo.middle_earth.model.Constructs;
+package com.github.tadukoo.aome.construct;
 
-import com.github.tadukoo.aome.construct.GameObject;
-import com.github.tadukoo.aome.construct.MapTile;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

@@ -1,10 +1,8 @@
-package com.github.tadukoo.middle_earth.persist;
+package com.github.tadukoo.aome;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.github.tadukoo.aome.InitialData;
-import com.github.tadukoo.aome.ReadCSV;
 import com.github.tadukoo.aome.construct.Item;
 import com.github.tadukoo.aome.construct.ItemType;
 import org.junit.jupiter.api.Test;

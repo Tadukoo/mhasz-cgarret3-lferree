@@ -1,4 +1,4 @@
-package com.github.tadukoo.middle_earth.model.Characters;
+package com.github.tadukoo.aome.character;
 
 import java.util.HashMap;
 

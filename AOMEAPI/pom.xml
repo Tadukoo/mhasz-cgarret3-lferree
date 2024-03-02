@@ -10,9 +10,19 @@
 	</parent>
 	<artifactId>AOMEAPI</artifactId>
 	<dependencies>
+		<!-- Tadukoo MySQL -->
 		<dependency>
 			<groupId>${tadukoo.database.groupID}</groupId>
 			<artifactId>${tadukoo.database.mysql.artifactID}</artifactId>
+		</dependency>
+		<!-- JUnit Dependencies -->
+		<dependency>
+			<groupId>${junit.jupiter.groupID}</groupId>
+			<artifactId>${junit.jupiter.artifactID}</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${junit.platform.groupID}</groupId>
+			<artifactId>${junit.platform.artifactID}</artifactId>
 		</dependency>
 	</dependencies>
 	<build>

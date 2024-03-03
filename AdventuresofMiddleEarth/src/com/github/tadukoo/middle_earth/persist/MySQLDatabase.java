@@ -3,6 +3,7 @@ package com.github.tadukoo.middle_earth.persist;
 import com.github.tadukoo.aome.User;
 import com.github.tadukoo.aome.construct.ItemToObjectMap;
 import com.github.tadukoo.aome.construct.ItemType;
+import com.github.tadukoo.aome.construct.ObjectCommandResponse;
 import com.github.tadukoo.database.mysql.Database;
 import com.github.tadukoo.database.mysql.syntax.SQLSyntaxUtil;
 import com.github.tadukoo.database.mysql.syntax.conditional.Conditional;
@@ -345,13 +346,17 @@ public class MySQLDatabase implements IDatabase{
 		ItemToObjectMap search = new ItemToObjectMap();
 		search.setObjectID(object.getID());
 		List<ItemToObjectMap> results = search.doSearch(database, ItemToObjectMap.class, false);
-		List<Item> items = new ArrayList<>();
 		for(ItemToObjectMap itemToObject: results){
-			items.add(getItemByID(itemToObject.getItemID()).result());
+			object.addItem(getItemByID(itemToObject.getItemID()).result());
 		}
-		object.setItems(items);
 		
-		// TODO: Find Command Responses for the Object
+		// Find Command Responses for the Object
+		ObjectCommandResponse search2 = new ObjectCommandResponse();
+		search2.setObjectID(object.getID());
+		List<ObjectCommandResponse> results2 = search2.doSearch(database, ObjectCommandResponse.class, false);
+		for(ObjectCommandResponse objectCommandResponse: results2){
+			object.addCommandResponse(objectCommandResponse.getCommand(), objectCommandResponse.getResponse());
+		}
 	}
 	
 	/** {@inheritDoc} */

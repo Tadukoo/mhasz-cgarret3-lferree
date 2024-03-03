@@ -5,6 +5,7 @@ import com.github.tadukoo.database.mysql.syntax.ColumnDefinition;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Represents an Object in the Game
@@ -19,7 +20,7 @@ public class GameObject extends Construct{
 	public static final String DESCRIPTION_UPDATE_COLUMN_NAME = "description_update";
 	
 	private List<Item> items;
-	private HashMap<String, String> commandResponses;
+	private Map<String, String> commandResponses;
 	
 	// TODO: Figure out how to put location in here???
 	public GameObject(){
@@ -76,11 +77,15 @@ public class GameObject extends Construct{
 		items.remove(remove);
 	}
 	
-	public HashMap<String, String> getCommandResponses(){
+	public Map<String, String> getCommandResponses(){
 		return commandResponses;
 	}
 	
-	public void setCommandResponses(HashMap<String, String> commandResponses){
+	public void setCommandResponses(Map<String, String> commandResponses){
 		this.commandResponses = commandResponses;
+	}
+	
+	public void addCommandResponse(String command, String response){
+		commandResponses.put(command, response);
 	}
 }

@@ -14,6 +14,7 @@ import com.github.tadukoo.aome.construct.GameMap;
 import com.github.tadukoo.aome.construct.MapTile;
 import com.github.tadukoo.aome.construct.Item;
 import com.github.tadukoo.aome.construct.ItemType;
+import com.github.tadukoo.aome.construct.ObjectCommandResponse;
 
 public class InitialData{
 	
@@ -101,6 +102,26 @@ public class InitialData{
 			}
 			return itemsToObjectsList;
 			
+		}
+	}
+	
+	public static List<ObjectCommandResponse> getObjectCommandResponses() throws IOException{
+		List<ObjectCommandResponse> objectCommandResponseList = new ArrayList<>();
+		
+		try(ReadCSV readObjectCommandResponses = new ReadCSV("objectcommandresponses.csv")){
+			List<String> tuple = readObjectCommandResponses.next();
+			while(tuple != null){
+				Iterator<String> i = tuple.iterator();
+				
+				ObjectCommandResponse objectCommandResponse = new ObjectCommandResponse();
+				objectCommandResponse.setObjectID(Integer.parseInt(i.next()));
+				objectCommandResponse.setCommand(i.next());
+				objectCommandResponse.setResponse(i.next());
+				objectCommandResponseList.add(objectCommandResponse);
+				
+				tuple = readObjectCommandResponses.next();
+			}
+			return objectCommandResponseList;
 		}
 	}
 	
@@ -300,30 +321,6 @@ public class InitialData{
 			}
 			
 			return mapTileList;
-		}
-	}
-	
-	public static ArrayList<ObjectIDCommandResponse> getObjectCommandResponses() throws IOException {
-		ArrayList<ObjectIDCommandResponse> objectCommandResponseList = new ArrayList<>();
-		
-		try(ReadCSV readObjectCommandResponses = new ReadCSV("objectcommandresponses.csv")){
-			while(true){
-				List<String> tuple = readObjectCommandResponses.next();
-				if(tuple == null){
-					break;
-				}
-				Iterator<String> i = tuple.iterator();
-				
-				ObjectIDCommandResponse objectCommandResponse = new ObjectIDCommandResponse();
-				
-				while(i.hasNext()){
-					objectCommandResponse.setObjectID(Integer.parseInt(i.next()));
-					objectCommandResponse.setCommand(i.next());
-					objectCommandResponse.setResponse(i.next());
-					objectCommandResponseList.add(objectCommandResponse);
-				}
-			}
-			return objectCommandResponseList;
 		}
 	}
 	

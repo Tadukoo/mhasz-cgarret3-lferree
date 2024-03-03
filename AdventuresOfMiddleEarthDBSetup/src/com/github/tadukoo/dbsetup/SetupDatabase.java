@@ -5,6 +5,7 @@ import com.github.tadukoo.aome.User;
 import com.github.tadukoo.aome.construct.GameObject;
 import com.github.tadukoo.aome.construct.Item;
 import com.github.tadukoo.aome.construct.ItemToObjectMap;
+import com.github.tadukoo.aome.construct.ObjectCommandResponse;
 import com.github.tadukoo.database.mysql.Database;
 import com.github.tadukoo.util.LoggerUtil;
 import com.github.tadukoo.util.logger.EasyLogger;
@@ -58,6 +59,10 @@ public class SetupDatabase{
 		// Create Items to Objects table
 		ItemToObjectMap itemToObject = new ItemToObjectMap();
 		itemToObject.createTable(database);
+		
+		// Create Object Command Response table
+		ObjectCommandResponse objectCommandResponse = new ObjectCommandResponse();
+		objectCommandResponse.createTable(database);
 	}
 	
 	/*
@@ -139,15 +144,6 @@ public class SetupDatabase{
 						+ ")"
 				);
 				stmt8.executeUpdate();
-				
-				stmt9 = conn.prepareStatement(
-						"create table objectcommandresponses ("
-						+ "object_id int, "
-						+ "command varchar(10), "
-						+ "response varchar (100)"
-						+ ")"
-				);
-				stmt9.executeUpdate();
 				
 				stmt10 = conn.prepareStatement(
 						"create table maps (" +
@@ -245,6 +241,12 @@ public class SetupDatabase{
 		List<ItemToObjectMap> itemsToObjects = InitialData.getItemsToObjects();
 		for(ItemToObjectMap itemToObject: itemsToObjects){
 			itemToObject.storeValues(database, false);
+		}
+		
+		// Load Object Command Responses
+		List<ObjectCommandResponse> objectCommandResponses = InitialData.getObjectCommandResponses();
+		for(ObjectCommandResponse objectCommandResponse: objectCommandResponses){
+			objectCommandResponse.storeValues(database, false);
 		}
 	}
 }

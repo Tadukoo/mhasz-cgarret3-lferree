@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
-import com.github.tadukoo.aome.InitialData;
 import com.github.tadukoo.middle_earth.controller.Game;
 import com.github.tadukoo.aome.Quest;
 import com.github.tadukoo.aome.character.Character;
@@ -23,7 +22,6 @@ import com.github.tadukoo.aome.construct.Item;
 import com.github.tadukoo.aome.construct.ItemType;
 import com.github.tadukoo.aome.construct.GameObject;
 import com.github.tadukoo.middle_earth.persist.pojo.DatabaseResult;
-import com.github.tadukoo.aome.ObjectIDCommandResponse;
 import com.github.tadukoo.aome.StringPair;
 import com.github.tadukoo.aome.construct.GameMap;
 import com.github.tadukoo.aome.construct.MapTile;
@@ -1108,15 +1106,6 @@ public class DerbyDatabase implements IDatabase {
 				insertItemsToObjects = conn.prepareStatement("insert into itemstoobjects" + playerName + " (item_id, object_id) values (?, ?)");
 				insertObjectCommandResponses = conn.prepareStatement(" insert into objectCommandResponses" + playerName + " (object_id, command, response) values (?, ?, ?)");
 				
-				ArrayList<ObjectIDCommandResponse> objectCommandResponseList = InitialData.getObjectCommandResponses();
-				for(ObjectIDCommandResponse objectCommandResponse: objectCommandResponseList){
-					insertObjectCommandResponses.setInt(1, objectCommandResponse.getObjectID());
-					insertObjectCommandResponses.setString(2, objectCommandResponse.getCommand());
-					insertObjectCommandResponses.setString(3, objectCommandResponse.getResponse());
-					
-					insertObjectCommandResponses.addBatch();
-				}
-				
 				for(MapTile mapTile: mapTileList){
 					insertMapTile.setString(1, mapTile.getName());
 					insertMapTile.setString(2, mapTile.getLongDescription());
@@ -1163,8 +1152,6 @@ public class DerbyDatabase implements IDatabase {
 				insertObjectCommandResponses.executeBatch();
 				
 				return true;
-			}catch(IOException e){
-				return false;
 			}finally{
 				DBUtil.closeQuietly(conn);
 				DBUtil.closeQuietly(insertObject);

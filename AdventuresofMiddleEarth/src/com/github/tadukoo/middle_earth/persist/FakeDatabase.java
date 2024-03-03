@@ -17,6 +17,7 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+import com.github.tadukoo.aome.construct.ObjectCommandResponse;
 import com.github.tadukoo.middle_earth.controller.Game;
 import com.github.tadukoo.aome.Quest;
 import com.github.tadukoo.aome.character.Character;
@@ -92,6 +93,13 @@ public class FakeDatabase implements IDatabase{
 				GameObject object = objectsByID.get(itemToObject.getObjectID());
 				object.addItem(item);
 			});
+			
+			// Object Command Responses
+			List<ObjectCommandResponse> objectCommandResponses = InitialData.getObjectCommandResponses();
+			for(ObjectCommandResponse objectCommandResponse: objectCommandResponses){
+				GameObject object = objectsByID.get(objectCommandResponse.getObjectID());
+				object.addCommandResponse(objectCommandResponse.getCommand(), objectCommandResponse.getResponse());
+			}
 			
 			//map = InitialData.getMap(); TODO: Fix?
 			map = new GameMap();

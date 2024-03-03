@@ -2,10 +2,10 @@ package com.github.tadukoo.aome.construct;
 
 import java.util.ArrayList;
 
-public class Map extends Construct{
+public class GameMap extends Construct{
 	private ArrayList<MapTile> mapTiles;
 	
-	public Map(){
+	public GameMap(){
 		mapTiles = new ArrayList<>();
 	}
 	

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import com.github.tadukoo.aome.character.Character;
 import com.github.tadukoo.aome.character.Player;
-import com.github.tadukoo.aome.construct.Map;
+import com.github.tadukoo.aome.construct.GameMap;
 import com.github.tadukoo.aome.construct.MapTile;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class HandleMovementCommandsTest{
 	private Game game;
 	private Player player;
-	private Map map;
+	private GameMap map;
 	private MapTile starting;
 	private MapTile northOfStarting;
 	private MapTile northEastOfStarting;
@@ -100,7 +100,7 @@ public class HandleMovementCommandsTest{
 		starting.setConnection("northwest", 8);
 		
 		// Add tiles to Map
-		map = new Map();
+		map = new GameMap();
 		ArrayList<MapTile> tiles = new ArrayList<>();
 		tiles.add(starting);
 		tiles.add(northOfStarting);

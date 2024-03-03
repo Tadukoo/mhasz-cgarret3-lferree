@@ -2,8 +2,9 @@ package com.github.tadukoo.middle_earth.persist;
 
 import com.github.tadukoo.aome.InitialData;
 import com.github.tadukoo.aome.User;
+import com.github.tadukoo.aome.construct.ItemToObjectMap;
 import com.github.tadukoo.aome.construct.ItemType;
-import com.github.tadukoo.aome.construct.Map;
+import com.github.tadukoo.aome.construct.GameMap;
 import com.github.tadukoo.aome.construct.MapTile;
 import com.github.tadukoo.aome.construct.Item;
 import com.github.tadukoo.aome.construct.GameObject;
@@ -11,8 +12,10 @@ import com.github.tadukoo.aome.construct.GameObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import com.github.tadukoo.middle_earth.controller.Game;
 import com.github.tadukoo.aome.Quest;
@@ -38,9 +41,11 @@ public class FakeDatabase implements IDatabase{
 	private final Random random;
 	private final List<User> users;
 	private final List<Item> items;
-	private final Map map;
-	private final List<MapTile> mapTiles;
+	private final Map<Integer, Item> itemsByID;
 	private final List<GameObject> objects;
+	private final Map<Integer, GameObject> objectsByID;
+	private final GameMap map;
+	private final List<MapTile> mapTiles;
 	private final List<Quest> quests;
 	private final List<Character> characters;
 	private final List<Inventory> inventories;
@@ -51,12 +56,46 @@ public class FakeDatabase implements IDatabase{
 	public FakeDatabase(){
 		try{
 			random = new Random(System.currentTimeMillis());
+			
+			// Users
 			users = InitialData.getUsers();
+			int id = 1;
+			for(User user: users){
+				user.setItem(User.USER_ID_COLUMN_NAME, id);
+				id++;
+			}
+			
+			// Items
 			items = InitialData.getItems();
-			//map = InitialData.getMap(); TODO: Fix?
-			map = new Map();
-			mapTiles = InitialData.getMapTiles();
+			id = 1;
+			for(Item item: items){
+				item.setID(id);
+				id++;
+			}
+			
+			// Objects
 			objects = InitialData.getObjects();
+			id = 1;
+			for(GameObject object: objects){
+				object.setID(id);
+				id++;
+			}
+			
+			// Items to Objects
+			List<ItemToObjectMap> itemsToObjects = InitialData.getItemsToObjects();
+			itemsByID = items.stream()
+					.collect(Collectors.toMap(Item::getID, item -> item));
+			objectsByID = objects.stream()
+					.collect(Collectors.toMap(GameObject::getID, object -> object));
+			itemsToObjects.forEach(itemToObject -> {
+				Item item = itemsByID.get(itemToObject.getItemID());
+				GameObject object = objectsByID.get(itemToObject.getObjectID());
+				object.addItem(item);
+			});
+			
+			//map = InitialData.getMap(); TODO: Fix?
+			map = new GameMap();
+			mapTiles = InitialData.getMapTiles();
 			quests = InitialData.getQuests();
 			characters = new ArrayList<>(); // TODO: Load in InitialData?
 			//inventoryList.addAll(InitialData.getItemsToInventories()); TODO: Fix?
@@ -122,10 +161,8 @@ public class FakeDatabase implements IDatabase{
 	/** {@inheritDoc} */
 	@Override
 	public DatabaseResult<Item> getItemByID(int id){
-		return items.stream()
-				.filter(item -> item.getID() == id)
-				.map(item -> new DatabaseResult<>(item, null))
-				.findFirst().orElse(new DatabaseResult<>(null, "No items match that ID number"));
+		return itemsByID.get(id) != null?new DatabaseResult<>(itemsByID.get(id), null)
+				:new DatabaseResult<>(null, "No items match that ID number");
 	}
 	
 	/** {@inheritDoc} */
@@ -183,27 +220,21 @@ public class FakeDatabase implements IDatabase{
 		}
 	}
 	
+	/*
+	 * Object Related Queries
+	 */
+	
+	/** {@inheritDoc} */
 	@Override
-	public List<GameObject> getAllObjects() {
-		
-		for(GameObject object : objects) {
-			if(object.getItems() != null) {
-				for(Item item : object.getItems()) {
-					for(Item listedItem : items) {
-						if(item.getID() == listedItem.getID()) {
-							item.setName(listedItem.getName());
-							item.setLongDescription(listedItem.getLongDescription());
-							item.setShortDescription(listedItem.getShortDescription());
-							item.setWeight(listedItem.getWeight());
-							item.setQuestItem(listedItem.isQuestItem());
-							break;
-						}
-					}
-				}
-			}
-		}
-			
-		return objects;
+	public DatabaseResult<List<GameObject>> getAllObjects(){
+		return new DatabaseResult<>(objects, null);
+	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public DatabaseResult<GameObject> getObjectByID(int id){
+		return objectsByID.get(id) != null?new DatabaseResult<>(objectsByID.get(id), null)
+				:new DatabaseResult<>(null, "No objects match that ID number");
 	}
 	
 	@Override
@@ -212,7 +243,7 @@ public class FakeDatabase implements IDatabase{
 		for (MapTile mapTile : mapTiles) {
 			if (mapTile.getObjects() != null) {
 				for (GameObject object : mapTile.getObjects()) {
-					for (GameObject listedObject : getAllObjects()) {
+					for (GameObject listedObject : getAllObjects().result()) {
 						if (object.getID() == listedObject.getID()) {
 							object.setCommandResponses(listedObject.getCommandResponses());
 							object.setItems(listedObject.getItems());
@@ -229,7 +260,7 @@ public class FakeDatabase implements IDatabase{
 	}
 	
 	@Override
-	public Map getMap() {
+	public GameMap getMap() {
 		getAllItems();
 		getAllObjects();
 		getAllMapTiles();
@@ -275,18 +306,6 @@ public class FakeDatabase implements IDatabase{
 			}
 		}
 		return quests;
-	}
-	
-	@Override
-	public GameObject getObjectByID(int objectID) {
-		for(GameObject object : objects) {
-			if(object.getID() == objectID) {
-				return object;
-			}
-		}
-		
-		System.out.println("no objects match that ID number");
-		return null;
 	}
 	
 	@Override

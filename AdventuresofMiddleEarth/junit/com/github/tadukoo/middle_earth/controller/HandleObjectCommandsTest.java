@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 import com.github.tadukoo.aome.character.Character;
 import com.github.tadukoo.aome.character.Player;
-import com.github.tadukoo.aome.construct.Map;
+import com.github.tadukoo.aome.construct.GameMap;
 import com.github.tadukoo.aome.construct.MapTile;
 import com.github.tadukoo.aome.construct.GameObject;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,7 +42,7 @@ public class HandleObjectCommandsTest{
 		tiles.add(tile);
 		
 		// Create the Map and set the MapTiles Array to it
-		Map map = new Map();
+		GameMap map = new GameMap();
 		map.setMapTiles(tiles);
 		
 		// Set the Map to the Game

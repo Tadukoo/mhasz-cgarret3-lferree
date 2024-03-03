@@ -13,15 +13,15 @@ import com.github.tadukoo.aome.Quest;
 import com.github.tadukoo.aome.character.Character;
 import com.github.tadukoo.aome.construct.Item;
 import com.github.tadukoo.aome.construct.ItemType;
-import com.github.tadukoo.aome.construct.Map;
+import com.github.tadukoo.aome.construct.GameMap;
 import com.github.tadukoo.middle_earth.persist.DatabaseProvider;
 import com.github.tadukoo.middle_earth.persist.IDatabase;
 
 public class Game implements Engine{
-	private Map map;
+	private GameMap map;
 	private ArrayList<Quest> quests;
 	private ArrayList<Character> characters;
-	private ArrayList<GameObject> objects;
+	private List<GameObject> objects;
 	private List<Item> items;
 	private ArrayList<String> dialog;
 	private String mode;
@@ -90,11 +90,11 @@ public class Game implements Engine{
 		}
 	}
 
-	public Map getmap(){
+	public GameMap getmap(){
 		return map;
 	}
 	
-	public void setmap(Map map){
+	public void setmap(GameMap map){
 		this.map = map;
 	}
 
@@ -119,11 +119,11 @@ public class Game implements Engine{
 		this.characters = characters;
 	}
 	
-	public ArrayList<GameObject> getobjects(){
+	public List<GameObject> getobjects(){
 		return objects;
 	}
 	
-	public void setobjects(ArrayList<GameObject> objects){
+	public void setobjects(List<GameObject> objects){
 		this.objects = objects;
 	}
 	
@@ -140,8 +140,8 @@ public class Game implements Engine{
 		String objectUpdate = "";
 		if (objects != null) {
 			for (GameObject object : objects) {
-				if (object.getdescription_update() != null) {
-					objectUpdate = object.getdescription_update();
+				if (object.getDescriptionUpdate() != null) {
+					objectUpdate = object.getDescriptionUpdate();
 				}
 			}
 		}
@@ -456,7 +456,7 @@ public class Game implements Engine{
 		if (map.getMapTiles().get(location).getObjects() != null) {
 			Item lookFor = null;
 			for (GameObject object : map.getMapTiles().get(location).getObjects()) {
-				ArrayList<Item> items = object.getItems();
+				List<Item> items = object.getItems();
 				for (Item item : items) {
 					if (item.getName().toLowerCase().contains(name.toLowerCase())) {
 						lookFor = item;

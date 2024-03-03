@@ -1,6 +1,7 @@
 package com.github.tadukoo.middle_earth.persist;
 
 import com.github.tadukoo.aome.User;
+import com.github.tadukoo.aome.construct.ItemToObjectMap;
 import com.github.tadukoo.aome.construct.ItemType;
 import com.github.tadukoo.database.mysql.Database;
 import com.github.tadukoo.database.mysql.syntax.SQLSyntaxUtil;
@@ -17,7 +18,7 @@ import com.github.tadukoo.aome.character.Enemy;
 import com.github.tadukoo.aome.character.Inventory;
 import com.github.tadukoo.aome.character.Player;
 import com.github.tadukoo.aome.construct.Item;
-import com.github.tadukoo.aome.construct.Map;
+import com.github.tadukoo.aome.construct.GameMap;
 import com.github.tadukoo.aome.construct.MapTile;
 import com.github.tadukoo.aome.construct.GameObject;
 import com.github.tadukoo.aome.Quest;
@@ -335,18 +336,71 @@ public class MySQLDatabase implements IDatabase{
 		return new DatabaseResult<>(item, error);
 	}
 	
+	/*
+	 * Object Related Queries
+	 */
+	
+	private void loadObjectRelatedTypes(GameObject object) throws SQLException{
+		// Find Items for the Object
+		ItemToObjectMap search = new ItemToObjectMap();
+		search.setObjectID(object.getID());
+		List<ItemToObjectMap> results = search.doSearch(database, ItemToObjectMap.class, false);
+		List<Item> items = new ArrayList<>();
+		for(ItemToObjectMap itemToObject: results){
+			items.add(getItemByID(itemToObject.getItemID()).result());
+		}
+		object.setItems(items);
+		
+		// TODO: Find Command Responses for the Object
+	}
+	
+	/** {@inheritDoc} */
 	@Override
-	public Map getMap(){
+	public DatabaseResult<List<GameObject>> getAllObjects(){
+		List<GameObject> objects = null;
+		String error = null;
+		try{
+			GameObject search = new GameObject();
+			objects = search.doSearch(database, GameObject.class, false);
+			for(GameObject object: objects){
+				loadObjectRelatedTypes(object);
+			}
+		}catch(SQLException e){
+			error = "Get All Objects SQL Error";
+			logger.logError(error, e);
+		}
+		return new DatabaseResult<>(objects, error);
+	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public DatabaseResult<GameObject> getObjectByID(int id){
+		GameObject object = null;
+		String error = null;
+		try{
+			GameObject search = new GameObject();
+			search.setID(id);
+			List<GameObject> results = search.doSearch(database, GameObject.class, false);
+			if(results.isEmpty()){
+				error = "No objects match that ID number";
+			}else{
+				object = results.get(0);
+				loadObjectRelatedTypes(object);
+			}
+		}catch(SQLException e){
+			error = "Get Object By ID SQL Error";
+			logger.logError(error, e);
+		}
+		return new DatabaseResult<>(object, error);
+	}
+	
+	@Override
+	public GameMap getMap(){
 		return null;
 	}
 	
 	@Override
 	public Player getPlayer(){
-		return null;
-	}
-	
-	@Override
-	public List<GameObject> getAllObjects(){
 		return null;
 	}
 	
@@ -362,11 +416,6 @@ public class MySQLDatabase implements IDatabase{
 	
 	@Override
 	public List<Quest> getAllQuests(){
-		return null;
-	}
-	
-	@Override
-	public GameObject getObjectByID(int objectID){
 		return null;
 	}
 	

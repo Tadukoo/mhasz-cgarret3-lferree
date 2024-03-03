@@ -7,7 +7,7 @@ import com.github.tadukoo.aome.Quest;
 import com.github.tadukoo.aome.character.Character;
 import com.github.tadukoo.aome.character.Player;
 import com.github.tadukoo.aome.construct.Item;
-import com.github.tadukoo.aome.construct.Map;
+import com.github.tadukoo.aome.construct.GameMap;
 import com.github.tadukoo.aome.construct.MapTile;
 import com.github.tadukoo.aome.construct.GameObject;
 import org.junit.jupiter.api.Test;
@@ -120,7 +120,7 @@ public class GameSettersTest{
 	@Test
 	public void testsetMap(){
 		Game game = new Game();
-		Map mappy = new Map();
+		GameMap mappy = new GameMap();
 		game.setmap(mappy);
 		
 		assertEquals(mappy, game.getmap());
@@ -129,12 +129,12 @@ public class GameSettersTest{
 	@Test
 	public void testResetMap(){
 		Game game = new Game();
-		Map mappy = new Map();
+		GameMap mappy = new GameMap();
 		game.setmap(mappy);
 		
 		assertEquals(mappy, game.getmap());
 		
-		Map mappy2 = new Map();
+		GameMap mappy2 = new GameMap();
 		mappy2.addMapTile(new MapTile());
 		game.setmap(mappy2);
 		
@@ -348,7 +348,7 @@ public class GameSettersTest{
 		chars.add(player);
 		game.setcharacters(chars);
 		
-		Map map = new Map();
+		GameMap map = new GameMap();
 		MapTile starting = new MapTile();
 		starting.setName("Derp");
 		starting.setLongDescription("Just a long description here. Nothing more.");
@@ -367,7 +367,7 @@ public class GameSettersTest{
 		chars.add(player);
 		game.setcharacters(chars);
 		
-		Map map = new Map();
+		GameMap map = new GameMap();
 		MapTile starting = new MapTile();
 		starting.setName("Derp");
 		starting.setLongDescription("Just a long description here. Nothing more.");

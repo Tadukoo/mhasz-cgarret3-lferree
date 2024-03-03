@@ -3,6 +3,7 @@ package com.github.tadukoo.dbsetup;
 import com.github.tadukoo.aome.User;
 import com.github.tadukoo.aome.construct.GameObject;
 import com.github.tadukoo.aome.construct.Item;
+import com.github.tadukoo.aome.construct.ItemToObjectMap;
 import com.github.tadukoo.database.mysql.Database;
 import com.github.tadukoo.database.mysql.pojo.DatabasePojo;
 import com.github.tadukoo.database.mysql.syntax.statement.SQLDropStatement;
@@ -32,6 +33,7 @@ public class CleanupDatabase{
 		deleteTable(new Item());
 		deleteTable(new User());
 		deleteTable(new GameObject());
+		deleteTable(new ItemToObjectMap());
 	}
 	
 	private static void deleteTable(DatabasePojo pojo) throws SQLException{

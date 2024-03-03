@@ -9,12 +9,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class MapTest{
-	private Map map;
+	private GameMap map;
 	
 	@BeforeEach
 	public void setup(){
 		// Create a blank map.... self-explanatory
-		map = new Map();
+		map = new GameMap();
 	}
 	
 	@Test

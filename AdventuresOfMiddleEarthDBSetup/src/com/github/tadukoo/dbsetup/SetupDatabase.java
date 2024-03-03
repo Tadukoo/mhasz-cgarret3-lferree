@@ -4,6 +4,7 @@ import com.github.tadukoo.aome.InitialData;
 import com.github.tadukoo.aome.User;
 import com.github.tadukoo.aome.construct.GameObject;
 import com.github.tadukoo.aome.construct.Item;
+import com.github.tadukoo.aome.construct.ItemToObjectMap;
 import com.github.tadukoo.database.mysql.Database;
 import com.github.tadukoo.util.LoggerUtil;
 import com.github.tadukoo.util.logger.EasyLogger;
@@ -53,19 +54,15 @@ public class SetupDatabase{
 		// Create GameObject table
 		GameObject object = new GameObject();
 		object.createTable(database);
+		
+		// Create Items to Objects table
+		ItemToObjectMap itemToObject = new ItemToObjectMap();
+		itemToObject.createTable(database);
 	}
 	
 	/*
 	 * Other Tables Creation to be moved
 	 *
-				stmt3 = conn.prepareStatement(
-						"create table itemstoobjects (" +
-						"   item_id int," +
-						"   object_id int" +
-						")"
-				);
-				stmt3.executeUpdate();
-				
 				stmt4 = conn.prepareStatement(
 						"create table maptileconnections (" +
 						"   maptile_id integer primary key " +
@@ -242,6 +239,12 @@ public class SetupDatabase{
 		List<GameObject> objects = InitialData.getObjects();
 		for(GameObject object: objects){
 			object.storeValues(database, false);
+		}
+		
+		// Load Items to Objects
+		List<ItemToObjectMap> itemsToObjects = InitialData.getItemsToObjects();
+		for(ItemToObjectMap itemToObject: itemsToObjects){
+			itemToObject.storeValues(database, false);
 		}
 	}
 }

@@ -9,7 +9,8 @@ import java.util.List;
 import com.github.tadukoo.aome.character.Enemy;
 import com.github.tadukoo.aome.character.Player;
 import com.github.tadukoo.aome.construct.GameObject;
-import com.github.tadukoo.aome.construct.Map;
+import com.github.tadukoo.aome.construct.ItemToObjectMap;
+import com.github.tadukoo.aome.construct.GameMap;
 import com.github.tadukoo.aome.construct.MapTile;
 import com.github.tadukoo.aome.construct.Item;
 import com.github.tadukoo.aome.construct.ItemType;
@@ -83,6 +84,23 @@ public class InitialData{
 				tuple = readObjects.next();
 			}
 			return objectList;
+		}
+	}
+	
+	public static List<ItemToObjectMap> getItemsToObjects() throws IOException{
+		List<ItemToObjectMap> itemsToObjectsList = new ArrayList<>();
+		try(ReadCSV readItemsToObjects = new ReadCSV("itemstoobjects.csv")){
+			List<String> tuple = readItemsToObjects.next();
+			while(tuple != null){
+				int itemID = Integer.parseInt(tuple.get(0));
+				int objectID = Integer.parseInt(tuple.get(1));
+				ItemToObjectMap itemToObject = new ItemToObjectMap(itemID, objectID);
+				
+				itemsToObjectsList.add(itemToObject);
+				tuple = readItemsToObjects.next();
+			}
+			return itemsToObjectsList;
+			
 		}
 	}
 	
@@ -191,29 +209,8 @@ public class InitialData{
 		}
 	}
 	
-	public static ArrayList<IntPair> getItemsToObjects() throws IOException {
-		ArrayList<IntPair> itemsToObjectsList = new ArrayList<>();
-		
-		try(ReadCSV readItemsToObjects = new ReadCSV("itemstoobjects.csv")){
-			while(true){
-				List<String> tuple = readItemsToObjects.next();
-				if(tuple == null){
-					break;
-				}
-				Iterator<String> i = tuple.iterator();
-				IntPair intPair = new IntPair();
-				intPair.setInt1(Integer.parseInt(i.next()));
-				intPair.setInt2(Integer.parseInt(i.next()));
-				
-				itemsToObjectsList.add(intPair);
-			}
-			return itemsToObjectsList;
-			
-		}
-	}
-	
-	public static ArrayList<Map> getMaps() throws IOException {
-		ArrayList<Map> mapList = new ArrayList<>();
+	public static ArrayList<GameMap> getMaps() throws IOException {
+		ArrayList<GameMap> mapList = new ArrayList<>();
 		try(ReadCSV readMaps = new ReadCSV("map.csv")){
 			while(true){
 				List<String> tuple = readMaps.next();
@@ -221,7 +218,7 @@ public class InitialData{
 					break;
 				}
 				Iterator<String> i = tuple.iterator();
-				Map map = new Map();
+				GameMap map = new GameMap();
 				
 				map.setName(i.next());
 				map.setShortDescription(i.next());

@@ -12,7 +12,7 @@ import com.github.tadukoo.aome.character.Character;
 import com.github.tadukoo.aome.character.Enemy;
 import com.github.tadukoo.aome.construct.Item;
 import com.github.tadukoo.aome.construct.GameObject;
-import com.github.tadukoo.aome.construct.Map;
+import com.github.tadukoo.aome.construct.GameMap;
 import com.github.tadukoo.aome.construct.MapTile;
 import com.github.tadukoo.middle_earth.persist.pojo.DatabaseResult;
 
@@ -45,15 +45,20 @@ public interface IDatabase{
 	DatabaseResult<Item> getHandheldItem();
 	DatabaseResult<Item> getArmorItem();
 	
-	Map getMap();
+	/*
+	 * Object Related Queries
+	 */
+	
+	DatabaseResult<List<GameObject>> getAllObjects();
+	DatabaseResult<GameObject> getObjectByID(int id);
+	
+	GameMap getMap();
 	Player getPlayer();
 	
-	List<GameObject> getAllObjects();
 	List<MapTile> getAllMapTiles();
 	List<Character> getAllCharacters();
 	List<Quest> getAllQuests();
 	
-	GameObject getObjectByID(int objectID);
 	MapTile getMapTileByID(int mapTileID);
 	Inventory getInventoryByID(int inventoryID);
 	

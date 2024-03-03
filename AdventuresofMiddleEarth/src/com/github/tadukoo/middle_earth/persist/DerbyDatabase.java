@@ -25,7 +25,7 @@ import com.github.tadukoo.aome.construct.GameObject;
 import com.github.tadukoo.middle_earth.persist.pojo.DatabaseResult;
 import com.github.tadukoo.aome.ObjectIDCommandResponse;
 import com.github.tadukoo.aome.StringPair;
-import com.github.tadukoo.aome.construct.Map;
+import com.github.tadukoo.aome.construct.GameMap;
 import com.github.tadukoo.aome.construct.MapTile;
 
 @Deprecated
@@ -155,7 +155,7 @@ public class DerbyDatabase implements IDatabase {
 		mapTile.setAreaDifficulty(resultSet.getInt(index));
 	}
 	 
-	private void loadMap(Map map, ResultSet resultSet) throws SQLException{
+	private void loadMap(GameMap map, ResultSet resultSet) throws SQLException{
 		int index = 1;
 		map.setID(resultSet.getInt(index++));
 		map.setName(resultSet.getString(index++));
@@ -309,7 +309,7 @@ public class DerbyDatabase implements IDatabase {
 	//  								Maps
 	///////////////////////////////////////////////////////////////////////////////////////
 	@Override
-	public Map getMap() {
+	public GameMap getMap() {
 		return executeTransaction(conn -> {
 			PreparedStatement stmt = null;
 			ResultSet resultSetMap = null;
@@ -322,7 +322,7 @@ public class DerbyDatabase implements IDatabase {
 								"  from maps "
 				);
 				
-				Map map = new Map();
+				GameMap map = new GameMap();
 				MapTile emptyMapTile = new MapTile();
 				map.addMapTile(emptyMapTile);
 				
@@ -623,197 +623,13 @@ public class DerbyDatabase implements IDatabase {
 	//  								Objects 
 	///////////////////////////////////////////////////////////////////////////////////////
 	@Override
-	public ArrayList<GameObject> getAllObjects() {
-		return executeTransaction(conn -> {
-			PreparedStatement stmt = null;
-			PreparedStatement stmt2 = null;
-			ResultSet resultSetObjects = null;
-			ResultSet resultSetObjectCommandResponses = null;
-			ResultSet resultSetItems = null;
-			
-			try{
-				// retrieve all attributes
-				stmt = conn.prepareStatement(
-						"select * " +
-								"  from objects "
-				);
-				
-				ArrayList<GameObject> resultObjects = new ArrayList<>();
-				resultSetObjects = stmt.executeQuery();
-				
-				// for testing that a result was returned
-				boolean found = false;
-				while(resultSetObjects.next()){
-					found = true;
-					
-					GameObject object = new GameObject();
-					loadObject(object, resultSetObjects);
-					
-					// Now get the commandResponses
-					stmt2 = conn.prepareStatement(
-							"select objectcommandresponses.command, objectcommandresponses.response "
-									+ "from objectcommandresponses "
-									+ "where objectcommandresponses.object_id = ?"
-					);
-					stmt2.setInt(1, object.getID());
-					ArrayList<HashMap<String, String>> resultObjectCommandResponses = new ArrayList<>();
-					
-					resultSetObjectCommandResponses = stmt2.executeQuery();
-					
-					while(resultSetObjectCommandResponses.next()){
-						HashMap<String, String> objectCommandResponse = new HashMap<>();
-						loadObjectCommandResponse(objectCommandResponse, resultSetObjectCommandResponses);
-						
-						resultObjectCommandResponses.add(objectCommandResponse);
-					}
-					if(!resultObjectCommandResponses.isEmpty()){
-						for(HashMap<String, String> objectCommandResponse: resultObjectCommandResponses){
-							object.setCommandResponses(objectCommandResponse);
-						}
-					}
-					
-					// Now get the items in the object
-					stmt = conn.prepareStatement(
-							"select * " +
-									"	from items, itemstoobjects" +
-									"   where itemstoobjects.object_id = ?"
-									+ "AND itemstoobjects.item_id = items.item_id "
-					);
-					
-					stmt.setInt(1, object.getID());
-					ArrayList<Item> resultItems = new ArrayList<>();
-					
-					resultSetItems = stmt.executeQuery();
-					
-					while(resultSetItems.next()){
-						Item item = new Item();
-						loadItem(item, resultSetItems);
-						
-						resultItems.add(item);
-					}
-					if(!resultItems.isEmpty()){
-						for(Item item: resultItems){
-							object.addItem(item);
-						}
-					}
-					
-					resultObjects.add(object);
-				}
-				
-				// check if the title was found
-				if(!found){
-					System.out.println("<objects> table is empty");
-				}
-				
-				return resultObjects;
-			}finally{
-				DBUtil.closeQuietly(resultSetItems);
-				DBUtil.closeQuietly(resultSetObjectCommandResponses);
-				DBUtil.closeQuietly(resultSetObjects);
-				DBUtil.closeQuietly(stmt2);
-				DBUtil.closeQuietly(stmt);
-				DBUtil.closeQuietly(conn);
-			}
-		});
+	public DatabaseResult<List<GameObject>> getAllObjects(){
+		throw new UnsupportedOperationException("DerbyDatabase not supported anymore!");
 	}
 
 	@Override
-	public GameObject getObjectByID(int objectID) {
-		return executeTransaction(conn -> {
-			
-			PreparedStatement stmt1 = null;
-			PreparedStatement stmt2 = null;
-			PreparedStatement stmt3 = null;
-			ResultSet resultSet = null;
-			ResultSet resultSetObjectCommandResponses = null;
-			ResultSet resultSetItems = null;
-			
-			try{
-				// retrieve all attributes
-				stmt1 = conn.prepareStatement(
-						"select * "
-								+ "from objects "
-								+ "where objects.object_id = ? "
-				);
-				stmt1.setInt(1, objectID);
-				
-				resultSet = stmt1.executeQuery();
-				
-				GameObject resultObject = new GameObject();
-				
-				// for testing that a result was returned
-				boolean found = false;
-				
-				while(resultSet.next()){
-					found = true;
-					
-					loadObject(resultObject, resultSet);
-					
-					// Now get the commandResponses
-					stmt2 = conn.prepareStatement(
-							"select objectcommandresponses.command, objectcommandresponses.response "
-									+ "from objectcommandresponses "
-									+ "where objectcommandresponses.object_id = ?"
-					);
-					stmt2.setInt(1, resultObject.getID());
-					ArrayList<HashMap<String, String>> resultObjectCommandResponses = new ArrayList<>();
-					
-					resultSetObjectCommandResponses = stmt2.executeQuery();
-					
-					while(resultSetObjectCommandResponses.next()){
-						HashMap<String, String> objectCommandResponse = new HashMap<>();
-						loadObjectCommandResponse(objectCommandResponse, resultSetObjectCommandResponses);
-						
-						resultObjectCommandResponses.add(objectCommandResponse);
-					}
-					if(!resultObjectCommandResponses.isEmpty()){
-						for(HashMap<String, String> objectCommandResponse: resultObjectCommandResponses){
-							resultObject.setCommandResponses(objectCommandResponse);
-						}
-					}
-					
-					// Now get the items in the object
-					stmt3 = conn.prepareStatement(
-							"select * " +
-									"	from items, itemstoobjects" +
-									"   where itemstoobjects.object_id = ?"
-									+ "AND itemstoobjects.item_id = items.item_id "
-					);
-					
-					stmt3.setInt(1, resultObject.getID());
-					ArrayList<Item> resultItems = new ArrayList<>();
-					
-					resultSetItems = stmt3.executeQuery();
-					
-					while(resultSetItems.next()){
-						Item item = new Item();
-						loadItem(item, resultSetItems);
-						
-						resultItems.add(item);
-					}
-					if(!resultItems.isEmpty()){
-						for(Item item: resultItems){
-							resultObject.addItem(item);
-						}
-					}
-				}
-				
-				// check if the object was found
-				if(!found){
-					System.out.println("no objects with that id");
-				}
-				
-				return resultObject;
-			}finally{
-				DBUtil.closeQuietly(resultSet);
-				DBUtil.closeQuietly(resultSetObjectCommandResponses);
-				DBUtil.closeQuietly(resultSetItems);
-				DBUtil.closeQuietly(stmt3);
-				DBUtil.closeQuietly(stmt2);
-				DBUtil.closeQuietly(stmt1);
-				DBUtil.closeQuietly(conn);
-			}
-		});
+	public DatabaseResult<GameObject> getObjectByID(int id){
+		throw new UnsupportedOperationException("DerbyDatabase not supported anymore!");
 	}
 	
 	///////////////////////////////////////////////////////////////////////////////////////
@@ -1184,7 +1000,7 @@ public class DerbyDatabase implements IDatabase {
 
 		game.setmap(getMap());
 		
-		game.setobjects(getAllObjects());
+		game.setobjects(getAllObjects().result());
 		game.setitems(getAllItems().result());
 		ArrayList<Character> characterList = new ArrayList<>();
 		characterList.add(getPlayer());
@@ -1646,7 +1462,7 @@ public class DerbyDatabase implements IDatabase {
 	 * 										Update Database Methods
 	********************************************************************************************************/
 	
-	private void updateMap(final Map map) {
+	private void updateMap(final GameMap map) {
 		// In the future will need to update map for Editor
 		// update all maptiles
 		updateMapTiles(map.getMapTiles());

@@ -1,10 +1,10 @@
 package com.github.tadukoo.aome.construct;
 
-import com.github.tadukoo.database.mysql.pojo.SubPojoDefinition;
-import com.github.tadukoo.util.tuple.Pair;
+import com.github.tadukoo.database.mysql.syntax.ColumnDefinition;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Represents an Object in the Game
@@ -16,9 +16,10 @@ import java.util.HashMap;
  * @since 1.0 or earlier
  */
 public class GameObject extends Construct{
+	public static final String DESCRIPTION_UPDATE_COLUMN_NAME = "description_update";
+	
+	private List<Item> items;
 	private HashMap<String, String> commandResponses;
-	private ArrayList<Item> items;
-	private String description_update;
 	
 	// TODO: Figure out how to put location in here???
 	public GameObject(){
@@ -32,41 +33,54 @@ public class GameObject extends Construct{
 		return "Objects";
 	}
 	
-	public void setCommandResponses(HashMap<String, String> commandResponses) {
-		this.commandResponses = commandResponses;
+	@Override
+	public void setDefaultColumnDefs(){
+		super.setDefaultColumnDefs();
+		
+		// Description Update
+		addColumnDef(ColumnDefinition.builder()
+				.columnName(DESCRIPTION_UPDATE_COLUMN_NAME)
+				.varchar()
+				.length(100)
+				.build());
 	}
 	
-	public HashMap<String, String> getCommandResponses() {
-		return this.commandResponses;
+	public String getDescriptionUpdate(){
+		return (String) getItem(DESCRIPTION_UPDATE_COLUMN_NAME);
+	}
+	
+	public void setDescriptionUpdate(String descriptionUpdate){
+		setItem(DESCRIPTION_UPDATE_COLUMN_NAME, descriptionUpdate);
+	}
+	
+	public List<Item> getItems(){
+		return items;
+	}
+	
+	public void setItems(List<Item> items){
+		this.items = items;
 	}
 	
 	public void addItem(Item item){
 		items.add(item);
 	}
 	
-	public void removeItem(Item item) {
+	public void removeItem(Item item){
 		Item remove = new Item();
-		for (Item check: items) {
-			if (check == item) {
+		for(Item check: items){
+			if(check == item){
 				remove = item;
+				break;
 			}
 		}
 		items.remove(remove);
 	}
 	
-	public void setItems(ArrayList<Item> items) {
-		this.items = items;
+	public HashMap<String, String> getCommandResponses(){
+		return commandResponses;
 	}
 	
-	public ArrayList<Item> getItems() {
-		return this.items;
-	}
-	
-	public void setdescription_update(String string){
-		this.description_update = string;
-	}
-	
-	public String getdescription_update(){
-		return description_update;
+	public void setCommandResponses(HashMap<String, String> commandResponses){
+		this.commandResponses = commandResponses;
 	}
 }

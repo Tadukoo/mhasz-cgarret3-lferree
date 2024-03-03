@@ -44,7 +44,7 @@ public class CombatSituation{
 		
 		// Initialize combat string and character IDs ArrayList
 		String combatString = "";
-		characterIDs = new ArrayList<Integer>();
+		characterIDs = new ArrayList<>();
 		
 		// Add player ids to ArrayList and names to combat string
 		for(int i = 0; i < players.length; i++){

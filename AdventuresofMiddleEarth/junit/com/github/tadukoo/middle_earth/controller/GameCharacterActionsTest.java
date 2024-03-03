@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import com.github.tadukoo.aome.character.Character;
 import com.github.tadukoo.aome.character.Player;
-import com.github.tadukoo.aome.construct.Map;
+import com.github.tadukoo.aome.construct.GameMap;
 import com.github.tadukoo.aome.construct.MapTile;
 import com.github.tadukoo.middle_earth.persist.DatabaseProvider;
 import com.github.tadukoo.middle_earth.persist.FakeDatabase;
@@ -17,7 +17,7 @@ import org.junit.jupiter.api.Test;
  */
 public class GameCharacterActionsTest{
 	private Game game;
-	private Map map;
+	private GameMap map;
 	private Player player;
 	private MapTile starting;
 	private MapTile northOfStarting;
@@ -79,7 +79,7 @@ public class GameCharacterActionsTest{
 		starting.setConnection("northwest", 8);
 		
 		// Create Map
-		map = new Map();
+		map = new GameMap();
 		
 		// Populate Map
 		ArrayList<MapTile> tiles = new ArrayList<MapTile>();

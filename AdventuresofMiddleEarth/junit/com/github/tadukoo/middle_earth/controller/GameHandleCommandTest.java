@@ -8,7 +8,7 @@ import com.github.tadukoo.aome.character.Character;
 import com.github.tadukoo.aome.character.Inventory;
 import com.github.tadukoo.aome.character.Player;
 import com.github.tadukoo.aome.construct.Item;
-import com.github.tadukoo.aome.construct.Map;
+import com.github.tadukoo.aome.construct.GameMap;
 import com.github.tadukoo.aome.construct.MapTile;
 import com.github.tadukoo.aome.construct.GameObject;
 import org.junit.jupiter.api.BeforeEach;
@@ -90,7 +90,7 @@ public class GameHandleCommandTest{
 		northEastOfStarting.setID(2);
 		northEastOfStarting.setLongDescription("You arrive in a barren wasteland, complete with radiation poisoning.");
 		
-		Map map = new Map();
+		GameMap map = new GameMap();
 		map.addMapTile(starting);
 		map.addMapTile(northOfStarting);
 		map.addMapTile(northEastOfStarting);

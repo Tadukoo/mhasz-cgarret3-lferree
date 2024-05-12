@@ -136,7 +136,7 @@ public class Game implements Engine{
 	}
 	
 	public String getmapTile_longDescription(){
-		ArrayList<GameObject> objects = map.getMapTiles().get(getplayer().getlocation()).getObjects();
+		List<GameObject> objects = map.getMapTiles().get(getplayer().getlocation()).getObjects();
 		String objectUpdate = "";
 		if (objects != null) {
 			for (GameObject object : objects) {
@@ -387,7 +387,7 @@ public class Game implements Engine{
 		}
 		
 		GameObject action_object = null;
-		ArrayList<GameObject> objects = map.getMapTiles().get(getplayer().getlocation()).getObjects();
+		List<GameObject> objects = map.getMapTiles().get(getplayer().getlocation()).getObjects();
 		if(objects == null){
 			return false;
 		}

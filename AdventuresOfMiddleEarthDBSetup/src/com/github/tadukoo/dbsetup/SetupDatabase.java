@@ -5,7 +5,9 @@ import com.github.tadukoo.aome.User;
 import com.github.tadukoo.aome.construct.GameObject;
 import com.github.tadukoo.aome.construct.Item;
 import com.github.tadukoo.aome.construct.ItemToObjectMap;
+import com.github.tadukoo.aome.construct.MapTile;
 import com.github.tadukoo.aome.construct.ObjectCommandResponse;
+import com.github.tadukoo.aome.construct.ObjectToMapTileMap;
 import com.github.tadukoo.database.mysql.Database;
 import com.github.tadukoo.util.LoggerUtil;
 import com.github.tadukoo.util.logger.EasyLogger;
@@ -63,6 +65,14 @@ public class SetupDatabase{
 		// Create Object Command Response table
 		ObjectCommandResponse objectCommandResponse = new ObjectCommandResponse();
 		objectCommandResponse.createTable(database);
+		
+		// Create Map Tiles table
+		MapTile mapTile = new MapTile();
+		mapTile.createTable(database);
+		
+		// Create Objects to Map Tiles table
+		ObjectToMapTileMap objectToMapTile = new ObjectToMapTileMap();
+		objectToMapTile.createTable(database);
 	}
 	
 	/*
@@ -84,26 +94,6 @@ public class SetupDatabase{
 						")"
 				);
 				stmt4.executeUpdate();
-				
-				stmt5 = conn.prepareStatement(
-						"create table maptiles (" +
-						"   maptile_id integer primary key " +
-						"       generated always as identity (start with 1, increment by 1), " +
-						"   maptilename varchar(40)," +
-						"	longdescription varchar(200)," +
-						"	shortdescription varchar(100)," +
-						"	difficulty int" +
-						")"
-				);
-				stmt5.executeUpdate();
-				
-				stmt6 = conn.prepareStatement(
-						"create table objectstomaptiles (" +
-						"	object_id int, " +
-						"   maptile_id int" +
-						")"
-				);
-				stmt6.executeUpdate();
 				
 				stmt7 = conn.prepareStatement(
 						"create table itemstoinventories ("
@@ -247,6 +237,18 @@ public class SetupDatabase{
 		List<ObjectCommandResponse> objectCommandResponses = InitialData.getObjectCommandResponses();
 		for(ObjectCommandResponse objectCommandResponse: objectCommandResponses){
 			objectCommandResponse.storeValues(database, false);
+		}
+		
+		// Load Map Tiles
+		List<MapTile> mapTiles = InitialData.getMapTiles();
+		for(MapTile mapTile: mapTiles){
+			mapTile.storeValues(database, false);
+		}
+		
+		// Load Objects to Map Tiles
+		List<ObjectToMapTileMap> objectsToMapTiles = InitialData.getObjectsToMapTiles();
+		for(ObjectToMapTileMap objectToMapTile: objectsToMapTiles){
+			objectToMapTile.storeValues(database, false);
 		}
 	}
 }

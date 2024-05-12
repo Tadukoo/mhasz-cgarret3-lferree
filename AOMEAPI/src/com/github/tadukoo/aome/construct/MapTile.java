@@ -1,18 +1,32 @@
 package com.github.tadukoo.aome.construct;
 
+import com.github.tadukoo.database.mysql.syntax.ColumnDefinition;
+
 import java.util.ArrayList;
 import java.util.HashMap;
-//import edu.ycp.cs320.middle_earth.model.CombatSituation;
+import java.util.List;
+import java.util.Map;
 
+/**
+ * Represents a Map Tile in the Game
+ *
+ * @author Logan Ferree (Tadukoo)
+ * @author Chris Garrety (cgarret3)
+ * @author Matt Hasz (mhasz239)
+ * @version 2.0
+ * @since 1.0 or earlier
+ */
 public class MapTile extends Construct{
-	private HashMap<String, Integer> connections;
-	//private ArrayList<CombatSituation> random_encounters;
-	private ArrayList<GameObject> objects;
+	/** Column name for Difficulty */
+	private static final String DIFFICULTY_COLUMN_NAME = "difficulty";
+	
+	private List<GameObject> objects;
+	private final Map<String, Integer> connections;
 	private boolean visited;
 	private String enemyString;
-	private int areaDifficulty;
 	
 	public MapTile(){
+		objects = new ArrayList<>();
 		connections = new HashMap<>();
 		connections.put("north", 0);
 		connections.put("northeast", 0);
@@ -24,26 +38,63 @@ public class MapTile extends Construct{
 		connections.put("northwest", 0);
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public String getTableName(){
 		return "map_tiles";
 	}
 	
-	// Note: Having setConnections(HashMap) causes us to lose the default values of 0.
-	public void setConnection(String direction, int weight){
-		connections.put(direction, weight);
+	/** {@inheritDoc} */
+	@Override
+	public void setDefaultColumnDefs(){
+		super.setDefaultColumnDefs();
+		
+		// Add difficulty
+		addColumnDef(ColumnDefinition.builder()
+				.columnName(DIFFICULTY_COLUMN_NAME)
+				.integer()
+				.defaultSize()
+				.build());
 	}
 	
-	public void setObjects(ArrayList<GameObject> objects) {
-		this.objects = objects;
+	public int getDifficulty(){
+		return (int) getItem(DIFFICULTY_COLUMN_NAME);
 	}
 	
-	public ArrayList<GameObject> getObjects() {
+	public void setDifficulty(int difficulty){
+		setItem(DIFFICULTY_COLUMN_NAME, difficulty);
+	}
+	
+	public List<GameObject> getObjects(){
 		return objects;
 	}
 	
-	public HashMap<String, Integer> getConnections() {
-		return this.connections;
+	public void setObjects(List<GameObject> objects){
+		this.objects = objects;
+	}
+	
+	public void addObject(GameObject object){
+		objects.add(object);
+	}
+	
+	public void removeObject(GameObject object){
+		GameObject remove = new GameObject();
+		for(GameObject check: objects){
+			if(check == object){
+				remove = object;
+				break;
+			}
+		}
+		objects.remove(remove);
+	}
+	
+	public Map<String, Integer> getConnections(){
+		return connections;
+	}
+	
+	// Note: Having setConnections(HashMap) causes us to lose the default values of 0.
+	public void setConnection(String direction, int weight){
+		connections.put(direction, weight);
 	}
 	
 	public int getMoveValue(String direction) {
@@ -55,7 +106,7 @@ public class MapTile extends Construct{
 	}
 	
 	public boolean getVisited() {
-		return this.visited;
+		return visited;
 	}
 	
 	public String getEnemyString(){
@@ -67,18 +118,10 @@ public class MapTile extends Construct{
 	}
 	
 	public ArrayList<Integer> getEnemyIDs(){
-		ArrayList<Integer> ids = new ArrayList<Integer>();
+		ArrayList<Integer> ids = new ArrayList<>();
 		for(String s: enemyString.split(",")){
 			ids.add(Integer.parseInt(s));
 		}
 		return ids;
-	}
-	
-	public void setAreaDifficulty(int areaDifficulty) {
-		this.areaDifficulty = areaDifficulty;
-	}
-	
-	public int getAreaDifficulty() {
-		return this.areaDifficulty;
 	}
 }

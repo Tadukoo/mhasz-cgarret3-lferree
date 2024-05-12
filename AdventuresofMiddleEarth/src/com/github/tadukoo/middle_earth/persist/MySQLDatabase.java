@@ -4,6 +4,7 @@ import com.github.tadukoo.aome.User;
 import com.github.tadukoo.aome.construct.ItemToObjectMap;
 import com.github.tadukoo.aome.construct.ItemType;
 import com.github.tadukoo.aome.construct.ObjectCommandResponse;
+import com.github.tadukoo.aome.construct.ObjectToMapTileMap;
 import com.github.tadukoo.database.mysql.Database;
 import com.github.tadukoo.database.mysql.syntax.SQLSyntaxUtil;
 import com.github.tadukoo.database.mysql.syntax.conditional.Conditional;
@@ -341,6 +342,12 @@ public class MySQLDatabase implements IDatabase{
 	 * Object Related Queries
 	 */
 	
+	/**
+	 * Used to load related data for the given {@link GameObject object}
+	 *
+	 * @param object The {@link GameObject object} to load other data for
+	 * @throws SQLException If anything goes wrong
+	 */
 	private void loadObjectRelatedTypes(GameObject object) throws SQLException{
 		// Find Items for the Object
 		ItemToObjectMap search = new ItemToObjectMap();
@@ -399,6 +406,66 @@ public class MySQLDatabase implements IDatabase{
 		return new DatabaseResult<>(object, error);
 	}
 	
+	/*
+	 * Map Tile Related Queries
+	 */
+	
+	/**
+	 * Used to load related data for the given {@link MapTile map tile}
+	 *
+	 * @param mapTile The {@link MapTile map tile} to load other data for
+	 * @throws SQLException If anything goes wrong
+	 */
+	private void loadMapTileRelatedTypes(MapTile mapTile) throws SQLException{
+		// Find Objects for the Map Tile
+		ObjectToMapTileMap search = new ObjectToMapTileMap();
+		search.setMapTileID(mapTile.getID());
+		List<ObjectToMapTileMap> results = search.doSearch(database, ObjectToMapTileMap.class, false);
+		for(ObjectToMapTileMap objectToMapTile: results){
+			mapTile.addObject(getObjectByID(objectToMapTile.getObjectID()).result());
+		}
+	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public DatabaseResult<List<MapTile>> getAllMapTiles(){
+		List<MapTile> mapTiles = null;
+		String error = null;
+		try{
+			MapTile search = new MapTile();
+			mapTiles = search.doSearch(database, MapTile.class, false);
+			for(MapTile mapTile: mapTiles){
+				loadMapTileRelatedTypes(mapTile);
+			}
+		}catch(SQLException e){
+			error = "Get All Map Tiles SQL Error";
+			logger.logError(error, e);
+		}
+		return new DatabaseResult<>(mapTiles, error);
+	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public DatabaseResult<MapTile> getMapTileByID(int id){
+		MapTile mapTile = null;
+		String error = null;
+		try{
+			MapTile search = new MapTile();
+			search.setID(id);
+			List<MapTile> results = search.doSearch(database, MapTile.class, false);
+			if(results.isEmpty()){
+				error = "No map tiles match that ID number";
+			}else{
+				mapTile = results.get(0);
+				loadMapTileRelatedTypes(mapTile);
+			}
+		}catch(SQLException e){
+			error = "Get Map Tile By ID SQL Error";
+			logger.logError(error, e);
+		}
+		return new DatabaseResult<>(mapTile, error);
+	}
+	
 	@Override
 	public GameMap getMap(){
 		return null;
@@ -410,22 +477,12 @@ public class MySQLDatabase implements IDatabase{
 	}
 	
 	@Override
-	public List<MapTile> getAllMapTiles(){
-		return null;
-	}
-	
-	@Override
 	public List<Character> getAllCharacters(){
 		return null;
 	}
 	
 	@Override
 	public List<Quest> getAllQuests(){
-		return null;
-	}
-	
-	@Override
-	public MapTile getMapTileByID(int mapTileID){
 		return null;
 	}
 	

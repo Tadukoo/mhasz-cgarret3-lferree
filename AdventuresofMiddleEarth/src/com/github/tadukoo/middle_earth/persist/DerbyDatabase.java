@@ -1,6 +1,5 @@
 package com.github.tadukoo.middle_earth.persist;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -9,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -133,7 +133,7 @@ public class DerbyDatabase implements IDatabase {
 		}
 	}
 	
-	private void loadMapTileConnections(HashMap<String, Integer> mapTileConnections, ResultSet resultSet, int index) throws SQLException {
+	private void loadMapTileConnections(Map<String, Integer> mapTileConnections, ResultSet resultSet, int index) throws SQLException {
 		mapTileConnections.put("north", resultSet.getInt(index++));
 		mapTileConnections.put("northeast", resultSet.getInt(index++));
 		mapTileConnections.put("east", resultSet.getInt(index++));
@@ -150,7 +150,7 @@ public class DerbyDatabase implements IDatabase {
 		mapTile.setName(resultSet.getString(index++));
 		mapTile.setLongDescription(resultSet.getString(index++));
 		mapTile.setShortDescription(resultSet.getString(index++));		
-		mapTile.setAreaDifficulty(resultSet.getInt(index));
+		mapTile.setDifficulty(resultSet.getInt(index));
 	}
 	 
 	private void loadMap(GameMap map, ResultSet resultSet) throws SQLException{
@@ -345,7 +345,7 @@ public class DerbyDatabase implements IDatabase {
 					while(resultSetMapTileIDs.next()){
 						MapTile mapTile = new MapTile();
 						mapTile.setID(resultSetMapTileIDs.getInt(1));
-						mapTile = getMapTileByID(mapTile.getID());
+						mapTile = getMapTileByID(mapTile.getID()).result();
 						map.addMapTile(mapTile);
 					}
 				}
@@ -369,7 +369,7 @@ public class DerbyDatabase implements IDatabase {
 	//  								MapTiles 
 	///////////////////////////////////////////////////////////////////////////////////////
 	@Override
-	public ArrayList<MapTile> getAllMapTiles() {
+	public DatabaseResult<List<MapTile>> getAllMapTiles(){
 		return executeTransaction(conn -> {
 			PreparedStatement stmt = null;
 			PreparedStatement stmt2 = null;
@@ -481,7 +481,7 @@ public class DerbyDatabase implements IDatabase {
 					System.out.println("<maptiles> table is empty");
 				}
 				
-				return resultMapTiles;
+				return new DatabaseResult<>(resultMapTiles, null);
 			}finally{
 				DBUtil.closeQuietly(resultSetItems);
 				DBUtil.closeQuietly(resultSetObjectCommandResponses);
@@ -495,7 +495,7 @@ public class DerbyDatabase implements IDatabase {
 	}
 
 	@Override
-	public MapTile getMapTileByID(int mapTileID) {
+	public DatabaseResult<MapTile> getMapTileByID(int mapTileID) {
 		return executeTransaction(conn -> {
 			
 			PreparedStatement stmt = null;
@@ -604,7 +604,7 @@ public class DerbyDatabase implements IDatabase {
 					System.out.println("no maptiles with that id");
 				}
 				
-				return mapTile;
+				return new DatabaseResult<>(mapTile, null);
 			}finally{
 				DBUtil.closeQuietly(resultSetItems);
 				DBUtil.closeQuietly(resultSetObjectCommandResponses);
@@ -1080,7 +1080,7 @@ public class DerbyDatabase implements IDatabase {
 			PreparedStatement insertItemsToObjects = null;
 			PreparedStatement insertObjectCommandResponses = null;
 			
-			ArrayList<MapTile> mapTileList = getAllMapTiles();
+			List<MapTile> mapTileList = getAllMapTiles().result();
 			try{
 				createWildcardMapTileTable(playerName);
 				createWildcardMapTileConnectionsTable(playerName);
@@ -1110,7 +1110,7 @@ public class DerbyDatabase implements IDatabase {
 					insertMapTile.setString(1, mapTile.getName());
 					insertMapTile.setString(2, mapTile.getLongDescription());
 					insertMapTile.setString(3, mapTile.getShortDescription());
-					insertMapTile.setInt(4, mapTile.getAreaDifficulty());
+					insertMapTile.setInt(4, mapTile.getDifficulty());
 					
 					// Connections for each mapTile
 					int i = 1;

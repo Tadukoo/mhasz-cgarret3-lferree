@@ -15,9 +15,23 @@ import com.github.tadukoo.aome.construct.MapTile;
 import com.github.tadukoo.aome.construct.Item;
 import com.github.tadukoo.aome.construct.ItemType;
 import com.github.tadukoo.aome.construct.ObjectCommandResponse;
+import com.github.tadukoo.aome.construct.ObjectToMapTileMap;
 
+/**
+ * A class used to load Initial Data from CSV files
+ *
+ * @author Logan Ferree (Tadukoo)
+ * @author Chris Garrety (cgarret3)
+ * @author Matt Hasz (mhasz239)
+ * @version 2.0
+ * @since 1.0 or earlier
+ */
 public class InitialData{
 	
+	/**
+	 * @return A List of {@link User Users} based on the CSV to use for initial data
+	 * @throws IOException If anything goes wrong
+	 */
 	public static List<User> getUsers() throws IOException{
 		List<User> users = new ArrayList<>();
 		// Read users from the CSV
@@ -39,115 +53,162 @@ public class InitialData{
 		}
 	}
 	
+	/**
+	 * @return A List of {@link Item items} based on the CSV to use for initial data
+	 * @throws IOException If anything goes wrong
+	 */
 	public static List<Item> getItems() throws IOException{
-		List<Item> itemList = new ArrayList<>();
+		List<Item> items = new ArrayList<>();
+		// Read items from the CSV
 		try(ReadCSV readItems = new ReadCSV("items.csv")){
-			while(true){
-				List<String> tuple = readItems.next();
-				if(tuple == null){
-					break;
-				}
-				Iterator<String> i = tuple.iterator();
-				Item item = new Item();
+			int id = 1;
+			List<String> tuple = readItems.next();
+			while(tuple != null){
+				// Grab the parts of the Item
+				String name = tuple.get(0);
+				String longDescription = tuple.get(1);
+				String shortDescription = tuple.get(2);
+				String descriptionUpdate = tuple.get(3);
+				int attackBonus = Integer.parseInt(tuple.get(4));
+				int defenseBonus = Integer.parseInt(tuple.get(5));
+				int hpBonus = Integer.parseInt(tuple.get(6));
+				float weight = Float.parseFloat(tuple.get(7));
+				ItemType type = ItemType.valueOf(tuple.get(8));
+				int levelRequirement = Integer.parseInt(tuple.get(9));
 				
-				item.setName(i.next());
-				item.setLongDescription(i.next());
-				item.setShortDescription(i.next());
-				item.setDescriptionUpdate(i.next());
-				item.setAttackBonus(Integer.parseInt(i.next()));
-				item.setDefenseBonus(Integer.parseInt(i.next()));
-				item.setHPBonus(Integer.parseInt(i.next()));
-				item.setWeight(Integer.parseInt(i.next()));
-				item.setType(ItemType.valueOf(i.next()));
-				item.setLevelRequirement(Integer.parseInt(i.next()));
+				// Create the item and add it to the List
+				items.add(new Item(id++, name, shortDescription, longDescription,
+						descriptionUpdate, type, levelRequirement,
+						attackBonus, defenseBonus, hpBonus, weight));
 				
-				itemList.add(item);
+				// Grab next tuple
+				tuple = readItems.next();
 			}
-			return itemList;
+			return items;
 		}
 	}
 	
+	/**
+	 * @return A List of {@link GameObject objects} based on the CSV to use for initial data
+	 * @throws IOException If anything goes wrong
+	 */
 	public static List<GameObject> getObjects() throws IOException{
-		List<GameObject> objectList = new ArrayList<>();
+		List<GameObject> objects = new ArrayList<>();
 		// Read Objects from the CSV
 		try(ReadCSV readObjects = new ReadCSV("objects.csv")){
+			int objectID = 1;
 			List<String> tuple = readObjects.next();
 			while(tuple != null){
-				// Grab the parts of the object
+				// Create the object and add it to the list
 				GameObject object = new GameObject();
+				object.setID(objectID++);
 				object.setName(tuple.get(0));
 				object.setLongDescription(tuple.get(1));
 				object.setShortDescription(tuple.get(2));
-				
-				objectList.add(object);
+				objects.add(object);
 				
 				// Grab next tuple
 				tuple = readObjects.next();
 			}
-			return objectList;
+			return objects;
 		}
 	}
 	
+	/**
+	 * @return A List of {@link ItemToObjectMap Item to Object mappings} based on the CSV to use for initial data
+	 * @throws IOException If anything goes wrong
+	 */
 	public static List<ItemToObjectMap> getItemsToObjects() throws IOException{
-		List<ItemToObjectMap> itemsToObjectsList = new ArrayList<>();
+		List<ItemToObjectMap> itemsToObjects = new ArrayList<>();
+		// Read Items to Objects from the CSV
 		try(ReadCSV readItemsToObjects = new ReadCSV("itemstoobjects.csv")){
 			List<String> tuple = readItemsToObjects.next();
 			while(tuple != null){
+				// Create the Item to Object map and add it to the list
 				int itemID = Integer.parseInt(tuple.get(0));
 				int objectID = Integer.parseInt(tuple.get(1));
 				ItemToObjectMap itemToObject = new ItemToObjectMap(itemID, objectID);
+				itemsToObjects.add(itemToObject);
 				
-				itemsToObjectsList.add(itemToObject);
+				// Grab next tuple
 				tuple = readItemsToObjects.next();
 			}
-			return itemsToObjectsList;
-			
+			return itemsToObjects;
 		}
 	}
 	
+	/**
+	 * @return A List of {@link ObjectCommandResponse Object Command Responses} based on the CSV to use for initial data
+	 * @throws IOException If anything goes wrong
+	 */
 	public static List<ObjectCommandResponse> getObjectCommandResponses() throws IOException{
-		List<ObjectCommandResponse> objectCommandResponseList = new ArrayList<>();
-		
+		List<ObjectCommandResponse> objectCommandResponses = new ArrayList<>();
+		// Read Object Command Responses from the CSV
 		try(ReadCSV readObjectCommandResponses = new ReadCSV("objectcommandresponses.csv")){
 			List<String> tuple = readObjectCommandResponses.next();
 			while(tuple != null){
-				Iterator<String> i = tuple.iterator();
-				
+				// Create the Object Command Response and add it to the list
 				ObjectCommandResponse objectCommandResponse = new ObjectCommandResponse();
-				objectCommandResponse.setObjectID(Integer.parseInt(i.next()));
-				objectCommandResponse.setCommand(i.next());
-				objectCommandResponse.setResponse(i.next());
-				objectCommandResponseList.add(objectCommandResponse);
+				objectCommandResponse.setObjectID(Integer.parseInt(tuple.get(0)));
+				objectCommandResponse.setCommand(tuple.get(1));
+				objectCommandResponse.setResponse(tuple.get(2));
+				objectCommandResponses.add(objectCommandResponse);
 				
+				// Grab next tuple
 				tuple = readObjectCommandResponses.next();
 			}
-			return objectCommandResponseList;
+			return objectCommandResponses;
 		}
 	}
 	
-/*
-	public static ArrayList<Integer> getInventoriesToPlayers() throws IOException {
-		ArrayList<Integer> inventoriesToPlayersList = new ArrayList<Integer>();
-		ReadCSV readInventoriesToPlayers = new ReadCSV("inventoriestoplayers.csv");
-		try {
-			while (true) {
-				List<String> tuple = readInventoriesToPlayers.next();
-				if (tuple == null) {
-					break;
-				}
-				Iterator<String> i = tuple.iterator();
+	/**
+	 * @return A List of {@link MapTile Map Tiles} based on the CSV to use for initial data
+	 * @throws IOException If anything goes wrong
+	 */
+	public static List<MapTile> getMapTiles() throws IOException{
+		List<MapTile> mapTiles = new ArrayList<>();
+		// Read Map Tiles from the CSV
+		try(ReadCSV readMapTiles = new ReadCSV("maptiles.csv")){
+			int mapTileID = 1;
+			List<String> tuple = readMapTiles.next();
+			while(tuple != null){
+				// Create the Map Tile and add it to the list
+				MapTile mapTile = new MapTile();
+				mapTile.setID(mapTileID++);
+				mapTile.setName(tuple.get(0));
+				mapTile.setLongDescription(tuple.get(1));
+				mapTile.setShortDescription(tuple.get(2));
+				mapTile.setDifficulty(Integer.parseInt(tuple.get(3)));
+				mapTiles.add(mapTile);
 				
-				while (i.hasNext()) {
-					inventoriesToPlayersList.add(Integer.parseInt(i.next()));
-				}
+				// Grab next tuple
+				tuple = readMapTiles.next();
 			}
-			return inventoriesToPlayersList;
-			
-		} finally {
-			readInventoriesToPlayers.close();
+			return mapTiles;
 		}
 	}
-	*/
+	
+	/**
+	 * @return A List of {@link ObjectToMapTileMap Object to Map Tile mappings} based on the CSV to use for initial data
+	 * @throws IOException If anything goes wrong
+	 */
+	public static List<ObjectToMapTileMap> getObjectsToMapTiles() throws IOException{
+		List<ObjectToMapTileMap> objectsToMapTiles = new ArrayList<>();
+		// Read Objects to Map Tiles from the CSV
+		try(ReadCSV readObjectsToMapTiles = new ReadCSV("objectstomaptiles.csv")){
+			List<String> tuple = readObjectsToMapTiles.next();
+			while(tuple != null){
+				// Create the Object to Map Tile mapping and add it to the list
+				int objectID = Integer.parseInt(tuple.get(0));
+				int mapTileID = Integer.parseInt(tuple.get(1));
+				objectsToMapTiles.add(new ObjectToMapTileMap(objectID, mapTileID));
+				
+				// Grab next tuple
+				tuple = readObjectsToMapTiles.next();
+			}
+			return objectsToMapTiles;
+		}
+	}
 	
 	public static ArrayList<Integer> getInventoriesToCharacters() throws IOException {
 		ArrayList<Integer> inventoriesToCharactersList = new ArrayList<>();
@@ -294,53 +355,6 @@ public class InitialData{
 				mapTileConnectionsList.add(mapTileConnections);
 			}
 			return mapTileConnectionsList;
-		}
-	}
-	
-	public static ArrayList<MapTile> getMapTiles() throws IOException {
-		ArrayList<MapTile> mapTileList = new ArrayList<>();
-		
-		try(ReadCSV readMapTiles = new ReadCSV("maptiles.csv")){
-			int mapTileID = 1;
-			while(true){
-				List<String> tuple = readMapTiles.next();
-				if(tuple == null){
-					break;
-				}
-				Iterator<String> i = tuple.iterator();
-				
-				MapTile mapTile = new MapTile();
-				
-				mapTile.setID(mapTileID++);
-				mapTile.setName(i.next());
-				mapTile.setLongDescription(i.next());
-				mapTile.setShortDescription(i.next());
-				mapTile.setAreaDifficulty(Integer.parseInt(i.next()));
-				
-				mapTileList.add(mapTile);
-			}
-			
-			return mapTileList;
-		}
-	}
-	
-	public static ArrayList<IntPair> getObjectsToMapTiles() throws IOException {
-		ArrayList<IntPair> objectsToMapTilesList = new ArrayList<>();
-		try(ReadCSV readObjectsToMapTiles = new ReadCSV("objectstomaptiles.csv")){
-			while(true){
-				List<String> tuple = readObjectsToMapTiles.next();
-				if(tuple == null){
-					break;
-				}
-				Iterator<String> i = tuple.iterator();
-				IntPair intPair = new IntPair();
-				intPair.setInt1(Integer.parseInt(i.next()));
-				intPair.setInt2(Integer.parseInt(i.next()));
-				
-				objectsToMapTilesList.add(intPair);
-			}
-			return objectsToMapTilesList;
-			
 		}
 	}
 

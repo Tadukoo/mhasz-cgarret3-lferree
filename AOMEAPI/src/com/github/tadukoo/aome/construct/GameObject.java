@@ -34,6 +34,7 @@ public class GameObject extends Construct{
 		return "Objects";
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public void setDefaultColumnDefs(){
 		super.setDefaultColumnDefs();

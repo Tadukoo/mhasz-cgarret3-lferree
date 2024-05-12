@@ -18,6 +18,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 import com.github.tadukoo.aome.construct.ObjectCommandResponse;
+import com.github.tadukoo.aome.construct.ObjectToMapTileMap;
 import com.github.tadukoo.middle_earth.controller.Game;
 import com.github.tadukoo.aome.Quest;
 import com.github.tadukoo.aome.character.Character;
@@ -45,8 +46,9 @@ public class FakeDatabase implements IDatabase{
 	private final Map<Integer, Item> itemsByID;
 	private final List<GameObject> objects;
 	private final Map<Integer, GameObject> objectsByID;
-	private final GameMap map;
 	private final List<MapTile> mapTiles;
+	private final Map<Integer, MapTile> mapTilesByID;
+	private final GameMap map;
 	private final List<Quest> quests;
 	private final List<Character> characters;
 	private final List<Inventory> inventories;
@@ -68,19 +70,9 @@ public class FakeDatabase implements IDatabase{
 			
 			// Items
 			items = InitialData.getItems();
-			id = 1;
-			for(Item item: items){
-				item.setID(id);
-				id++;
-			}
 			
 			// Objects
 			objects = InitialData.getObjects();
-			id = 1;
-			for(GameObject object: objects){
-				object.setID(id);
-				id++;
-			}
 			
 			// Items to Objects
 			List<ItemToObjectMap> itemsToObjects = InitialData.getItemsToObjects();
@@ -101,9 +93,21 @@ public class FakeDatabase implements IDatabase{
 				object.addCommandResponse(objectCommandResponse.getCommand(), objectCommandResponse.getResponse());
 			}
 			
+			// Map Tiles
+			mapTiles = InitialData.getMapTiles();
+			
+			// Objects to Map Tiles
+			List<ObjectToMapTileMap> objectsToMapTiles = InitialData.getObjectsToMapTiles();
+			mapTilesByID = mapTiles.stream()
+					.collect(Collectors.toMap(MapTile::getID, mapTile -> mapTile));
+			objectsToMapTiles.forEach(objectToMapTile -> {
+				GameObject object = objectsByID.get(objectToMapTile.getObjectID());
+				MapTile mapTile = mapTilesByID.get(objectToMapTile.getMapTileID());
+				mapTile.addObject(object);
+			});
+			
 			//map = InitialData.getMap(); TODO: Fix?
 			map = new GameMap();
-			mapTiles = InitialData.getMapTiles();
 			quests = InitialData.getQuests();
 			characters = new ArrayList<>(); // TODO: Load in InitialData?
 			//inventoryList.addAll(InitialData.getItemsToInventories()); TODO: Fix?
@@ -245,26 +249,20 @@ public class FakeDatabase implements IDatabase{
 				:new DatabaseResult<>(null, "No objects match that ID number");
 	}
 	
+	/*
+	 * Map Tile Related Queries
+	 */
+	
+	/** {@inheritDoc} */
 	@Override
-	public List<MapTile> getAllMapTiles() {
-		
-		for (MapTile mapTile : mapTiles) {
-			if (mapTile.getObjects() != null) {
-				for (GameObject object : mapTile.getObjects()) {
-					for (GameObject listedObject : getAllObjects().result()) {
-						if (object.getID() == listedObject.getID()) {
-							object.setCommandResponses(listedObject.getCommandResponses());
-							object.setItems(listedObject.getItems());
-							object.setLongDescription(listedObject.getLongDescription());
-							object.setName(listedObject.getName());
-							object.setShortDescription(listedObject.getShortDescription());
-							break;
-						}
-					}
-				}
-			}
-		}
-		return mapTiles;
+	public DatabaseResult<List<MapTile>> getAllMapTiles(){
+		return new DatabaseResult<>(mapTiles, null);
+	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public DatabaseResult<MapTile> getMapTileByID(int id){
+		return new DatabaseResult<>(mapTilesByID.get(id), null);
 	}
 	
 	@Override
@@ -314,18 +312,6 @@ public class FakeDatabase implements IDatabase{
 			}
 		}
 		return quests;
-	}
-	
-	@Override
-	public MapTile getMapTileByID(int mapTileID) {
-		for(MapTile mapTile : mapTiles) {
-			if(mapTile.getID() == mapTileID) {
-				return mapTile;
-			}
-		}
-		
-		System.out.println("No mapTiles match that ID number");
-		return null;
 	}
 	
 	@Override

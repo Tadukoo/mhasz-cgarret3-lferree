@@ -52,14 +52,19 @@ public interface IDatabase{
 	DatabaseResult<List<GameObject>> getAllObjects();
 	DatabaseResult<GameObject> getObjectByID(int id);
 	
+	/*
+	 * Map Tile Related Queries
+	 */
+	
+	DatabaseResult<List<MapTile>> getAllMapTiles();
+	DatabaseResult<MapTile> getMapTileByID(int id);
+	
 	GameMap getMap();
 	Player getPlayer();
 	
-	List<MapTile> getAllMapTiles();
 	List<Character> getAllCharacters();
 	List<Quest> getAllQuests();
 	
-	MapTile getMapTileByID(int mapTileID);
 	Inventory getInventoryByID(int inventoryID);
 	
 	Character getCharacterByName(String characterName);

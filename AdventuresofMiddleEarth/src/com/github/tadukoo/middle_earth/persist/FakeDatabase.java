@@ -4,8 +4,8 @@ import com.github.tadukoo.aome.InitialData;
 import com.github.tadukoo.aome.User;
 import com.github.tadukoo.aome.construct.ItemToObjectMap;
 import com.github.tadukoo.aome.construct.ItemType;
-import com.github.tadukoo.aome.construct.GameMap;
-import com.github.tadukoo.aome.construct.MapTile;
+import com.github.tadukoo.aome.construct.map.GameMap;
+import com.github.tadukoo.aome.construct.map.MapTile;
 import com.github.tadukoo.aome.construct.Item;
 import com.github.tadukoo.aome.construct.GameObject;
 
@@ -18,7 +18,8 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 import com.github.tadukoo.aome.construct.ObjectCommandResponse;
-import com.github.tadukoo.aome.construct.ObjectToMapTileMap;
+import com.github.tadukoo.aome.construct.map.MapTileConnections;
+import com.github.tadukoo.aome.construct.map.ObjectToMapTileMap;
 import com.github.tadukoo.middle_earth.controller.Game;
 import com.github.tadukoo.aome.Quest;
 import com.github.tadukoo.aome.character.Character;
@@ -105,6 +106,13 @@ public class FakeDatabase implements IDatabase{
 				MapTile mapTile = mapTilesByID.get(objectToMapTile.getMapTileID());
 				mapTile.addObject(object);
 			});
+			
+			// Map Tile Connections
+			List<MapTileConnections> mapTileConnections = InitialData.getMapTileConnections();
+			for(MapTileConnections mapTileConnection: mapTileConnections){
+				int mapTileID = mapTileConnection.getMapTileID();
+				mapTilesByID.get(mapTileID).setConnections(mapTileConnection);
+			}
 			
 			//map = InitialData.getMap(); TODO: Fix?
 			map = new GameMap();

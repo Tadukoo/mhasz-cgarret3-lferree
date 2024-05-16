@@ -1,6 +1,7 @@
-package com.github.tadukoo.aome.construct;
+package com.github.tadukoo.aome.construct.map;
 
 import com.github.tadukoo.aome.ManyToManyDatabasePojo;
+import com.github.tadukoo.aome.construct.GameObject;
 
 /**
  * A ManyToMany mapping of Objects to Map Tiles

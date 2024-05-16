@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 import com.github.tadukoo.aome.character.Character;
 import com.github.tadukoo.aome.character.Player;
-import com.github.tadukoo.aome.construct.GameMap;
-import com.github.tadukoo.aome.construct.MapTile;
+import com.github.tadukoo.aome.construct.map.GameMap;
+import com.github.tadukoo.aome.construct.map.MapTile;
 import com.github.tadukoo.middle_earth.persist.DatabaseProvider;
 import com.github.tadukoo.middle_earth.persist.FakeDatabase;
 import org.junit.jupiter.api.BeforeEach;
@@ -69,14 +69,14 @@ public class GameCharacterActionsTest{
 		northWestOfStarting.setLongDescription("You arrive in... The narrator died of boredom, so we're waiting on a new one.");
 		
 		// Set Connections
-		starting.setConnection("north", 1);
-		starting.setConnection("northeast", 2);
-		starting.setConnection("east", 3);
-		starting.setConnection("southeast", 4);
-		starting.setConnection("south", 5);
-		starting.setConnection("southwest", 6);
-		starting.setConnection("west", 7);
-		starting.setConnection("northwest", 8);
+		starting.setNorthConnection(1);
+		starting.setNortheastConnection(2);
+		starting.setEastConnection(3);
+		starting.setSoutheastConnection(4);
+		starting.setSouthConnection(5);
+		starting.setSouthwestConnection(6);
+		starting.setWestConnection(7);
+		starting.setNorthwestConnection(8);
 		
 		// Create Map
 		map = new GameMap();

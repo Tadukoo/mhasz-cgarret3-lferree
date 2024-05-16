@@ -12,8 +12,8 @@ import com.github.tadukoo.aome.character.Character;
 import com.github.tadukoo.aome.character.Enemy;
 import com.github.tadukoo.aome.construct.Item;
 import com.github.tadukoo.aome.construct.GameObject;
-import com.github.tadukoo.aome.construct.GameMap;
-import com.github.tadukoo.aome.construct.MapTile;
+import com.github.tadukoo.aome.construct.map.GameMap;
+import com.github.tadukoo.aome.construct.map.MapTile;
 import com.github.tadukoo.middle_earth.persist.pojo.DatabaseResult;
 
 /**
@@ -51,6 +51,9 @@ public interface IDatabase{
 	
 	DatabaseResult<List<GameObject>> getAllObjects();
 	DatabaseResult<GameObject> getObjectByID(int id);
+	// TODO: Below 2 methods?
+	void addItemToObject(Item item, GameObject object);
+	Item removeItemFromObject(Item item, GameObject object);
 	
 	/*
 	 * Map Tile Related Queries
@@ -70,10 +73,8 @@ public interface IDatabase{
 	Character getCharacterByName(String characterName);
 	
 	Item removeItemFromInventory(Item item, Inventory inventory);
-	Item removeItemFromObject(Item item, GameObject object);
 	
 	void addItemToInventory(Item item, Inventory inventory);
-	void addItemToObject(Item item, GameObject object);
 	
 	Game loadGame(int gameID);
 	void saveGame(Game game);

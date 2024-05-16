@@ -2,7 +2,6 @@ package com.github.tadukoo.aome;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -10,12 +9,13 @@ import com.github.tadukoo.aome.character.Enemy;
 import com.github.tadukoo.aome.character.Player;
 import com.github.tadukoo.aome.construct.GameObject;
 import com.github.tadukoo.aome.construct.ItemToObjectMap;
-import com.github.tadukoo.aome.construct.GameMap;
-import com.github.tadukoo.aome.construct.MapTile;
+import com.github.tadukoo.aome.construct.map.GameMap;
+import com.github.tadukoo.aome.construct.map.MapTile;
 import com.github.tadukoo.aome.construct.Item;
 import com.github.tadukoo.aome.construct.ItemType;
 import com.github.tadukoo.aome.construct.ObjectCommandResponse;
-import com.github.tadukoo.aome.construct.ObjectToMapTileMap;
+import com.github.tadukoo.aome.construct.map.MapTileConnections;
+import com.github.tadukoo.aome.construct.map.ObjectToMapTileMap;
 
 /**
  * A class used to load Initial Data from CSV files
@@ -210,6 +210,38 @@ public class InitialData{
 		}
 	}
 	
+	/**
+	 * @return A List of {@link MapTileConnections} based on the CSV to use for initial data
+	 * @throws IOException If anything goes wrong
+	 */
+	public static List<MapTileConnections> getMapTileConnections() throws IOException {
+		List<MapTileConnections> mapTileConnections = new ArrayList<>();
+		// Read Map Tile Connections
+		try(ReadCSV readMapTileConnections = new ReadCSV("maptileconnections.csv")){
+			List<String> tuple = readMapTileConnections.next();
+			while(tuple != null){
+				// Create the Map Tile Connections and add it to the list
+				int mapTileID = Integer.parseInt(tuple.get(0));
+				Integer northID = Integer.parseInt(tuple.get(1));
+				Integer northeastID = Integer.parseInt(tuple.get(2));
+				Integer eastID = Integer.parseInt(tuple.get(3));
+				Integer southeastID = Integer.parseInt(tuple.get(4));
+				Integer southID = Integer.parseInt(tuple.get(5));
+				Integer southwestID = Integer.parseInt(tuple.get(6));
+				Integer westID = Integer.parseInt(tuple.get(7));
+				Integer northwestID = Integer.parseInt(tuple.get(8));
+				mapTileConnections.add(new MapTileConnections(mapTileID,
+						northID, northeastID,
+						eastID, southeastID, southID,
+						southwestID, westID, northwestID));
+				
+				// Grab next tuple
+				tuple = readMapTileConnections.next();
+			}
+			return mapTileConnections;
+		}
+	}
+	
 	public static ArrayList<Integer> getInventoriesToCharacters() throws IOException {
 		ArrayList<Integer> inventoriesToCharactersList = new ArrayList<>();
 		try(ReadCSV readInventoriesToCharacters = new ReadCSV("inventoriestocharacters.csv")){
@@ -328,33 +360,6 @@ public class InitialData{
 				intPairList.add(intPair);
 			}
 			return intPairList;
-		}
-	}
-	
-	public static ArrayList<HashMap<String, Integer>> getMapTileConnections() throws IOException {
-		ArrayList<HashMap<String, Integer>> mapTileConnectionsList = new ArrayList<>();
-		try(ReadCSV readMapTileConnections = new ReadCSV("maptileconnections.csv")){
-			while(true){
-				List<String> tuple = readMapTileConnections.next();
-				
-				if(tuple == null){
-					break;
-				}
-				Iterator<String> i = tuple.iterator();
-				HashMap<String, Integer> mapTileConnections = new HashMap<>();
-				
-				mapTileConnections.put("north", Integer.parseInt(i.next()));
-				mapTileConnections.put("northeast", Integer.parseInt(i.next()));
-				mapTileConnections.put("east", Integer.parseInt(i.next()));
-				mapTileConnections.put("southeast", Integer.parseInt(i.next()));
-				mapTileConnections.put("south", Integer.parseInt(i.next()));
-				mapTileConnections.put("southwest", Integer.parseInt(i.next()));
-				mapTileConnections.put("west", Integer.parseInt(i.next()));
-				mapTileConnections.put("northwest", Integer.parseInt(i.next()));
-				
-				mapTileConnectionsList.add(mapTileConnections);
-			}
-			return mapTileConnectionsList;
 		}
 	}
 

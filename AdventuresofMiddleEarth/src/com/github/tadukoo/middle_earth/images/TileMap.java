@@ -4,10 +4,20 @@ import java.io.*;
 
 import javax.imageio.ImageIO;
 
-import com.github.tadukoo.aome.construct.MapTile;
+import com.github.tadukoo.aome.construct.map.MapTile;
+import com.github.tadukoo.util.StringUtil;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+/**
+ * A class used for displaying the Map using tiles
+ *
+ * @author Logan Ferree (Tadukoo)
+ * @author Matt Hasz (mhasz239)
+ * @version 2.0
+ * @since 1.0 or earlier
+ */
 public class TileMap {
 	private int x;
 	private int y;
@@ -127,15 +137,14 @@ public class TileMap {
 						write.print(map[row][col] + " ");
 					}
 				}
-				if (row == mapHeight - 1) {}
-				else {
+				if(row != mapHeight - 1){
 					write.println();
 				}
 			}
 			write.close();
 		} catch (FileNotFoundException e) {
 			String newFolder = fileLocation.substring(0, fileLocation.length()-12);
-			Boolean success = new File(newFolder).mkdir();
+			boolean success = new File(newFolder).mkdir();
 			if (success) {
 				save(fileLocation);
 			}
@@ -143,33 +152,33 @@ public class TileMap {
 		
 	}
 	
-	private String getMapTileString(MapTile tile) {
+	private String getMapTileString(MapTile tile){
 		String connection = "";
-		if (tile.getConnections().get("northwest") == 0) {
+		if(tile.getNorthwestConnection() == null){
 			connection = connection + "1";
 		}
-		if (tile.getConnections().get("north") == 0) {
+		if(tile.getNorthConnection() == null){
 			connection = connection + "2";
 		}
-		if (tile.getConnections().get("northeast") == 0) {
+		if(tile.getNortheastConnection() == null){
 			connection = connection + "3";
 		}
-		if (tile.getConnections().get("east") == 0) {
+		if(tile.getEastConnection() == null){
 			connection = connection + "4";
 		}
-		if (tile.getConnections().get("southeast") == 0) {
+		if(tile.getSoutheastConnection() == null){
 			connection = connection + "5";
 		}
-		if (tile.getConnections().get("south") == 0) {
+		if(tile.getSouthConnection() == null){
 			connection = connection + "6";
 		}
-		if (tile.getConnections().get("southwest") == 0) {
+		if(tile.getSouthwestConnection() == null){
 			connection = connection + "7";
 		}
-		if (tile.getConnections().get("west") == 0) {
+		if(tile.getWestConnection() == null){
 			connection = connection + "8";
 		}
-		if (connection == "") {
+		if(StringUtil.isBlank(connection)){
 			connection = "0";
 		}
 		return connection;

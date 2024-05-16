@@ -5,9 +5,10 @@ import com.github.tadukoo.aome.User;
 import com.github.tadukoo.aome.construct.GameObject;
 import com.github.tadukoo.aome.construct.Item;
 import com.github.tadukoo.aome.construct.ItemToObjectMap;
-import com.github.tadukoo.aome.construct.MapTile;
+import com.github.tadukoo.aome.construct.map.MapTile;
 import com.github.tadukoo.aome.construct.ObjectCommandResponse;
-import com.github.tadukoo.aome.construct.ObjectToMapTileMap;
+import com.github.tadukoo.aome.construct.map.MapTileConnections;
+import com.github.tadukoo.aome.construct.map.ObjectToMapTileMap;
 import com.github.tadukoo.database.mysql.Database;
 import com.github.tadukoo.util.LoggerUtil;
 import com.github.tadukoo.util.logger.EasyLogger;
@@ -73,28 +74,15 @@ public class SetupDatabase{
 		// Create Objects to Map Tiles table
 		ObjectToMapTileMap objectToMapTile = new ObjectToMapTileMap();
 		objectToMapTile.createTable(database);
+		
+		// Create Map Tile Connections table
+		MapTileConnections mapTileConnections = new MapTileConnections();
+		mapTileConnections.createTable(database);
 	}
 	
 	/*
 	 * Other Tables Creation to be moved
 	 *
-				stmt4 = conn.prepareStatement(
-						"create table maptileconnections (" +
-						"   maptile_id integer primary key " +
-						"       generated always as identity (start with 1, increment by 1), " +
-
-						"   north int," +
-						"	northeast int," +
-						"   east int," +
-						"   southeast int," +
-						"   south int," +
-						"   southwest int," +
-						"   west int," +
-						"   northwest int" +
-						")"
-				);
-				stmt4.executeUpdate();
-				
 				stmt7 = conn.prepareStatement(
 						"create table itemstoinventories ("
 						+ "item_id int, "
@@ -249,6 +237,12 @@ public class SetupDatabase{
 		List<ObjectToMapTileMap> objectsToMapTiles = InitialData.getObjectsToMapTiles();
 		for(ObjectToMapTileMap objectToMapTile: objectsToMapTiles){
 			objectToMapTile.storeValues(database, false);
+		}
+		
+		// Load Map Tile Connections
+		List<MapTileConnections> mapTileConnections = InitialData.getMapTileConnections();
+		for(MapTileConnections mapTileConnection: mapTileConnections){
+			mapTileConnection.storeValues(database, false);
 		}
 	}
 }

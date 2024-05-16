@@ -6,9 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -23,8 +21,8 @@ import com.github.tadukoo.aome.construct.ItemType;
 import com.github.tadukoo.aome.construct.GameObject;
 import com.github.tadukoo.middle_earth.persist.pojo.DatabaseResult;
 import com.github.tadukoo.aome.StringPair;
-import com.github.tadukoo.aome.construct.GameMap;
-import com.github.tadukoo.aome.construct.MapTile;
+import com.github.tadukoo.aome.construct.map.GameMap;
+import com.github.tadukoo.aome.construct.map.MapTile;
 
 @Deprecated
 public class DerbyDatabase implements IDatabase {
@@ -95,64 +93,6 @@ public class DerbyDatabase implements IDatabase {
 		return conn;
 	}
 	
-	/************************************************************************************************
-	 * 										Loading Methods
-	 * **********************************************************************************************/
-	
-	private void loadItem(Item item, ResultSet resultSet) throws SQLException{
-		int index = 1;
-		item.setID(resultSet.getInt(index++));
-		
-		item.setName(resultSet.getString(index++));
-		item.setLongDescription(resultSet.getString(index++));
-		item.setShortDescription(resultSet.getString(index++));
-		
-		item.setDescriptionUpdate(resultSet.getString(index++));
-		item.setAttackBonus(resultSet.getInt(index++));
-  		item.setDefenseBonus(resultSet.getInt(index++));
-  		item.setHPBonus(resultSet.getInt(index++));
-
-		item.setWeight(resultSet.getFloat(index++));
-		item.setType(ItemType.valueOf(resultSet.getString(index++)));
-		item.setLevelRequirement(resultSet.getInt(index));
-	}
-	
-	private void loadObject(GameObject object, ResultSet resultSet) throws SQLException{
-		int index = 1;
-		object.setID(resultSet.getInt(index++));
-		object.setName(resultSet.getString(index++));
-		object.setLongDescription(resultSet.getString(index++));
-		object.setShortDescription(resultSet.getString(index));
-	}
-	
-	private void loadObjectCommandResponse(HashMap<String, String> objectCommandResponse, ResultSet resultSet) {
-		try {
-			objectCommandResponse.put(resultSet.getString(1), resultSet.getString(2));
-		} catch (SQLException e) {
-			throw new UnsupportedOperationException("Derby Database no longer supported!");
-		}
-	}
-	
-	private void loadMapTileConnections(Map<String, Integer> mapTileConnections, ResultSet resultSet, int index) throws SQLException {
-		mapTileConnections.put("north", resultSet.getInt(index++));
-		mapTileConnections.put("northeast", resultSet.getInt(index++));
-		mapTileConnections.put("east", resultSet.getInt(index++));
-		mapTileConnections.put("southeast", resultSet.getInt(index++));
-		mapTileConnections.put("south", resultSet.getInt(index++));
-		mapTileConnections.put("southwest", resultSet.getInt(index++));
-		mapTileConnections.put("west", resultSet.getInt(index++));
-		mapTileConnections.put("northwest", resultSet.getInt(index));
-	}
-	
-	private void loadMapTile(MapTile mapTile, ResultSet resultSet) throws SQLException{
-		int index = 1;
-		mapTile.setID(resultSet.getInt(index++));
-		mapTile.setName(resultSet.getString(index++));
-		mapTile.setLongDescription(resultSet.getString(index++));
-		mapTile.setShortDescription(resultSet.getString(index++));		
-		mapTile.setDifficulty(resultSet.getInt(index));
-	}
-	 
 	private void loadMap(GameMap map, ResultSet resultSet) throws SQLException{
 		int index = 1;
 		map.setID(resultSet.getInt(index++));
@@ -370,251 +310,12 @@ public class DerbyDatabase implements IDatabase {
 	///////////////////////////////////////////////////////////////////////////////////////
 	@Override
 	public DatabaseResult<List<MapTile>> getAllMapTiles(){
-		return executeTransaction(conn -> {
-			PreparedStatement stmt = null;
-			PreparedStatement stmt2 = null;
-			ResultSet resultSetMapTiles = null;
-			ResultSet resultSetObjects = null;
-			ResultSet resultSetObjectCommandResponses = null;
-			ResultSet resultSetItems = null;
-			
-			try{
-				// retrieve all attributes
-				stmt = conn.prepareStatement(
-						"select * "
-								+ "from maptiles, maptileconnections "
-								+ "where maptiles.maptile_id = maptileconnections.maptile_id"
-				);
-				
-				ArrayList<MapTile> resultMapTiles = new ArrayList<>();
-				
-				resultSetMapTiles = stmt.executeQuery();
-				
-				// for testing that a result was returned
-				boolean found = false;
-				
-				while(resultSetMapTiles.next()){
-					found = true;
-					
-					MapTile mapTile = new MapTile();
-					loadMapTile(mapTile, resultSetMapTiles);
-					
-					// remember to skip an index for the repeated maptile_id from the connections table
-					loadMapTileConnections(mapTile.getConnections(), resultSetMapTiles, 7);
-					
-					// Now get all objects associated with the mapTile
-					stmt = conn.prepareStatement(
-							"select * "
-									+ "from objects, objectstomaptiles "
-									+ "where objectstomaptiles.maptile_id = ? "
-									+ "AND objectstomaptiles.object_id = objects.object_id "
-					);
-					
-					stmt.setInt(1, mapTile.getID());
-					ArrayList<GameObject> resultObjects = new ArrayList<>();
-					
-					resultSetObjects = stmt.executeQuery();
-					
-					while(resultSetObjects.next()){
-						GameObject object = new GameObject();
-						loadObject(object, resultSetObjects);
-						
-						// Now get the commandResponses
-						stmt2 = conn.prepareStatement(
-								"select objectcommandresponses.command, objectcommandresponses.response "
-										+ "from objectcommandresponses "
-										+ "where objectcommandresponses.object_id = ?"
-						);
-						stmt2.setInt(1, object.getID());
-						ArrayList<HashMap<String, String>> resultObjectCommandResponses = new ArrayList<>();
-						
-						resultSetObjectCommandResponses = stmt2.executeQuery();
-						
-						while(resultSetObjectCommandResponses.next()){
-							HashMap<String, String> objectCommandResponse = new HashMap<>();
-							loadObjectCommandResponse(objectCommandResponse, resultSetObjectCommandResponses);
-							
-							resultObjectCommandResponses.add(objectCommandResponse);
-						}
-						if(!resultObjectCommandResponses.isEmpty()){
-							for(HashMap<String, String> objectCommandResponse: resultObjectCommandResponses){
-								object.setCommandResponses(objectCommandResponse);
-							}
-						}
-						
-						// Now get the items in the object
-						stmt = conn.prepareStatement(
-								"select * " +
-										"	from items, itemstoobjects" +
-										"   where itemstoobjects.object_id = ?"
-										+ "AND itemstoobjects.item_id = items.item_id "
-						);
-						
-						stmt.setInt(1, object.getID());
-						ArrayList<Item> resultItems = new ArrayList<>();
-						
-						resultSetItems = stmt.executeQuery();
-						
-						while(resultSetItems.next()){
-							Item item = new Item();
-							loadItem(item, resultSetItems);
-							
-							resultItems.add(item);
-						}
-						if(!resultItems.isEmpty()){
-							for(Item item: resultItems){
-								object.addItem(item);
-							}
-						}
-						
-						resultObjects.add(object);
-					}
-					if(!resultObjects.isEmpty()){
-						mapTile.setObjects(resultObjects);
-					}
-					
-					resultMapTiles.add(mapTile);
-				}
-				
-				// check if the maptiles were found
-				if(!found){
-					System.out.println("<maptiles> table is empty");
-				}
-				
-				return new DatabaseResult<>(resultMapTiles, null);
-			}finally{
-				DBUtil.closeQuietly(resultSetItems);
-				DBUtil.closeQuietly(resultSetObjectCommandResponses);
-				DBUtil.closeQuietly(resultSetObjects);
-				DBUtil.closeQuietly(resultSetMapTiles);
-				DBUtil.closeQuietly(stmt2);
-				DBUtil.closeQuietly(stmt);
-				DBUtil.closeQuietly(conn);
-			}
-		});
+		throw new UnsupportedOperationException("DerbyDatabase not supported anymore!");
 	}
 
 	@Override
 	public DatabaseResult<MapTile> getMapTileByID(int mapTileID) {
-		return executeTransaction(conn -> {
-			
-			PreparedStatement stmt = null;
-			PreparedStatement stmt2 = null;
-			ResultSet resultSetMapTiles = null;
-			ResultSet resultSetObjects = null;
-			ResultSet resultSetObjectCommandResponses = null;
-			ResultSet resultSetItems = null;
-			try{
-				// retrieve all attributes
-				stmt = conn.prepareStatement(
-						"select * " +
-								"  from maptiles, maptileconnections "
-								+ "where maptiles.maptile_id = ? "
-								+ " and maptiles.maptile_id = maptileconnections.maptile_id"
-				);
-				stmt.setInt(1, mapTileID);
-				
-				resultSetMapTiles = stmt.executeQuery();
-				
-				MapTile mapTile = new MapTile();
-				
-				// for testing that a result was returned
-				boolean found = false;
-				
-				while(resultSetMapTiles.next()){
-					found = true;
-					
-					loadMapTile(mapTile, resultSetMapTiles);
-					loadMapTileConnections(mapTile.getConnections(), resultSetMapTiles, 7);
-					
-					// Now get all objects associated with the mapTile
-					stmt = conn.prepareStatement(
-							"select * "
-									+ "from objects, objectstomaptiles "
-									+ "where objectstomaptiles.maptile_id = ? "
-									+ "AND objectstomaptiles.object_id = objects.object_id "
-					);
-					
-					stmt.setInt(1, mapTile.getID());
-					ArrayList<GameObject> resultObjects = new ArrayList<>();
-					
-					resultSetObjects = stmt.executeQuery();
-					
-					while(resultSetObjects.next()){
-						GameObject object = new GameObject();
-						loadObject(object, resultSetObjects);
-						
-						// Now get the commandResponses
-						stmt2 = conn.prepareStatement(
-								"select objectcommandresponses.command, objectcommandresponses.response "
-										+ "from objectcommandresponses "
-										+ "where objectcommandresponses.object_id = ?"
-						);
-						stmt2.setInt(1, object.getID());
-						ArrayList<HashMap<String, String>> resultObjectCommandResponses = new ArrayList<>();
-						
-						resultSetObjectCommandResponses = stmt2.executeQuery();
-						
-						while(resultSetObjectCommandResponses.next()){
-							HashMap<String, String> objectCommandResponse = new HashMap<>();
-							loadObjectCommandResponse(objectCommandResponse, resultSetObjectCommandResponses);
-							
-							resultObjectCommandResponses.add(objectCommandResponse);
-						}
-						if(!resultObjectCommandResponses.isEmpty()){
-							for(HashMap<String, String> objectCommandResponse: resultObjectCommandResponses){
-								object.setCommandResponses(objectCommandResponse);
-							}
-						}
-						
-						// Now get the items in the object
-						stmt = conn.prepareStatement(
-								"select * " +
-										"	from items, itemstoobjects" +
-										"   where itemstoobjects.object_id = ?"
-										+ "AND itemstoobjects.item_id = items.item_id "
-						);
-						
-						stmt.setInt(1, object.getID());
-						ArrayList<Item> resultItems = new ArrayList<>();
-						
-						resultSetItems = stmt.executeQuery();
-						
-						while(resultSetItems.next()){
-							Item item = new Item();
-							loadItem(item, resultSetItems);
-							
-							resultItems.add(item);
-						}
-						if(!resultItems.isEmpty()){
-							for(Item item: resultItems){
-								object.addItem(item);
-							}
-						}
-						
-						resultObjects.add(object);
-					}
-					if(!resultObjects.isEmpty()){
-						mapTile.setObjects(resultObjects);
-					}
-				}
-				
-				// check if the maptile was found
-				if(!found){
-					System.out.println("no maptiles with that id");
-				}
-				
-				return new DatabaseResult<>(mapTile, null);
-			}finally{
-				DBUtil.closeQuietly(resultSetItems);
-				DBUtil.closeQuietly(resultSetObjectCommandResponses);
-				DBUtil.closeQuietly(resultSetObjects);
-				DBUtil.closeQuietly(resultSetMapTiles);
-				DBUtil.closeQuietly(stmt);
-				DBUtil.closeQuietly(stmt2);
-				DBUtil.closeQuietly(conn);
-			}
-		});
+		throw new UnsupportedOperationException("DerbyDatabase not supported anymore!");
 	}
 	
 	///////////////////////////////////////////////////////////////////////////////////////
@@ -1114,15 +815,17 @@ public class DerbyDatabase implements IDatabase {
 					
 					// Connections for each mapTile
 					int i = 1;
-					insertMapTileConnections.setInt(i++, mapTile.getConnections().get("north"));
-					insertMapTileConnections.setInt(i++, mapTile.getConnections().get("northeast"));
-					insertMapTileConnections.setInt(i++, mapTile.getConnections().get("east"));
-					insertMapTileConnections.setInt(i++, mapTile.getConnections().get("southeast"));
-					insertMapTileConnections.setInt(i++, mapTile.getConnections().get("south"));
-					insertMapTileConnections.setInt(i++, mapTile.getConnections().get("southwest"));
-					insertMapTileConnections.setInt(i++, mapTile.getConnections().get("west"));
-					insertMapTileConnections.setInt(i, mapTile.getConnections().get("northwest"));
+					/*
+					insertMapTileConnections.setInt(i++, mapTile.getOldConnections().get("north"));
+					insertMapTileConnections.setInt(i++, mapTile.getOldConnections().get("northeast"));
+					insertMapTileConnections.setInt(i++, mapTile.getOldConnections().get("east"));
+					insertMapTileConnections.setInt(i++, mapTile.getOldConnections().get("southeast"));
+					insertMapTileConnections.setInt(i++, mapTile.getOldConnections().get("south"));
+					insertMapTileConnections.setInt(i++, mapTile.getOldConnections().get("southwest"));
+					insertMapTileConnections.setInt(i++, mapTile.getOldConnections().get("west"));
+					insertMapTileConnections.setInt(i, mapTile.getOldConnections().get("northwest"));
 					insertMapTileConnections.addBatch();
+					 */
 					
 					// If there are objects on the maptile, add them
 					if(mapTile.getObjects() != null){

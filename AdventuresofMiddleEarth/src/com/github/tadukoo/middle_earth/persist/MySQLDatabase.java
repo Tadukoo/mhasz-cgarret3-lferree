@@ -4,7 +4,8 @@ import com.github.tadukoo.aome.User;
 import com.github.tadukoo.aome.construct.ItemToObjectMap;
 import com.github.tadukoo.aome.construct.ItemType;
 import com.github.tadukoo.aome.construct.ObjectCommandResponse;
-import com.github.tadukoo.aome.construct.ObjectToMapTileMap;
+import com.github.tadukoo.aome.construct.map.MapTileConnections;
+import com.github.tadukoo.aome.construct.map.ObjectToMapTileMap;
 import com.github.tadukoo.database.mysql.Database;
 import com.github.tadukoo.database.mysql.syntax.SQLSyntaxUtil;
 import com.github.tadukoo.database.mysql.syntax.conditional.Conditional;
@@ -20,8 +21,8 @@ import com.github.tadukoo.aome.character.Enemy;
 import com.github.tadukoo.aome.character.Inventory;
 import com.github.tadukoo.aome.character.Player;
 import com.github.tadukoo.aome.construct.Item;
-import com.github.tadukoo.aome.construct.GameMap;
-import com.github.tadukoo.aome.construct.MapTile;
+import com.github.tadukoo.aome.construct.map.GameMap;
+import com.github.tadukoo.aome.construct.map.MapTile;
 import com.github.tadukoo.aome.construct.GameObject;
 import com.github.tadukoo.aome.Quest;
 import com.github.tadukoo.middle_earth.persist.pojo.DatabaseResult;
@@ -424,6 +425,13 @@ public class MySQLDatabase implements IDatabase{
 		for(ObjectToMapTileMap objectToMapTile: results){
 			mapTile.addObject(getObjectByID(objectToMapTile.getObjectID()).result());
 		}
+		
+		// Load Map Tile Connections for the Map Tile
+		MapTileConnections searchConnections = new MapTileConnections();
+		searchConnections.setMapTileID(mapTile.getID());
+		List<MapTileConnections> mapTileConnections = searchConnections.doSearch(
+				database, MapTileConnections.class, false);
+		mapTile.setConnections(mapTileConnections.get(0));
 	}
 	
 	/** {@inheritDoc} */

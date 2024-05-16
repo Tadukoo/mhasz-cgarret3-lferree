@@ -1,5 +1,7 @@
-package com.github.tadukoo.aome.construct;
+package com.github.tadukoo.aome.construct.map;
 
+import com.github.tadukoo.aome.construct.Construct;
+import com.github.tadukoo.aome.construct.GameObject;
 import com.github.tadukoo.database.mysql.syntax.ColumnDefinition;
 
 import java.util.ArrayList;
@@ -17,16 +19,19 @@ import java.util.Map;
  * @since 1.0 or earlier
  */
 public class MapTile extends Construct{
+	public static final String TABLE_NAME = "MapTiles";
 	/** Column name for Difficulty */
 	private static final String DIFFICULTY_COLUMN_NAME = "difficulty";
 	
 	private List<GameObject> objects;
+	private MapTileConnections mapTileConnections;
 	private final Map<String, Integer> connections;
 	private boolean visited;
 	private String enemyString;
 	
 	public MapTile(){
 		objects = new ArrayList<>();
+		mapTileConnections = new MapTileConnections();
 		connections = new HashMap<>();
 		connections.put("north", 0);
 		connections.put("northeast", 0);
@@ -41,7 +46,7 @@ public class MapTile extends Construct{
 	/** {@inheritDoc} */
 	@Override
 	public String getTableName(){
-		return "map_tiles";
+		return TABLE_NAME;
 	}
 	
 	/** {@inheritDoc} */
@@ -88,17 +93,76 @@ public class MapTile extends Construct{
 		objects.remove(remove);
 	}
 	
-	public Map<String, Integer> getConnections(){
-		return connections;
+	public MapTileConnections getConnections(){
+		return mapTileConnections;
 	}
 	
-	// Note: Having setConnections(HashMap) causes us to lose the default values of 0.
-	public void setConnection(String direction, int weight){
-		connections.put(direction, weight);
+	public Integer getNorthConnection(){
+		return mapTileConnections.getNorthTileID();
 	}
 	
-	public int getMoveValue(String direction) {
-		return connections.get(direction);
+	public Integer getNortheastConnection(){
+		return mapTileConnections.getNortheastTileID();
+	}
+	
+	public Integer getEastConnection(){
+		return mapTileConnections.getEastTileID();
+	}
+	
+	public Integer getSoutheastConnection(){
+		return mapTileConnections.getSoutheastTileID();
+	}
+	
+	public Integer getSouthConnection(){
+		return mapTileConnections.getSouthTileID();
+	}
+	
+	public Integer getSouthwestConnection(){
+		return mapTileConnections.getSouthwestTileID();
+	}
+	
+	public Integer getWestConnection(){
+		return mapTileConnections.getWestTileID();
+	}
+	
+	public Integer getNorthwestConnection(){
+		return mapTileConnections.getNorthwestTileID();
+	}
+	
+	public void setConnections(MapTileConnections mapTileConnections){
+		this.mapTileConnections = mapTileConnections;
+	}
+	
+	public void setNorthConnection(int northID){
+		mapTileConnections.setNorthTileID(northID);
+	}
+	
+	public void setNortheastConnection(int northeastID){
+		mapTileConnections.setNortheastTileID(northeastID);
+	}
+	
+	public void setEastConnection(int eastID){
+		mapTileConnections.setEastTileID(eastID);
+	}
+	
+	public void setSoutheastConnection(int southeastID){
+		mapTileConnections.setSoutheastTileID(southeastID);
+	}
+	
+	public void setSouthConnection(int southID){
+		mapTileConnections.setSouthTileID(southID);
+	}
+	
+	public void setSouthwestConnection(int southwestID){
+		mapTileConnections.setSouthwestTileID(southwestID);
+	}
+	
+	public void setWestConnection(int westID){
+		mapTileConnections.setWestTileID(westID);
+	}
+	
+	public void setNorthwestConnection(int northwestID){
+		mapTileConnections.setNorthwestTileID(northwestID);
 	}
 	
 	public void setVisited(boolean visited){

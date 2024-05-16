@@ -2,7 +2,7 @@ package com.github.tadukoo.middle_earth.images;
 
 import javax.swing.JFrame;
 
-import com.github.tadukoo.aome.construct.MapTile;
+import com.github.tadukoo.aome.construct.map.MapTile;
 
 public class DrawMap {
 	
@@ -11,9 +11,9 @@ public class DrawMap {
 		JFrame window = new JFrame("Map");
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		MapTile tile = new MapTile();
-		tile.setConnection("north", 3);
-		tile.setConnection("northeast", 4);
-		tile.setConnection("east", 1);
+		tile.setNorthConnection(3);
+		tile.setNortheastConnection(4);
+		tile.setEastConnection(1);
 		window.setContentPane(new MapPanel(tile));
 		window.pack();
 		window.setVisible(true);

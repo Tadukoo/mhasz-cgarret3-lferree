@@ -7,13 +7,14 @@ import java.util.Random;
 import javax.swing.JFrame;
 
 import com.github.tadukoo.aome.construct.GameObject;
+import com.github.tadukoo.aome.construct.map.MapTile;
 import com.github.tadukoo.middle_earth.images.MapPanel;
 import com.github.tadukoo.middle_earth.model.CombatSituation;
 import com.github.tadukoo.aome.Quest;
 import com.github.tadukoo.aome.character.Character;
 import com.github.tadukoo.aome.construct.Item;
 import com.github.tadukoo.aome.construct.ItemType;
-import com.github.tadukoo.aome.construct.GameMap;
+import com.github.tadukoo.aome.construct.map.GameMap;
 import com.github.tadukoo.middle_earth.persist.DatabaseProvider;
 import com.github.tadukoo.middle_earth.persist.IDatabase;
 
@@ -490,8 +491,19 @@ public class Game implements Engine{
 	@Override
 	public void move(String direction){
 		Character player = characters.get(0);
-		int moveValue = map.getMapTiles().get(player.getlocation()).getMoveValue(direction.toLowerCase());
-		if (moveValue != 0) {
+		MapTile currentTile = map.getMapTiles().get(player.getlocation());
+		Integer newTileID = switch(direction.toLowerCase()){
+			case "north" -> currentTile.getNorthConnection();
+			case "northeast" -> currentTile.getNortheastConnection();
+			case "east" -> currentTile.getEastConnection();
+			case "southeast" -> currentTile.getSoutheastConnection();
+			case "south" -> currentTile.getSouthConnection();
+			case "southwest" -> currentTile.getSouthwestConnection();
+			case "west" -> currentTile.getWestConnection();
+			case "northwest" -> currentTile.getNorthwestConnection();
+			default -> null;
+		};
+		if(newTileID != null){
 			if (player.getlocation() == 8 && direction.equalsIgnoreCase("west")) {
 				boolean key = false;
 				for (Item item : player.getinventory().getitems()) {
@@ -501,30 +513,30 @@ public class Game implements Engine{
 				}
 				if (key) {
 					add_dialog("You use the Ornate Key and open the gate.");
-					player.setlocation(player.getlocation() + moveValue);
-					add_dialog(map.getMapTiles().get(player.getlocation()).getLongDescription());
+					player.setlocation(newTileID);
+					MapTile mapTile = map.getMapTileByID(newTileID);
+					add_dialog(mapTile.getLongDescription());
 					mapPanel.setDirection(direction);
-					mapPanel.setMapTile(map.getMapTiles().get(player.getlocation()));
+					mapPanel.setMapTile(mapTile);
 					battle = new CombatSituation(this, 1, "Greater Demon", 0);
 				} else {
 					add_dialog("You seem to be missing something to be able to go that direction.");
 				}
 			} else {
+				player.setlocation(newTileID);
+				MapTile mapTile = map.getMapTileByID(newTileID);
+				add_dialog(mapTile.getName());
+				String string = mapTile.getLongDescription();
 				
-				player.setlocation(player.getlocation() + moveValue);
-				add_dialog(map.getMapTiles().get(player.getlocation()).getName());
-				String string = map.getMapTiles().get(player.getlocation()).getLongDescription();
-				
-				if (map.getMapTileByID(player.getlocation()).getObjects() != null) {
-					for (GameObject object : map.getMapTileByID(player.getlocation()).getObjects()){
-						string = string + " " + object.getLongDescription();
-						
+				if (mapTile.getObjects() != null) {
+					for (GameObject object : mapTile.getObjects()){
+						string += " " + object.getLongDescription();
 					}
 				}
 				add_dialog(string);
 				
 				mapPanel.setDirection(direction);
-				mapPanel.setMapTile(map.getMapTiles().get(player.getlocation()));
+				mapPanel.setMapTile(mapTile);
 				// TODO: Check if on the same tile as another player to trigger pvp combat (and thus not do an encounter check)
 				
 				Random rand = new Random(System.currentTimeMillis());

@@ -1,5 +1,6 @@
 package com.github.tadukoo.aome.construct;
 
+import com.github.tadukoo.aome.construct.map.MapTile;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -7,6 +8,7 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class MapTileTest{
@@ -19,41 +21,38 @@ public class MapTileTest{
 	
 	@Test
 	public void testDefaultConnections(){
-		// They all need to be 0 for the given 
-		assertEquals(0, (int) tile.getConnections().get("north"));
-		assertEquals(0, (int) tile.getConnections().get("south"));
-		assertEquals(0, (int) tile.getConnections().get("east"));
-		assertEquals(0, (int) tile.getConnections().get("west"));
-		assertEquals(0, (int) tile.getConnections().get("northwest"));
-		assertEquals(0, (int) tile.getConnections().get("northeast"));
-		assertEquals(0, (int) tile.getConnections().get("southwest"));
-		assertEquals(0, (int) tile.getConnections().get("southeast"));
+		// They all need to be null by default
+		assertNull(tile.getConnections().getNorthTileID());
+		assertNull(tile.getConnections().getNortheastTileID());
+		assertNull(tile.getConnections().getEastTileID());
+		assertNull(tile.getConnections().getSoutheastTileID());
+		assertNull(tile.getConnections().getSouthTileID());
+		assertNull(tile.getConnections().getSouthwestTileID());
+		assertNull(tile.getConnections().getWestTileID());
+		assertNull(tile.getConnections().getNorthwestTileID());
 		
-		// Check that it's only the 8 directions in the HashMap
-		assertEquals(8, tile.getConnections().keySet().size());
-		
-		// Same for these (just a different method for getting them)
-		assertEquals(0, tile.getMoveValue("north"));
-		assertEquals(0, tile.getMoveValue("south"));
-		assertEquals(0, tile.getMoveValue("east"));
-		assertEquals(0, tile.getMoveValue("west"));
-		assertEquals(0, tile.getMoveValue("northwest"));
-		assertEquals(0, tile.getMoveValue("northeast"));
-		assertEquals(0, tile.getMoveValue("southwest"));
-		assertEquals(0, tile.getMoveValue("southeast"));
+		// Also test the specific get methods
+		assertNull(tile.getNorthConnection());
+		assertNull(tile.getNortheastConnection());
+		assertNull(tile.getEastConnection());
+		assertNull(tile.getSoutheastConnection());
+		assertNull(tile.getSouthConnection());
+		assertNull(tile.getSouthwestConnection());
+		assertNull(tile.getWestConnection());
+		assertNull(tile.getNorthwestConnection());
 	}
 	
 	@Test
 	public void testSetConnection(){
 		// Set north to be 10
-		tile.setConnection("north", 10);
+		tile.setNorthConnection(10);
 		// Check north is 10
-		assertEquals(10, (int) tile.getConnections().get("north"));
+		assertEquals(10, tile.getNorthConnection());
 		
 		// Set north to be 93
-		tile.setConnection("north", 93);
+		tile.setNorthConnection(93);
 		// Check north to be 93
-		assertEquals(93, (int) tile.getConnections().get("north"));
+		assertEquals(93, tile.getNorthConnection());
 	}
 	
 	@Test

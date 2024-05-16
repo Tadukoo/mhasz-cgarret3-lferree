@@ -1,4 +1,6 @@
-package com.github.tadukoo.aome.construct;
+package com.github.tadukoo.aome.construct.map;
+
+import com.github.tadukoo.aome.construct.Construct;
 
 import java.util.ArrayList;
 

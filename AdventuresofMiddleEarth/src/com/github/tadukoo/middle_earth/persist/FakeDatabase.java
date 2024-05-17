@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 
 import com.github.tadukoo.aome.construct.ObjectCommandResponse;
 import com.github.tadukoo.aome.construct.map.MapTileConnections;
+import com.github.tadukoo.aome.construct.map.MapTileToMapMap;
 import com.github.tadukoo.aome.construct.map.ObjectToMapTileMap;
 import com.github.tadukoo.middle_earth.controller.Game;
 import com.github.tadukoo.aome.Quest;
@@ -49,7 +50,8 @@ public class FakeDatabase implements IDatabase{
 	private final Map<Integer, GameObject> objectsByID;
 	private final List<MapTile> mapTiles;
 	private final Map<Integer, MapTile> mapTilesByID;
-	private final GameMap map;
+	private final List<GameMap> maps;
+	private final Map<Integer, GameMap> mapsByID;
 	private final List<Quest> quests;
 	private final List<Character> characters;
 	private final List<Inventory> inventories;
@@ -114,8 +116,19 @@ public class FakeDatabase implements IDatabase{
 				mapTilesByID.get(mapTileID).setConnections(mapTileConnection);
 			}
 			
-			//map = InitialData.getMap(); TODO: Fix?
-			map = new GameMap();
+			// Maps
+			maps = InitialData.getMaps();
+			mapsByID = maps.stream()
+					.collect(Collectors.toMap(GameMap::getID, map -> map));
+			
+			// Map Tiles to Maps
+			List<MapTileToMapMap> mapTilesToMaps = InitialData.getMapTilesToMaps();
+			for(MapTileToMapMap mapTileToMap: mapTilesToMaps){
+				MapTile mapTile = mapTilesByID.get(mapTileToMap.getMapTileID());
+				GameMap map = mapsByID.get(mapTileToMap.getMapID());
+				map.addMapTile(mapTile);
+			}
+			
 			quests = InitialData.getQuests();
 			characters = new ArrayList<>(); // TODO: Load in InitialData?
 			//inventoryList.addAll(InitialData.getItemsToInventories()); TODO: Fix?
@@ -258,7 +271,7 @@ public class FakeDatabase implements IDatabase{
 	}
 	
 	/*
-	 * Map Tile Related Queries
+	 * Map Tile and Map Related Queries
 	 */
 	
 	/** {@inheritDoc} */
@@ -273,15 +286,10 @@ public class FakeDatabase implements IDatabase{
 		return new DatabaseResult<>(mapTilesByID.get(id), null);
 	}
 	
+	/** {@inheritDoc} */
 	@Override
-	public GameMap getMap() {
-		getAllItems();
-		getAllObjects();
-		getAllMapTiles();
-		for(MapTile mapTile : mapTiles) {
-			map.addMapTile(mapTile);
-		}
-		return map;
+	public DatabaseResult<GameMap> getMapByID(int id){
+		return new DatabaseResult<>(mapsByID.get(id), null);
 	}
 	
 	@Override

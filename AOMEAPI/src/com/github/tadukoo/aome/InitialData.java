@@ -15,6 +15,7 @@ import com.github.tadukoo.aome.construct.Item;
 import com.github.tadukoo.aome.construct.ItemType;
 import com.github.tadukoo.aome.construct.ObjectCommandResponse;
 import com.github.tadukoo.aome.construct.map.MapTileConnections;
+import com.github.tadukoo.aome.construct.map.MapTileToMapMap;
 import com.github.tadukoo.aome.construct.map.ObjectToMapTileMap;
 
 /**
@@ -214,7 +215,7 @@ public class InitialData{
 	 * @return A List of {@link MapTileConnections} based on the CSV to use for initial data
 	 * @throws IOException If anything goes wrong
 	 */
-	public static List<MapTileConnections> getMapTileConnections() throws IOException {
+	public static List<MapTileConnections> getMapTileConnections() throws IOException{
 		List<MapTileConnections> mapTileConnections = new ArrayList<>();
 		// Read Map Tile Connections
 		try(ReadCSV readMapTileConnections = new ReadCSV("maptileconnections.csv")){
@@ -239,6 +240,52 @@ public class InitialData{
 				tuple = readMapTileConnections.next();
 			}
 			return mapTileConnections;
+		}
+	}
+	
+	/**
+	 * @return A List of {@link GameMap Maps} based on the CSV to use for initial data
+	 * @throws IOException If anything goes wrong
+	 */
+	public static List<GameMap> getMaps() throws IOException{
+		List<GameMap> maps = new ArrayList<>();
+		// Read Maps
+		try(ReadCSV readMaps = new ReadCSV("map.csv")){
+			int mapID = 1;
+			List<String> tuple = readMaps.next();
+			while(tuple != null){
+				// Create the Map and add it to the list
+				String name = tuple.get(0);
+				String shortDescription = tuple.get(1);
+				String longDescription = tuple.get(2);
+				maps.add(new GameMap(mapID++, name, shortDescription, longDescription));
+				
+				// Grab next tuple
+				tuple = readMaps.next();
+			}
+			return maps;
+		}
+	}
+	
+	/**
+	 * @return A List of {@link MapTileToMapMap Map Tile to Map mappings} based on the CSV to use for initial data
+	 * @throws IOException If anything goes wrong
+	 */
+	public static List<MapTileToMapMap> getMapTilesToMaps() throws IOException {
+		List<MapTileToMapMap> mapTilesToMaps = new ArrayList<>();
+		// Read Map Tiles to Maps
+		try(ReadCSV readMapTilesToMaps = new ReadCSV("maptilestomaps.csv")){
+			List<String> tuple = readMapTilesToMaps.next();
+			while(tuple != null){
+				// Create the Map Tile to Map mapping and add it to the list
+				int mapTileID = Integer.parseInt(tuple.get(0));
+				int mapID = Integer.parseInt(tuple.get(1));
+				mapTilesToMaps.add(new MapTileToMapMap(mapTileID, mapID));
+				
+				// Grab next tuple
+				tuple = readMapTilesToMaps.next();
+			}
+			return mapTilesToMaps;
 		}
 	}
 	
@@ -320,46 +367,6 @@ public class InitialData{
 			}
 			return itemToInventoryList;
 			
-		}
-	}
-	
-	public static ArrayList<GameMap> getMaps() throws IOException {
-		ArrayList<GameMap> mapList = new ArrayList<>();
-		try(ReadCSV readMaps = new ReadCSV("map.csv")){
-			while(true){
-				List<String> tuple = readMaps.next();
-				if(tuple == null){
-					break;
-				}
-				Iterator<String> i = tuple.iterator();
-				GameMap map = new GameMap();
-				
-				map.setName(i.next());
-				map.setShortDescription(i.next());
-				map.setLongDescription(i.next());
-				
-				mapList.add(map);
-			}
-			return mapList;
-		}
-	}
-	
-	public static ArrayList<IntPair> getMapTilesToMaps() throws IOException {
-		ArrayList<IntPair> intPairList = new ArrayList<>();
-		try(ReadCSV readMapTilesToMaps = new ReadCSV("maptilestomaps.csv")){
-			while(true){
-				List<String> tuple = readMapTilesToMaps.next();
-				if(tuple == null){
-					break;
-				}
-				Iterator<String> i = tuple.iterator();
-				IntPair intPair = new IntPair();
-				
-				intPair.setInt1(Integer.parseInt(i.next()));
-				intPair.setInt2(Integer.parseInt(i.next()));
-				intPairList.add(intPair);
-			}
-			return intPairList;
 		}
 	}
 

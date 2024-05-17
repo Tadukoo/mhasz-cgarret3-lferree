@@ -4,9 +4,11 @@ import com.github.tadukoo.aome.User;
 import com.github.tadukoo.aome.construct.GameObject;
 import com.github.tadukoo.aome.construct.Item;
 import com.github.tadukoo.aome.construct.ItemToObjectMap;
+import com.github.tadukoo.aome.construct.map.GameMap;
 import com.github.tadukoo.aome.construct.map.MapTile;
 import com.github.tadukoo.aome.construct.ObjectCommandResponse;
 import com.github.tadukoo.aome.construct.map.MapTileConnections;
+import com.github.tadukoo.aome.construct.map.MapTileToMapMap;
 import com.github.tadukoo.aome.construct.map.ObjectToMapTileMap;
 import com.github.tadukoo.database.mysql.Database;
 import com.github.tadukoo.database.mysql.pojo.DatabasePojo;
@@ -42,6 +44,8 @@ public class CleanupDatabase{
 		deleteTable(new MapTile());
 		deleteTable(new ObjectToMapTileMap());
 		deleteTable(new MapTileConnections());
+		deleteTable(new GameMap());
+		deleteTable(new MapTileToMapMap());
 	}
 	
 	private static void deleteTable(DatabasePojo pojo) throws SQLException{

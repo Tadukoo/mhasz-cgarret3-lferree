@@ -5,6 +5,7 @@ import com.github.tadukoo.aome.construct.ItemToObjectMap;
 import com.github.tadukoo.aome.construct.ItemType;
 import com.github.tadukoo.aome.construct.ObjectCommandResponse;
 import com.github.tadukoo.aome.construct.map.MapTileConnections;
+import com.github.tadukoo.aome.construct.map.MapTileToMapMap;
 import com.github.tadukoo.aome.construct.map.ObjectToMapTileMap;
 import com.github.tadukoo.database.mysql.Database;
 import com.github.tadukoo.database.mysql.syntax.SQLSyntaxUtil;
@@ -474,9 +475,42 @@ public class MySQLDatabase implements IDatabase{
 		return new DatabaseResult<>(mapTile, error);
 	}
 	
+	/**
+	 * Used to load related data for the given {@link GameMap map}
+	 *
+	 * @param map The {@link GameMap map} to load other data for
+	 * @throws SQLException If anything goes wrong
+	 */
+	private void loadMapRelatedTypes(GameMap map) throws SQLException{
+		// Find Map Tiles for the Map
+		MapTileToMapMap search = new MapTileToMapMap();
+		search.setMapID(map.getID());
+		List<MapTileToMapMap> results = search.doSearch(database, MapTileToMapMap.class, false);
+		for(MapTileToMapMap mapTileToMap: results){
+			map.addMapTile(getMapTileByID(mapTileToMap.getMapTileID()).result());
+		}
+	}
+	
+	/** {@inheritDoc} */
 	@Override
-	public GameMap getMap(){
-		return null;
+	public DatabaseResult<GameMap> getMapByID(int id){
+		GameMap map = null;
+		String error = null;
+		try{
+			GameMap search = new GameMap();
+			search.setID(id);
+			List<GameMap> results = search.doSearch(database, GameMap.class, false);
+			if(results.isEmpty()){
+				error = "No maps match that ID number";
+			}else{
+				map = results.get(0);
+				loadMapRelatedTypes(map);
+			}
+		}catch(SQLException e){
+			error = "Get Map By ID SQL Error";
+			logger.logError(error, e);
+		}
+		return new DatabaseResult<>(map, error);
 	}
 	
 	@Override

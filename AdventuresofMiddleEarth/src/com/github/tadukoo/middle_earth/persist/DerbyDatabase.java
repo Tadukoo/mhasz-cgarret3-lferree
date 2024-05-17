@@ -93,14 +93,6 @@ public class DerbyDatabase implements IDatabase {
 		return conn;
 	}
 	
-	private void loadMap(GameMap map, ResultSet resultSet) throws SQLException{
-		int index = 1;
-		map.setID(resultSet.getInt(index++));
-		map.setName(resultSet.getString(index++));
-		map.setLongDescription(resultSet.getString(index++));
-		map.setShortDescription(resultSet.getString(index));
-	}
-	
 	private void loadEnemy(Enemy enemy, ResultSet resultSet) throws SQLException {
 		int index = 1;
 		enemy.setrace(resultSet.getString(index++));
@@ -247,62 +239,8 @@ public class DerbyDatabase implements IDatabase {
 	//  								Maps
 	///////////////////////////////////////////////////////////////////////////////////////
 	@Override
-	public GameMap getMap() {
-		return executeTransaction(conn -> {
-			PreparedStatement stmt = null;
-			ResultSet resultSetMap = null;
-			ResultSet resultSetMapTileIDs = null;
-			
-			try{
-				// retrieve all attributes
-				stmt = conn.prepareStatement(
-						"select * " +
-								"  from maps "
-				);
-				
-				GameMap map = new GameMap();
-				MapTile emptyMapTile = new MapTile();
-				map.addMapTile(emptyMapTile);
-				
-				resultSetMap = stmt.executeQuery();
-				
-				// for testing that a result was returned
-				boolean found = false;
-				
-				while(resultSetMap.next()){
-					found = true;
-					loadMap(map, resultSetMap);
-					
-					stmt = conn.prepareStatement(
-							" select maptiles.* "
-									+ "from maptilestomaps, maptiles "
-									+ "where maptilestomaps.map_id = ?"
-									+ "AND maptiles.maptile_id = maptilestomaps.maptile_id "
-					);
-					stmt.setInt(1, map.getID());
-					resultSetMapTileIDs = stmt.executeQuery();
-					
-					while(resultSetMapTileIDs.next()){
-						MapTile mapTile = new MapTile();
-						mapTile.setID(resultSetMapTileIDs.getInt(1));
-						mapTile = getMapTileByID(mapTile.getID()).result();
-						map.addMapTile(mapTile);
-					}
-				}
-				
-				// check if the maps were found
-				if(!found){
-					System.out.println("<maps> table is empty");
-				}
-				
-				return map;
-			}finally{
-				DBUtil.closeQuietly(resultSetMapTileIDs);
-				DBUtil.closeQuietly(resultSetMap);
-				DBUtil.closeQuietly(stmt);
-				DBUtil.closeQuietly(conn);
-			}
-		});
+	public DatabaseResult<GameMap> getMapByID(int id){
+		throw new UnsupportedOperationException("DerbyDatabase not supported anymore!");
 	}
 	
 	///////////////////////////////////////////////////////////////////////////////////////
@@ -697,7 +635,7 @@ public class DerbyDatabase implements IDatabase {
 		
 		Game game = new Game();
 
-		game.setmap(getMap());
+		game.setmap(getMapByID(-1).result());
 		
 		game.setobjects(getAllObjects().result());
 		game.setitems(getAllItems().result());
@@ -1158,7 +1096,7 @@ public class DerbyDatabase implements IDatabase {
 		updateMapTiles(map.getMapTiles());
 	}
 	
-	private void updateMapTiles(final ArrayList<MapTile> mapTileList) {
+	private void updateMapTiles(final List<MapTile> mapTileList) {
 		
 		for(MapTile mapTile : mapTileList) {
 			updateMapTile(mapTile);

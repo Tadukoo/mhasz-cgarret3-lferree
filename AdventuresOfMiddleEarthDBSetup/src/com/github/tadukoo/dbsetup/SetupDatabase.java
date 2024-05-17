@@ -5,9 +5,11 @@ import com.github.tadukoo.aome.User;
 import com.github.tadukoo.aome.construct.GameObject;
 import com.github.tadukoo.aome.construct.Item;
 import com.github.tadukoo.aome.construct.ItemToObjectMap;
+import com.github.tadukoo.aome.construct.map.GameMap;
 import com.github.tadukoo.aome.construct.map.MapTile;
 import com.github.tadukoo.aome.construct.ObjectCommandResponse;
 import com.github.tadukoo.aome.construct.map.MapTileConnections;
+import com.github.tadukoo.aome.construct.map.MapTileToMapMap;
 import com.github.tadukoo.aome.construct.map.ObjectToMapTileMap;
 import com.github.tadukoo.database.mysql.Database;
 import com.github.tadukoo.util.LoggerUtil;
@@ -78,6 +80,14 @@ public class SetupDatabase{
 		// Create Map Tile Connections table
 		MapTileConnections mapTileConnections = new MapTileConnections();
 		mapTileConnections.createTable(database);
+		
+		// Create Maps table
+		GameMap map = new GameMap();
+		map.createTable(database);
+		
+		// Create Map Tiles to Maps table
+		MapTileToMapMap mapTileToMapMap = new MapTileToMapMap();
+		mapTileToMapMap.createTable(database);
 	}
 	
 	/*
@@ -122,25 +132,6 @@ public class SetupDatabase{
 						+ ")"
 				);
 				stmt8.executeUpdate();
-				
-				stmt10 = conn.prepareStatement(
-						"create table maps (" +
-						"   map_id integer primary key " +
-						"       generated always as identity (start with 1, increment by 1), " +
-						"   mapname varchar(40)," +
-						"	longdescription varchar(200)," +
-						"	shortdescription varchar(100)" +
-						")"
-				);
-				stmt10.executeUpdate();
-				
-				stmt11 = conn.prepareStatement(
-						"create table maptilestomaps ("
-						+ "maptile_id int, "
-						+ "map_id int "
-						+ ")"
-				);
-				stmt11.executeUpdate();
 				
 				stmt12 = conn.prepareStatement(
 						"create table enemies ("
@@ -243,6 +234,18 @@ public class SetupDatabase{
 		List<MapTileConnections> mapTileConnections = InitialData.getMapTileConnections();
 		for(MapTileConnections mapTileConnection: mapTileConnections){
 			mapTileConnection.storeValues(database, false);
+		}
+		
+		// Load Maps
+		List<GameMap> maps = InitialData.getMaps();
+		for(GameMap map: maps){
+			map.storeValues(database, false);
+		}
+		
+		// Load Map Tile to Maps
+		List<MapTileToMapMap> mapTilesToMaps = InitialData.getMapTilesToMaps();
+		for(MapTileToMapMap mapTileToMap: mapTilesToMaps){
+			mapTileToMap.storeValues(database, false);
 		}
 	}
 }

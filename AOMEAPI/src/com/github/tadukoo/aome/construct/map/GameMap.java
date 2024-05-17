@@ -3,11 +3,17 @@ package com.github.tadukoo.aome.construct.map;
 import com.github.tadukoo.aome.construct.Construct;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class GameMap extends Construct{
-	private ArrayList<MapTile> mapTiles;
+	private List<MapTile> mapTiles;
 	
 	public GameMap(){
+		mapTiles = new ArrayList<>();
+	}
+	
+	public GameMap(int mapID, String name, String shortDescription, String longDescription){
+		super(mapID, name, shortDescription, longDescription);
 		mapTiles = new ArrayList<>();
 	}
 	
@@ -16,14 +22,14 @@ public class GameMap extends Construct{
 		return "Maps";
 	}
 	
-	public ArrayList<MapTile> getMapTiles(){
+	public List<MapTile> getMapTiles(){
 		return mapTiles;
 	}
 	
 	public MapTile getMapTileByID(int id){
-		for(MapTile m: mapTiles){
-			if(m.getID() == id){
-				return m;
+		for(MapTile mapTile: mapTiles){
+			if(mapTile.getID() == id){
+				return mapTile;
 			}
 		}
 		return null;
@@ -33,7 +39,7 @@ public class GameMap extends Construct{
 		mapTiles.add(tile);
 	}
 	
-	public void setMapTiles(ArrayList<MapTile> mapTiles){
+	public void setMapTiles(List<MapTile> mapTiles){
 		this.mapTiles = mapTiles;
 	}
 }

@@ -56,13 +56,13 @@ public interface IDatabase{
 	Item removeItemFromObject(Item item, GameObject object);
 	
 	/*
-	 * Map Tile Related Queries
+	 * Map Tile and Map Related Queries
 	 */
 	
 	DatabaseResult<List<MapTile>> getAllMapTiles();
 	DatabaseResult<MapTile> getMapTileByID(int id);
+	DatabaseResult<GameMap> getMapByID(int id);
 	
-	GameMap getMap();
 	Player getPlayer();
 	
 	List<Character> getAllCharacters();

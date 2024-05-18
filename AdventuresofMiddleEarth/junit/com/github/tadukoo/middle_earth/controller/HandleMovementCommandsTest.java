@@ -6,6 +6,8 @@ import com.github.tadukoo.aome.character.Character;
 import com.github.tadukoo.aome.character.Player;
 import com.github.tadukoo.aome.construct.map.GameMap;
 import com.github.tadukoo.aome.construct.map.MapTile;
+import com.github.tadukoo.middle_earth.persist.DatabaseProvider;
+import com.github.tadukoo.middle_earth.persist.FakeDatabase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -32,10 +34,12 @@ public class HandleMovementCommandsTest{
 	
 	@BeforeEach
 	public void setup(){
+		DatabaseProvider.setInstance(new FakeDatabase());
 		game = new Game();
 		// This is here just in case the Game doesn't initialize the current mode to this.
 		game.setmode("game");
 		player = new Player();
+		player.setLocationID(0);
 		ArrayList<Character> characters = new ArrayList<>();
 		characters.add(player);
 		game.setcharacters(characters);
@@ -133,7 +137,7 @@ public class HandleMovementCommandsTest{
 	 */
 	public static void checkValidMovePreconditions(Game game, MapTile original){
 		// Ensure the player is in the correct starting location.
-		assertEquals(original.getID(), game.getplayer().getlocation());
+		assertEquals(original.getID(), game.getplayer().getLocationID());
 	}
 	
 	/**
@@ -142,7 +146,7 @@ public class HandleMovementCommandsTest{
 	 */
 	public static void checkValidMovePostConditions(Game game, MapTile destination){
 		// Ensure the player moved to the correct destination.
-		assertEquals(destination.getID(), game.getplayer().getlocation());
+		assertEquals(destination.getID(), game.getplayer().getLocationID());
 		
 		// Ensure 2 lines have been added to the dialog.
 		// Note: Cannot check that it's 2 lines exactly because of Combat now
@@ -172,9 +176,9 @@ public class HandleMovementCommandsTest{
 	 */
 	public static void setupInvalidMovePreConditions(Game game, MapTile setup){
 		// Set the player's location to the requested maptile.
-		game.getplayer().setlocation(setup.getID());
+		game.getplayer().setLocationID(setup.getID());
 		// Ensure the player's location is properly set.
-		assertEquals(setup.getID(), game.getplayer().getlocation());
+		assertEquals(setup.getID(), game.getplayer().getLocationID());
 	}
 	
 	/**
@@ -183,7 +187,7 @@ public class HandleMovementCommandsTest{
 	 */
 	public static void checkInvalidMovePostConditions(Game game, MapTile setup){
 		// Ensure the player's location hasn't changed.
-		assertEquals(setup.getID(), game.getplayer().getlocation());
+		assertEquals(setup.getID(), game.getplayer().getLocationID());
 		// Ensure the game's dialog got one new line.
 		assertEquals(1, game.getdialog().size());
 		// Ensure that new line is the invalidDirection string.
@@ -198,13 +202,13 @@ public class HandleMovementCommandsTest{
 		game.setmode("inventory");
 		
 		// Ensure before the command that the player is in the proper location.
-		assertEquals(original.getID(), game.getplayer().getlocation());
+		assertEquals(original.getID(), game.getplayer().getLocationID());
 		
 		// Run the command
 		String response = game.handle_command(command);
 		
 		// Ensure that after the command, the player hasn't moved (since not in mode = game)
-		assertEquals(original.getID(), game.getplayer().getlocation());
+		assertEquals(original.getID(), game.getplayer().getLocationID());
 		// Ensure that 1 line is the invalidMode string
 		assertEquals(invalidMode, response);
 	}

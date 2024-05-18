@@ -45,7 +45,7 @@ public class InventoryModeActionsTest{
 		playerItems.add(key);
 		Inventory inventory = new Inventory();
 		inventory.setitems(playerItems);
-		player.setinventory(inventory);
+		player.setInventory(playerItems);
 		
 		// Setup Character Array
 		ArrayList<Character> chars = new ArrayList<>();

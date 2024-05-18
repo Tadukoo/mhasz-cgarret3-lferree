@@ -1,6 +1,7 @@
 package com.github.tadukoo.dbsetup;
 
 import com.github.tadukoo.aome.User;
+import com.github.tadukoo.aome.character.Player;
 import com.github.tadukoo.aome.construct.GameObject;
 import com.github.tadukoo.aome.construct.Item;
 import com.github.tadukoo.aome.construct.ItemToObjectMap;
@@ -46,6 +47,7 @@ public class CleanupDatabase{
 		deleteTable(new MapTileConnections());
 		deleteTable(new GameMap());
 		deleteTable(new MapTileToMapMap());
+		deleteTable(new Player());
 	}
 	
 	private static void deleteTable(DatabasePojo pojo) throws SQLException{

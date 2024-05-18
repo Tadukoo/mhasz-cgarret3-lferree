@@ -32,6 +32,7 @@ public class GamePlayerActionsTest{
 	public void setup(){
 		game = new Game();
 		player = new Player();
+		player.setLocationID(0);
 		ArrayList<Character> characters = new ArrayList<>();
 		characters.add(player);
 		game.setcharacters(characters);
@@ -58,7 +59,7 @@ public class GamePlayerActionsTest{
 		playerItems.add(key);
 		Inventory inventory = new Inventory();
 		inventory.setitems(playerItems);
-		player.setinventory(inventory);
+		player.setInventory(playerItems);
 		
 		tree = new GameObject();
 		tree.setName("Tree");
@@ -105,15 +106,15 @@ public class GamePlayerActionsTest{
 	 */
 	@Test
 	public void testTakeCommand(){
-		assertEquals(3, player.getinventory().getitems().size());
+		assertEquals(3, player.getInventory().size());
 		assertEquals(1, starting.getObjects().get(1).getItems().size());
 		assertEquals(wood, starting.getObjects().get(1).getItems().get(0));
 		
 		game.take(wood.getName());
 		
 		assertEquals(0, starting.getObjects().get(1).getItems().size());
-		assertEquals(4, player.getinventory().getitems().size());
-		assertEquals(wood, player.getinventory().getitems().get(3));
+		assertEquals(4, player.getInventory().size());
+		assertEquals(wood, player.getInventory().get(3));
 		
 		// Check dialog
 		assertEquals(1, game.getdialog().size());
@@ -125,7 +126,7 @@ public class GamePlayerActionsTest{
 	 */
 	@Test
 	public void testLookAtStarting(){
-		assertEquals(0, player.getlocation());
+		assertEquals(0, player.getLocationID());
 		
 		game.look();
 		
@@ -137,9 +138,9 @@ public class GamePlayerActionsTest{
 	
 	@Test
 	public void testLookAtNorthOfStarting(){
-		game.getcharacters().get(0).setlocation(1);
+		game.getcharacters().get(0).setLocationID(1);
 		
-		assertEquals(1, player.getlocation());
+		assertEquals(1, player.getLocationID());
 		
 		game.look();
 		

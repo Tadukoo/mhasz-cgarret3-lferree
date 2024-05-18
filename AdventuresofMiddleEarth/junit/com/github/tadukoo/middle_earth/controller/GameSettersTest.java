@@ -100,11 +100,11 @@ public class GameSettersTest{
 		Game game = new Game();
 		ArrayList<Character> chars = new ArrayList<>();
 		Player player = new Player();
-		player.sethit_points(100);
-		player.setname("Derpkins");
+		player.setHP(100);
+		player.setName("Derpkins");
 		Player player2 = new Player();
-		player2.setattack(20);
-		player2.setname("My Face");
+		player2.setAttack(20);
+		player2.setName("My Face");
 		chars.add(player);
 		chars.add(player2);
 		
@@ -344,7 +344,7 @@ public class GameSettersTest{
 		Game game = new Game();
 		ArrayList<Character> chars = new ArrayList<>();
 		Player player = new Player();
-		player.setlocation(0);
+		player.setLocationID(0);
 		chars.add(player);
 		game.setcharacters(chars);
 		
@@ -363,7 +363,7 @@ public class GameSettersTest{
 		Game game = new Game();
 		ArrayList<Character> chars = new ArrayList<>();
 		Player player = new Player();
-		player.setlocation(0);
+		player.setLocationID(0);
 		chars.add(player);
 		game.setcharacters(chars);
 		
@@ -382,7 +382,9 @@ public class GameSettersTest{
 		Game game = new Game();
 		
 		ArrayList<Character> chars = new ArrayList<>();
-		chars.add(new Player());
+		Player player = new Player();
+		player.setLocationID(1);
+		chars.add(player);
 		game.setcharacters(chars);
 		
 		CombatSituation sitch = new CombatSituation(game, 1, 0);

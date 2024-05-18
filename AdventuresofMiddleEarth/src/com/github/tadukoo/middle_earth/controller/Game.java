@@ -137,7 +137,7 @@ public class Game implements Engine{
 	}
 	
 	public String getmapTile_longDescription(){
-		List<GameObject> objects = map.getMapTiles().get(getplayer().getlocation()).getObjects();
+		List<GameObject> objects = map.getMapTiles().get(getplayer().getLocationID()).getObjects();
 		String objectUpdate = "";
 		if (objects != null) {
 			for (GameObject object : objects) {
@@ -146,11 +146,11 @@ public class Game implements Engine{
 				}
 			}
 		}
-		return map.getMapTiles().get(getplayer().getlocation()).getLongDescription() + objectUpdate;
+		return map.getMapTiles().get(getplayer().getLocationID()).getLongDescription() + objectUpdate;
 	}
 	
 	public String getmapTile_name(){
-		return map.getMapTiles().get(getplayer().getlocation()).getName();
+		return map.getMapTiles().get(getplayer().getLocationID()).getName();
 	}
 	
 	public CombatSituation getBattle(){
@@ -318,7 +318,7 @@ public class Game implements Engine{
 					try {
 						int Item_num = Integer.parseInt(arg);
 						//if (getplayer().getinventory().getitems().size() < Item_num || Item_num < 1 ) {
-						if (getplayer().getinventory().getitems().size() < Item_num || Item_num < 1 ) {
+						if (getplayer().getInventory().size() < Item_num || Item_num < 1 ) {
 							returnMessage = "Sorry you dont have an item at that index";
 						} else  {
 							returnMessage = item_details(Item_num-1);
@@ -333,30 +333,30 @@ public class Game implements Engine{
 				if (arg != null)
 					try {
 						int Item_num = Integer.parseInt(arg) - 1;
-						if (getplayer().getinventory().getitems().size() - 1 < Item_num || Item_num < 0 ) {
+						if (getplayer().getInventory().size() - 1 < Item_num || Item_num < 0 ) {
 							returnMessage = "Sorry you dont have an item at that index";
 						} else {
-							Item item = getplayer().getinventory().getitems().get(Item_num);
+							Item item = getplayer().getInventory().get(Item_num);
 							if (item.getType() == ItemType.HELM) {
-								getplayer().sethelm(item);
+								getplayer().setHelm(item);
 								returnMessage = "You have equiped " + item.getName();
 							} else if (item.getType() == ItemType.BOOTS) {
-								getplayer().setboots(item);
+								getplayer().setBoots(item);
 								returnMessage = "You have equiped " + item.getName();
 							} else if (item.getType() == ItemType.BRACES) {
-								getplayer().setbraces(item);
+								getplayer().setBraces(item);
 								returnMessage = "You have equiped " + item.getName();
 							} else if (item.getType() == ItemType.CHEST) {
-								getplayer().setchest(item);
+								getplayer().setChest(item);
 								returnMessage = "You have equiped " + item.getName();
 							} else if (item.getType() == ItemType.L_HAND) {
-								getplayer().setl_hand(item);
+								getplayer().setLeftHand(item);
 								returnMessage = "You have equiped " + item.getName();
 							} else if (item.getType() == ItemType.R_HAND) {
-								getplayer().setr_hand(item);
+								getplayer().setRightHand(item);
 								returnMessage = "You have equiped " + item.getName();
 							} else if (item.getType() == ItemType.LEGS) {
-								getplayer().setlegs(item);
+								getplayer().setLegs(item);
 								returnMessage = "You have equiped " + item.getName();
 							}
 						}
@@ -388,7 +388,7 @@ public class Game implements Engine{
 		}
 		
 		GameObject action_object = null;
-		List<GameObject> objects = map.getMapTiles().get(getplayer().getlocation()).getObjects();
+		List<GameObject> objects = map.getMapTiles().get(getplayer().getLocationID()).getObjects();
 		if(objects == null){
 			return false;
 		}
@@ -442,7 +442,7 @@ public class Game implements Engine{
 
 	
 	public String item_details(int item_num){
-		Item item = getplayer().getinventory().getitems().get(item_num);
+		Item item = getplayer().getInventory().get(item_num);
 		//Item item = items.get(item_num);
 		return item.getName() + ": " + item.getLongDescription() + ";Weight: " + item.getWeight() + ";Quest item: " + String.valueOf(item.isQuestItem());
 	}
@@ -452,7 +452,7 @@ public class Game implements Engine{
 	
 	@Override
 	public void take(String name){
-		int location = getplayer().getlocation();
+		int location = getplayer().getLocationID();
 		GameObject holder = new GameObject();
 		if (map.getMapTiles().get(location).getObjects() != null) {
 			Item lookFor = null;
@@ -462,7 +462,7 @@ public class Game implements Engine{
 					if (item.getName().toLowerCase().contains(name.toLowerCase())) {
 						lookFor = item;
 						holder = object;
-						getplayer().getinventory().getitems().add(item);
+						getplayer().getInventory().add(item);
 					}
 				}
 			}
@@ -491,7 +491,7 @@ public class Game implements Engine{
 	@Override
 	public void move(String direction){
 		Character player = characters.get(0);
-		MapTile currentTile = map.getMapTiles().get(player.getlocation());
+		MapTile currentTile = map.getMapTiles().get(player.getLocationID());
 		Integer newTileID = switch(direction.toLowerCase()){
 			case "north" -> currentTile.getNorthConnection();
 			case "northeast" -> currentTile.getNortheastConnection();
@@ -504,16 +504,16 @@ public class Game implements Engine{
 			default -> null;
 		};
 		if(newTileID != null){
-			if (player.getlocation() == 8 && direction.equalsIgnoreCase("west")) {
+			if (player.getLocationID() == 8 && direction.equalsIgnoreCase("west")) {
 				boolean key = false;
-				for (Item item : player.getinventory().getitems()) {
+				for (Item item : player.getInventory()) {
 					if (item.getName() != null && item.getName().equalsIgnoreCase("Ornate Key")) {
 						key = true;
 					}
 				}
 				if (key) {
 					add_dialog("You use the Ornate Key and open the gate.");
-					player.setlocation(newTileID);
+					player.setLocationID(newTileID);
 					MapTile mapTile = map.getMapTileByID(newTileID);
 					add_dialog(mapTile.getLongDescription());
 					mapPanel.setDirection(direction);
@@ -523,7 +523,7 @@ public class Game implements Engine{
 					add_dialog("You seem to be missing something to be able to go that direction.");
 				}
 			} else {
-				player.setlocation(newTileID);
+				player.setLocationID(newTileID);
 				MapTile mapTile = map.getMapTileByID(newTileID);
 				add_dialog(mapTile.getName());
 				String string = mapTile.getLongDescription();
@@ -549,13 +549,13 @@ public class Game implements Engine{
 		} else {
 			add_dialog("You can't go that way");
 		}
-		map.getMapTiles().get(player.getlocation()).setVisited(true);
+		map.getMapTiles().get(player.getLocationID()).setVisited(true);
 		
 	}
 	
 	
 	public void startMap(String username, int gameID){
-		mapPanel.setMapTile(map.getMapTileByID(getplayer().getlocation()));
+		mapPanel.setMapTile(map.getMapTileByID(getplayer().getLocationID()));
 		mapPanel.setusername(username);
 		mapPanel.setgameID(gameID);
 		mapIMG.setContentPane(mapPanel);

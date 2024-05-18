@@ -2,6 +2,7 @@ package com.github.tadukoo.dbsetup;
 
 import com.github.tadukoo.aome.InitialData;
 import com.github.tadukoo.aome.User;
+import com.github.tadukoo.aome.character.Player;
 import com.github.tadukoo.aome.construct.GameObject;
 import com.github.tadukoo.aome.construct.Item;
 import com.github.tadukoo.aome.construct.ItemToObjectMap;
@@ -88,11 +89,16 @@ public class SetupDatabase{
 		// Create Map Tiles to Maps table
 		MapTileToMapMap mapTileToMapMap = new MapTileToMapMap();
 		mapTileToMapMap.createTable(database);
+		
+		// Create Players table
+		Player player = new Player();
+		player.createTable(database);
 	}
 	
 	/*
 	 * Other Tables Creation to be moved
 	 *
+	 *  Going to change Items to Inventories to Items to Players (don't have a way to distinguish inventories now)
 				stmt7 = conn.prepareStatement(
 						"create table itemstoinventories ("
 						+ "item_id int, "
@@ -100,38 +106,6 @@ public class SetupDatabase{
 						+ ")"
 				);
 				stmt7.executeUpdate();
-				
-				stmt8 = conn.prepareStatement(
-						"create table players ("
-						+ "race varchar(40),"
-						+ "name varchar(40),"
-						+ "gender varchar(40),"
-						+ "level int,"
-						+ "hit_points int,"
-						
-						+ "magic_points int,"
-						+ "attack int,"
-						+ "defense int,"
-						+ "sp_attack int,"
-						+ "sp_defense int,"
-						
-						+ "coins int,"
-						+ "map_location int,"
-						+ "inventory_id int,"
-						+ "helm_item_id int,"
-						+ "braces_item_id int,"
-						
-						+ "chest_item_id int,"
-						+ "legs_item_id int,"
-						+ "boots_item_id int,"
-						+ "l_hand_item_id int,"
-						+ "r_hand_item_id int,"
-						
-						+ "experience int,"
-						+ "carry_weight int"
-						+ ")"
-				);
-				stmt8.executeUpdate();
 				
 				stmt12 = conn.prepareStatement(
 						"create table enemies ("
@@ -246,6 +220,12 @@ public class SetupDatabase{
 		List<MapTileToMapMap> mapTilesToMaps = InitialData.getMapTilesToMaps();
 		for(MapTileToMapMap mapTileToMap: mapTilesToMaps){
 			mapTileToMap.storeValues(database, false);
+		}
+		
+		// Load Players
+		List<Player> players = InitialData.getPlayers();
+		for(Player player: players){
+			player.storeValues(database, false);
 		}
 	}
 }

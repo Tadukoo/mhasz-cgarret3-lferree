@@ -36,7 +36,7 @@ public class GameCharacterActionsTest{
 		// This is here in case Game doesn't set mode to game by default.
 		game.setmode("game");
 		player = new Player();
-		player.setlocation(0);
+		player.setLocationID(0);
 		ArrayList<Character> characters = new ArrayList<Character>();
 		characters.add(player);
 		game.setcharacters(characters);

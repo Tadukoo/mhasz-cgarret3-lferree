@@ -17,6 +17,7 @@ import com.github.tadukoo.aome.construct.ObjectCommandResponse;
 import com.github.tadukoo.aome.construct.map.MapTileConnections;
 import com.github.tadukoo.aome.construct.map.MapTileToMapMap;
 import com.github.tadukoo.aome.construct.map.ObjectToMapTileMap;
+import com.github.tadukoo.util.StringUtil;
 
 /**
  * A class used to load Initial Data from CSV files
@@ -28,6 +29,13 @@ import com.github.tadukoo.aome.construct.map.ObjectToMapTileMap;
  * @since 1.0 or earlier
  */
 public class InitialData{
+	
+	private static Integer parsePotentiallyNullInt(String text){
+		if(StringUtil.equalsIgnoreCase(text, "null")){
+			return null;
+		}
+		return Integer.parseInt(text);
+	}
 	
 	/**
 	 * @return A List of {@link User Users} based on the CSV to use for initial data
@@ -223,14 +231,14 @@ public class InitialData{
 			while(tuple != null){
 				// Create the Map Tile Connections and add it to the list
 				int mapTileID = Integer.parseInt(tuple.get(0));
-				Integer northID = Integer.parseInt(tuple.get(1));
-				Integer northeastID = Integer.parseInt(tuple.get(2));
-				Integer eastID = Integer.parseInt(tuple.get(3));
-				Integer southeastID = Integer.parseInt(tuple.get(4));
-				Integer southID = Integer.parseInt(tuple.get(5));
-				Integer southwestID = Integer.parseInt(tuple.get(6));
-				Integer westID = Integer.parseInt(tuple.get(7));
-				Integer northwestID = Integer.parseInt(tuple.get(8));
+				Integer northID = parsePotentiallyNullInt(tuple.get(1));
+				Integer northeastID = parsePotentiallyNullInt(tuple.get(2));
+				Integer eastID = parsePotentiallyNullInt(tuple.get(3));
+				Integer southeastID = parsePotentiallyNullInt(tuple.get(4));
+				Integer southID = parsePotentiallyNullInt(tuple.get(5));
+				Integer southwestID = parsePotentiallyNullInt(tuple.get(6));
+				Integer westID = parsePotentiallyNullInt(tuple.get(7));
+				Integer northwestID = parsePotentiallyNullInt(tuple.get(8));
 				mapTileConnections.add(new MapTileConnections(mapTileID,
 						northID, northeastID,
 						eastID, southeastID, southID,
@@ -289,6 +297,58 @@ public class InitialData{
 		}
 	}
 	
+	/**
+	 * @return A List of {@link Player players} based on the CSV to use for initial data
+	 * @throws IOException If anything goes wrong
+	 */
+	public static List<Player> getPlayers() throws IOException{
+		List<Player> players = new ArrayList<>();
+		// Read Players
+		try(ReadCSV readPlayers = new ReadCSV("players.csv")){
+			int playerID = 1;
+			List<String> tuple = readPlayers.next();
+			while(tuple != null){
+				// Create the Player and add it to the list
+				Player player = new Player();
+				player.setID(playerID++);
+				player.setName(tuple.get(0));
+				player.setRace(tuple.get(1));
+				player.setGender(tuple.get(2));
+				
+				// Stats
+				player.setLevel(Integer.parseInt(tuple.get(3)));
+				player.setHP(Integer.parseInt(tuple.get(4)));
+				player.setMP(Integer.parseInt(tuple.get(5)));
+				player.setAttack(Integer.parseInt(tuple.get(6)));
+				player.setDefense(Integer.parseInt(tuple.get(7)));
+				player.setSpecialAttack(Integer.parseInt(tuple.get(8)));
+				player.setSpecialDefense(Integer.parseInt(tuple.get(9)));
+				
+				// Location
+				player.setLocationID(Integer.parseInt(tuple.get(10)));
+				
+				// Items (Armor/Weapons)
+				player.setHelmID(parsePotentiallyNullInt(tuple.get(11)));
+				player.setBracesID(parsePotentiallyNullInt(tuple.get(12)));
+				player.setChestID(parsePotentiallyNullInt(tuple.get(13)));
+				player.setLegsID(parsePotentiallyNullInt(tuple.get(14)));
+				player.setBootsID(parsePotentiallyNullInt(tuple.get(15)));
+				player.setLeftHandID(parsePotentiallyNullInt(tuple.get(16)));
+				player.setRightHandID(parsePotentiallyNullInt(tuple.get(17)));
+				
+				// Other Settings
+				player.setCoins(Integer.parseInt(tuple.get(18)));
+				player.setExperience(Integer.parseInt(tuple.get(19)));
+				player.setCarryWeight(Integer.parseInt(tuple.get(20)));
+				players.add(player);
+				
+				// Grab next tuple
+				tuple = readPlayers.next();
+			}
+			return players;
+		}
+	}
+	
 	public static ArrayList<Integer> getInventoriesToCharacters() throws IOException {
 		ArrayList<Integer> inventoriesToCharactersList = new ArrayList<>();
 		try(ReadCSV readInventoriesToCharacters = new ReadCSV("inventoriestocharacters.csv")){
@@ -299,7 +359,7 @@ public class InitialData{
 				}
 				
 				for(String s: tuple){
-					inventoriesToCharactersList.add(Integer.parseInt(s));
+					inventoriesToCharactersList.add(parsePotentiallyNullInt(s));
 				}
 			}
 			return inventoriesToCharactersList;
@@ -339,10 +399,10 @@ public class InitialData{
 				Iterator<String> i = tuple.iterator();
 				Enemy enemy = new Enemy();
 				
-				enemy.setrace(i.next());
-				enemy.setattack(Integer.parseInt(i.next()));
-				enemy.setdefense(Integer.parseInt(i.next()));
-				enemy.sethit_points(Integer.parseInt(i.next()));
+				enemy.setRace(i.next());
+				enemy.setAttack(Integer.parseInt(i.next()));
+				enemy.setDefense(Integer.parseInt(i.next()));
+				enemy.setHP(Integer.parseInt(i.next()));
 				
 				enemyList.add(enemy);
 			}
@@ -367,90 +427,6 @@ public class InitialData{
 			}
 			return itemToInventoryList;
 			
-		}
-	}
-
-	public static ArrayList<Player> getPlayers() throws IOException {
-		ArrayList<Player> playerList = new ArrayList<>();
-		try(ReadCSV readPlayers = new ReadCSV("players.csv")){
-			while(true){
-				List<String> tuple = readPlayers.next();
-				if(tuple == null){
-					break;
-				}
-				Iterator<String> i = tuple.iterator();
-				Player player = new Player();
-				
-				player.setrace(i.next());
-				player.setname(i.next());
-				player.setgender(i.next());
-				player.setlevel(Integer.parseInt(i.next()));
-				player.sethit_points(Integer.parseInt(i.next()));
-				
-				player.setmagic_points(Integer.parseInt(i.next()));
-				player.setattack(Integer.parseInt(i.next()));
-				player.setdefense(Integer.parseInt(i.next()));
-				player.setspecial_attack(Integer.parseInt(i.next()));
-				player.setspecial_defense(Integer.parseInt(i.next()));
-				
-				player.setcoins(Integer.parseInt(i.next()));
-				player.setlocation(Integer.parseInt(i.next()));
-				player.setinventory_id(Integer.parseInt(i.next()));
-				
-				/*
-				 * The next few lines are equipping armor pieces to pass player
-				 * back up to the database.  If there is no item associated with
-				 * a slot, it puts an empty item of the correct ItemType in the
-				 * slot. There is a check in DerbyDatabase to make sure the any
-				 * item in the slot is of the correct type in actuality, but they
-				 * must be passed assuming so until that check.  It would mean
-				 * that the database is broken.  Unfortunately you cannot check
-				 * at this stage, you must check after the item is pulled from
-				 * the masteritems table
-				 */
-				Item item = new Item();
-				
-				// helm
-				item.setType(ItemType.HELM);
-				item.setID(Integer.parseInt(i.next()));
-				player.sethelm(item);
-				
-				// braces
-				item.setType(ItemType.BRACES);
-				item.setID(Integer.parseInt(i.next()));
-				player.setbraces(item);
-				
-				// chest
-				item.setType(ItemType.CHEST);
-				item.setID(Integer.parseInt(i.next()));
-				player.setchest(item);
-				
-				// legs
-				item.setType(ItemType.LEGS);
-				item.setID(Integer.parseInt(i.next()));
-				player.setlegs(item);
-				
-				// boots
-				item.setType(ItemType.BOOTS);
-				item.setID(Integer.parseInt(i.next()));
-				player.setboots(item);
-				
-				// l_hand
-				item.setType(ItemType.L_HAND);
-				item.setID(Integer.parseInt(i.next()));
-				player.setl_hand(item);
-				
-				// r_hand
-				item.setType(ItemType.R_HAND);
-				item.setID(Integer.parseInt(i.next()));
-				player.setr_hand(item);
-				
-				player.setexperience(Integer.parseInt(i.next()));
-				player.setcarry_weight(Integer.parseInt(i.next()));
-				
-				playerList.add(player);
-			}
-			return playerList;
 		}
 	}
 	

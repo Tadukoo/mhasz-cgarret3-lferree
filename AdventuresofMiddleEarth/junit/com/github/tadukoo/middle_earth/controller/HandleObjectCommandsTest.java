@@ -23,7 +23,7 @@ public class HandleObjectCommandsTest{
 		
 		// Create Player
 		Player player = new Player();
-		player.setlocation(0);
+		player.setLocationID(0);
 		
 		// Create Characters Array and Put in Player
 		ArrayList<Character> chars = new ArrayList<>();

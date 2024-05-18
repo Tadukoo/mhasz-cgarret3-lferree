@@ -25,7 +25,7 @@ public class InventoryServlet extends HttpServlet{
 		String command = (String) req.getSession().getAttribute("command");
 		int counter = 1;
 		
-		List<Item> itemlist = game.getplayer().getinventory().getitems();
+		List<Item> itemlist = game.getplayer().getInventory();
 		ArrayList<Item> cleanList = new ArrayList<>();
 		for(Item item: itemlist){
 			cleanList.add(new Item(
@@ -40,7 +40,7 @@ public class InventoryServlet extends HttpServlet{
 		req.setAttribute("numItems", counter);
 		
 		game.setmode("inventory");
-		List<Item> inventory_list =  game.getplayer().getinventory().getitems();
+		List<Item> inventory_list =  game.getplayer().getInventory();
 		StringBuilder inventory_display_list = new StringBuilder();
 		for(Item item: inventory_list){
 			inventory_display_list.append(item.getName()).append(": ")
@@ -68,7 +68,7 @@ public class InventoryServlet extends HttpServlet{
 		Game game = (Game) req.getSession().getAttribute("game");
 		game.setmode("inventory");
 		// Gets the inventory of the player
-		List<Item> inventory_list =  game.getplayer().getinventory().getitems();
+		List<Item> inventory_list =  game.getplayer().getInventory();
 		
 		//Inventory is split into two display sections, the inventory list, then the responses to the commands in inventory
 		StringBuilder inventory_display_list = new StringBuilder();

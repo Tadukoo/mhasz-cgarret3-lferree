@@ -67,8 +67,8 @@ public class CombatServlet extends HttpServlet{
 		for(int i = 0; i < enemy.size(); i++){
 			if(i == 0){
 				req.setAttribute("p1", "player1");
-				req.setAttribute("p1Name", game.getplayer().getname());
-				req.setAttribute("p1Health", game.getplayer().gethit_points());
+				req.setAttribute("p1Name", game.getplayer().getName());
+				req.setAttribute("p1Health", game.getplayer().getHP());
 			}else if(i == 1){
 				e1 = game.getcharacters().get(enemy.get(i));
 			}else if(i == 2){
@@ -80,21 +80,21 @@ public class CombatServlet extends HttpServlet{
 		
 		if(e1 != null){
 			req.setAttribute("e1", e1);
-			req.setAttribute("e1Name", e1.getname());
-			req.setAttribute("e1Health", e1.gethit_points());
-			req.setAttribute("e1Race", e1.getrace().replaceAll(" ", ""));
+			req.setAttribute("e1Name", e1.getName());
+			req.setAttribute("e1Health", e1.getHP());
+			req.setAttribute("e1Race", e1.getRace().replaceAll(" ", ""));
 		}
 		if(e2 != null){
 			req.setAttribute("e2", e2);
-			req.setAttribute("e2Name", e2.getname());
-			req.setAttribute("e2Health", e2.gethit_points());
-			req.setAttribute("e2Race", e2.getrace().replaceAll(" ", ""));
+			req.setAttribute("e2Name", e2.getName());
+			req.setAttribute("e2Health", e2.getHP());
+			req.setAttribute("e2Race", e2.getRace().replaceAll(" ", ""));
 		}
 		if(e3 != null){
 			req.setAttribute("e3", e3);
-			req.setAttribute("e3Name", e3.getname());
-			req.setAttribute("e3Health", e3.gethit_points());
-			req.setAttribute("e3Race", e3.getrace().replaceAll(" ", ""));
+			req.setAttribute("e3Name", e3.getName());
+			req.setAttribute("e3Health", e3.getHP());
+			req.setAttribute("e3Race", e3.getRace().replaceAll(" ", ""));
 		}
 		
 		req.getRequestDispatcher("/_view/combat.jsp").forward(req, resp);

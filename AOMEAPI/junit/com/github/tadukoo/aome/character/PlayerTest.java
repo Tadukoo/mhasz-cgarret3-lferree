@@ -18,24 +18,24 @@ public class PlayerTest{
 	
 	@Test
 	public void testSetExperience(){
-		player.setexperience(6);
+		player.setExperience(6);
 		
-		assertEquals(6, player.getexperience());
+		assertEquals(6, player.getExperience());
 		
-		player.setexperience(42);
+		player.setExperience(42);
 		
-		assertEquals(42, player.getexperience());
+		assertEquals(42, player.getExperience());
 	}
 	
 	@Test
 	public void testSetCarry_Weight(){
-		player.setcarry_weight(837);
+		player.setCarryWeight(837);
 		
-		assertEquals(837, player.getcarry_weight());
+		assertEquals(837, player.getCarryWeight());
 		
-		player.setcarry_weight(29384);
+		player.setCarryWeight(29384);
 		
-		assertEquals(29384, player.getcarry_weight());
+		assertEquals(29384, player.getCarryWeight());
 	}
 	
 	@Test

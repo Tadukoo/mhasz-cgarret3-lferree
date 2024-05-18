@@ -50,11 +50,11 @@ public class CombatSituation{
 		for(int i = 0; i < players.length; i++){
 			characterIDs.add(players[i]);
 			if(i == 0){
-				combatString += game.getcharacters().get(i).getname();
+				combatString += game.getcharacters().get(i).getName();
 			}else if(i != players.length - 1){
-				combatString += ", " + game.getcharacters().get(i).getname();
+				combatString += ", " + game.getcharacters().get(i).getName();
 			}else{
-				combatString += " and " + game.getcharacters().get(i).getname();
+				combatString += " and " + game.getcharacters().get(i).getName();
 			}
 		}
 		
@@ -85,18 +85,18 @@ public class CombatSituation{
 		
 		// Add enemies to combat
 		for(int i = 0; i < enemies; i++){
-			Enemy enemy = createEnemy(raceList, game.getcharacters().get(0).getlocation());
+			Enemy enemy = createEnemy(raceList, game.getcharacters().get(0).getLocationID());
 			// set enemy level to "areaDifficulty" of maptile == player location.
 			// enemy.setlevel(game.map.get(player.getlocation).getAreaDifficulty);
 	
 			game.getcharacters().add(enemy);
 			characterIDs.add(game.getcharacters().size() - 1);
 			if(i == 0){
-				combatString += " staring into the eyes of a " + enemy.getrace();
+				combatString += " staring into the eyes of a " + enemy.getRace();
 			}else if(i != enemies - 1){
-				combatString += ", a " + enemy.getrace();
+				combatString += ", a " + enemy.getRace();
 			}else{
-				combatString += " and a " + enemy.getrace(); 
+				combatString += " and a " + enemy.getRace();
 			}
 		}
 		
@@ -128,7 +128,7 @@ public class CombatSituation{
 		
 		if(playerLocation == 7) {
 			Enemy demon = db.getEnemyByRace("Greater Demon");
-			demon.setname("Balrog");
+			demon.setName("Balrog");
 			return demon;
 		} else {
 			// Return an enemy by a random race from the list
@@ -148,8 +148,8 @@ public class CombatSituation{
 			for(int characterIndex: characterIDs){
 				// Find the enemy the Player specified
 				Character chara = game.getcharacters().get(characterIndex);
-				if(characterIndex != playerIndex && (chara.getname().equalsIgnoreCase(target) || 
-						chara.getrace().equalsIgnoreCase(target))){
+				if(characterIndex != playerIndex && (chara.getName().equalsIgnoreCase(target) ||
+						chara.getRace().equalsIgnoreCase(target))){
 					enemy = chara;
 					enemyIndex = characterIndex;
 				}
@@ -159,14 +159,14 @@ public class CombatSituation{
 				game.add_dialog("No one by the name/race of " + target + " was found in combat with you!");
 			}else{
 				// Do attack against enemy
-				int enemyHP = enemy.gethit_points();
+				int enemyHP = enemy.getHP();
 				int damage = calculateDamage(game, playerIndex, enemyIndex);
-				enemy.sethit_points(enemyHP - damage);
-				game.add_dialog("You attacked " + enemy.getname() + " for " + damage + " damage.");
+				enemy.setHP(enemyHP - damage);
+				game.add_dialog("You attacked " + enemy.getName() + " for " + damage + " damage.");
 				
 				// Check if the enemy is dead
-				if(enemy.gethit_points() <= 0){
-					enemy.sethit_points(0);
+				if(enemy.getHP() <= 0){
+					enemy.setHP(0);
 					doPlayerWon(game, playerIndex, enemyIndex);
 				}
 				
@@ -218,15 +218,15 @@ public class CombatSituation{
 		Character enemy = game.getcharacters().get(enemyIndex);
 		
 		// Do damage to player
-		int playerHP = player.gethit_points();
+		int playerHP = player.getHP();
 		int damage = calculateDamage(game, characterIDs.get(currentIDsIndex), playerIndex);
-		player.sethit_points(playerHP - damage);
-		game.add_dialog(enemy.getname() + " attacked you for " + damage + " damage.");
+		player.setHP(playerHP - damage);
+		game.add_dialog(enemy.getName() + " attacked you for " + damage + " damage.");
 		//game.add_dialog("You have " + player.gethit_points() + " HP left.");
 		
 		// Check if player has died
-		if(player.gethit_points() <= 0){
-			player.sethit_points(0);
+		if(player.getHP() <= 0){
+			player.setHP(0);
 			doPlayerDied(game, playerIndex);
 		}
 		
@@ -254,27 +254,27 @@ public class CombatSituation{
 	
 	public int calculateAttack(Game game, int character){
 		Character chr = game.getcharacters().get(character);
-		int attack = chr.getattack();
-		if(chr.gethelm() != null){
-			attack += chr.gethelm().getAttackBonus();
+		int attack = chr.getAttack();
+		if(chr.getHelm() != null){
+			attack += chr.getHelm().getAttackBonus();
 		}
-		if(chr.getbraces() != null){
-			attack += chr.getbraces().getAttackBonus();
+		if(chr.getBraces() != null){
+			attack += chr.getBraces().getAttackBonus();
 		}
-		if(chr.getchest() != null){
-			attack += chr.getchest().getAttackBonus();
+		if(chr.getChest() != null){
+			attack += chr.getChest().getAttackBonus();
 		}
-		if(chr.getlegs() != null){
-			attack += chr.getlegs().getAttackBonus();
+		if(chr.getLegs() != null){
+			attack += chr.getLegs().getAttackBonus();
 		}
-		if(chr.getboots() != null){
-			attack += chr.getboots().getAttackBonus();
+		if(chr.getBoots() != null){
+			attack += chr.getBoots().getAttackBonus();
 		}
-		if(chr.getl_hand() != null){
-			attack += chr.getl_hand().getAttackBonus();
+		if(chr.getLeftHand() != null){
+			attack += chr.getLeftHand().getAttackBonus();
 		}
-		if(chr.getr_hand() != null){
-			attack += chr.getr_hand().getAttackBonus();
+		if(chr.getRightHand() != null){
+			attack += chr.getRightHand().getAttackBonus();
 		}
 		int range = (int) (attack*0.2);
 		attack = (int) (attack + (random.nextInt(range+1) - range/2.0));
@@ -283,27 +283,27 @@ public class CombatSituation{
 	
 	public int calculateDefense(Game game, int character){
 		Character chr = game.getcharacters().get(character);
-		int defense = chr.getdefense();
-		if(chr.gethelm() != null){
-			defense += chr.gethelm().getDefenseBonus();
+		int defense = chr.getDefense();
+		if(chr.getHelm() != null){
+			defense += chr.getHelm().getDefenseBonus();
 		}
-		if(chr.getbraces() != null){
-			defense += chr.getbraces().getDefenseBonus();
+		if(chr.getBraces() != null){
+			defense += chr.getBraces().getDefenseBonus();
 		}
-		if(chr.getchest() != null){
-			defense += chr.getchest().getDefenseBonus();
+		if(chr.getChest() != null){
+			defense += chr.getChest().getDefenseBonus();
 		}
-		if(chr.getlegs() != null){
-			defense += chr.getlegs().getDefenseBonus();
+		if(chr.getLegs() != null){
+			defense += chr.getLegs().getDefenseBonus();
 		}
-		if(chr.getboots() != null){
-			defense += chr.getboots().getDefenseBonus();
+		if(chr.getBoots() != null){
+			defense += chr.getBoots().getDefenseBonus();
 		}
-		if(chr.getl_hand() != null){
-			defense += chr.getl_hand().getDefenseBonus();
+		if(chr.getLeftHand() != null){
+			defense += chr.getLeftHand().getDefenseBonus();
 		}
-		if(chr.getr_hand() != null){
-			defense += chr.getr_hand().getDefenseBonus();
+		if(chr.getRightHand() != null){
+			defense += chr.getRightHand().getDefenseBonus();
 		}
 		return defense;
 	}
@@ -314,15 +314,15 @@ public class CombatSituation{
 	
 	public void doPlayerWon(Game game, int playerIndex, int killedIndex){
 		// Let player know what they have done.
-		game.add_dialog("You killed " + game.getcharacters().get(killedIndex).getname() + "!");
+		game.add_dialog("You killed " + game.getcharacters().get(killedIndex).getName() + "!");
 		
 		// Get the player
 		Player player = ((Player) game.getcharacters().get(playerIndex));
 		
 		// Change player exp
-		int currentXP = player.getexperience();
-		player.setexperience(currentXP + 300);
-		System.out.println(player.getlevel() + " " + player.getskill_points());
+		int currentXP = player.getExperience();
+		player.setExperience(currentXP + 300);
+		System.out.println(player.getLevel() + " " + player.getskill_points());
 		// Let player know what they have earned.
 		game.add_dialog("You have been awarded 300 experience!");
 		
@@ -330,12 +330,12 @@ public class CombatSituation{
 		IDatabase db = DatabaseProvider.getInstance();
 		
 		// Determine if boss fight or not (for legendary drop or not)
-		if(game.getcharacters().get(killedIndex).getrace().equalsIgnoreCase("Greater Demon")){
+		if(game.getcharacters().get(killedIndex).getRace().equalsIgnoreCase("Greater Demon")){
 			// Get a legendary hand
 			Item handReward = db.getLegendaryItem(ItemType.R_HAND).result();
 			
 			// Give player the hand
-			player.getinventory().getitems().add(handReward);
+			player.getInventory().add(handReward);
 			game.add_dialog("The Greater Demon dropped a " + handReward.getName() + "!");
 		}else{
 			// Get an armor and a hand
@@ -343,8 +343,8 @@ public class CombatSituation{
 			Item handReward = db.getHandheldItem().result();
 			
 			// Give items to player
-			player.getinventory().getitems().add(armorReward);
-			player.getinventory().getitems().add(handReward);
+			player.getInventory().add(armorReward);
+			player.getInventory().add(handReward);
 			game.add_dialog("You got a " + armorReward.getName() + " and a " + handReward.getName() + "!");
 		}
 		
@@ -354,7 +354,7 @@ public class CombatSituation{
 		
 		// Check for alive combatant that isn't the player.
 		for(int characterIndex: characterIDs){
-			if(characterIndex != playerIndex && game.getcharacters().get(characterIndex).gethit_points() > 0){
+			if(characterIndex != playerIndex && game.getcharacters().get(characterIndex).getHP() > 0){
 				// If any aren't dead, combat isn't over.
 				done = false;
 			}
@@ -380,7 +380,7 @@ public class CombatSituation{
 		// Check for alive players yet
 		for(int characterIndex: characterIDs){
 			if(characterIndex != playerIndex && game.getcharacters().get(characterIndex) instanceof Player &&
-					game.getcharacters().get(characterIndex).gethit_points() > 0){
+					game.getcharacters().get(characterIndex).getHP() > 0){
 				done = false;
 			}
 		}

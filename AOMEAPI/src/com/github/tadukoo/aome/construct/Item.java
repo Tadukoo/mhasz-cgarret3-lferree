@@ -12,7 +12,8 @@ import com.github.tadukoo.database.mysql.syntax.ColumnDefinition;
  * @since 1.0 or earlier
  */
 public class Item extends Construct{
-	
+	/** The name of the table */
+	public static final String TABLE_NAME = "Items";
 	/** The column name for the description update column */
 	public static final String DESCRIPTION_UPDATE_COLUMN_NAME = "description_update";
 	/** The column name for the type column */
@@ -70,7 +71,7 @@ public class Item extends Construct{
 	/** {@inheritDoc} */
 	@Override
 	public String getTableName(){
-		return "Items";
+		return TABLE_NAME;
 	}
 	
 	/** {@inheritDoc} */

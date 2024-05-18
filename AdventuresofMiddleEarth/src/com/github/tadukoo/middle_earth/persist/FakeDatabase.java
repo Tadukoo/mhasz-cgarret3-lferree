@@ -23,9 +23,7 @@ import com.github.tadukoo.aome.construct.map.MapTileToMapMap;
 import com.github.tadukoo.aome.construct.map.ObjectToMapTileMap;
 import com.github.tadukoo.middle_earth.controller.Game;
 import com.github.tadukoo.aome.Quest;
-import com.github.tadukoo.aome.character.Character;
 import com.github.tadukoo.aome.character.Enemy;
-import com.github.tadukoo.aome.character.Inventory;
 import com.github.tadukoo.aome.character.Player;
 import com.github.tadukoo.middle_earth.persist.pojo.DatabaseResult;
 import com.github.tadukoo.util.StringUtil;
@@ -50,12 +48,9 @@ public class FakeDatabase implements IDatabase{
 	private final Map<Integer, GameObject> objectsByID;
 	private final List<MapTile> mapTiles;
 	private final Map<Integer, MapTile> mapTilesByID;
-	private final List<GameMap> maps;
 	private final Map<Integer, GameMap> mapsByID;
+	private final Map<Integer, Player> playersByID;
 	private final List<Quest> quests;
-	private final List<Character> characters;
-	private final List<Inventory> inventories;
-	private final List<Player> players;
 	private final List<Enemy> enemies;
 	private final List<StringPair> nameGenders;
 	
@@ -117,7 +112,7 @@ public class FakeDatabase implements IDatabase{
 			}
 			
 			// Maps
-			maps = InitialData.getMaps();
+			List<GameMap> maps = InitialData.getMaps();
 			mapsByID = maps.stream()
 					.collect(Collectors.toMap(GameMap::getID, map -> map));
 			
@@ -129,11 +124,50 @@ public class FakeDatabase implements IDatabase{
 				map.addMapTile(mapTile);
 			}
 			
+			// Players
+			List<Player> players = InitialData.getPlayers();
+			playersByID = players.stream()
+					.collect(Collectors.toMap(Player::getID, player -> player));
+			
+			// Items for players
+			for(Player player: players){
+				// Helm
+				if(player.getHelmID() != null){
+					player.setHelm(itemsByID.get(player.getHelmID()));
+				}
+				
+				// Braces
+				if(player.getBracesID() != null){
+					player.setBraces(itemsByID.get(player.getBracesID()));
+				}
+				
+				// Chest
+				if(player.getChestID() != null){
+					player.setChest(itemsByID.get(player.getChestID()));
+				}
+				
+				// Legs
+				if(player.getLegsID() != null){
+					player.setLegs(itemsByID.get(player.getLegsID()));
+				}
+				
+				// Boots
+				if(player.getBootsID() != null){
+					player.setBoots(itemsByID.get(player.getBootsID()));
+				}
+				
+				// Left Hand
+				if(player.getLeftHandID() != null){
+					player.setLeftHand(itemsByID.get(player.getLeftHandID()));
+				}
+				
+				// Right Hand
+				if(player.getRightHandID() != null){
+					player.setRightHand(itemsByID.get(player.getRightHandID()));
+				}
+			}
+			
 			quests = InitialData.getQuests();
-			characters = new ArrayList<>(); // TODO: Load in InitialData?
-			//inventoryList.addAll(InitialData.getItemsToInventories()); TODO: Fix?
-			inventories = new ArrayList<>();
-			players = InitialData.getPlayers();
 			enemies = InitialData.getEnemies();
 			nameGenders = InitialData.getNameGenderList();
 		}catch(IOException e){
@@ -292,20 +326,14 @@ public class FakeDatabase implements IDatabase{
 		return new DatabaseResult<>(mapsByID.get(id), null);
 	}
 	
-	@Override
-	public List<Character> getAllCharacters() {
-		return characters;
-	}
+	/*
+	 * Player Related Queries
+	 */
 	
+	/** {@inheritDoc} */
 	@Override
-	public Player getPlayer() {
-		
-		for(Inventory inventory : inventories) {
-			if(inventory.getinventory_id() == players.get(0).getinventory_id()) {
-				players.get(0).setinventory(inventory);
-			}
-		}
-		return players.get(0);
+	public DatabaseResult<Player> getPlayerByID(int id){
+		return new DatabaseResult<>(playersByID.get(id), null);
 	}
 	
 	@Override
@@ -329,39 +357,11 @@ public class FakeDatabase implements IDatabase{
 		}
 		return quests;
 	}
-	
-	@Override
-	public Character getCharacterByName(String characterName) {
-		for(Character character : characters) {
-			if(character.getname() == characterName) {
-				return character;
-			}
-		}
-		System.out.println("No character exists by that name");
-		return null;
-	}
-
-	@Override
-	public Inventory getInventoryByID(int inventoryID) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Item removeItemFromInventory(Item item, Inventory inventory) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public Item removeItemFromObject(Item item, GameObject object) {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	@Override
-	public void addItemToInventory(Item item, Inventory inventory) {
-		// TODO Auto-generated method stub
 	}
 
 	@Override
@@ -378,12 +378,12 @@ public class FakeDatabase implements IDatabase{
 	@Override
 	public Enemy getEnemyByRace(String race){
 		Enemy foundEnemy = enemies.stream()
-				.filter(enemy -> enemy.getrace().equals(race))
+				.filter(enemy -> enemy.getRace().equals(race))
 				.findFirst().orElse(null);
 		if(foundEnemy == null){
 			return null;
 		}
-		foundEnemy.setname(nameGenders.get(random.nextInt(nameGenders.size())).getString1());
+		foundEnemy.setName(nameGenders.get(random.nextInt(nameGenders.size())).getString1());
 		return foundEnemy;
 	}
 
@@ -396,7 +396,7 @@ public class FakeDatabase implements IDatabase{
 	@Override
 	public ArrayList<String> getAllEnemyRaces(){
 		return new ArrayList<>(enemies.stream()
-				.map(Enemy::getrace)
+				.map(Enemy::getRace)
 				.distinct()
 				.toList());
 	}

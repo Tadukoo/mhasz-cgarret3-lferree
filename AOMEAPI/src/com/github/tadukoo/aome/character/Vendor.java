@@ -5,12 +5,26 @@ import java.util.HashMap;
 import com.github.tadukoo.aome.character.Character;
 import com.github.tadukoo.aome.construct.Item;
 
+/**
+ * Vendor represents a shop {@link Character} in the game
+ *
+ * @author Logan Ferree (Tadukoo)
+ * @author Matt Hasz (mhasz239)
+ * @version 2.0
+ * @since 1.0 or earlier
+ */
 public class Vendor extends Character{
 	private HashMap<Item, Integer> item_prices;
 	
 	public Vendor(){
 		item_prices = new HashMap<Item, Integer>();
 	};
+	
+	/** {@inheritDoc} */
+	@Override
+	public String getTableName(){
+		return "Vendors";
+	}
 	
 	public int get_item_price(Item item){
 		return item_prices.get(item);

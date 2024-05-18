@@ -513,14 +513,103 @@ public class MySQLDatabase implements IDatabase{
 		return new DatabaseResult<>(map, error);
 	}
 	
-	@Override
-	public Player getPlayer(){
-		return null;
+	/*
+	 * Player Related Queries
+	 */
+	
+	/**
+	 * Used to load related data for the given {@link Player}
+	 *
+	 * @param player The {@link Player} to load other data for
+	 * @throws SQLException If anything goes wrong
+	 */
+	private void loadPlayerRelatedTypes(Player player) throws SQLException{
+		// Find Helm
+		if(player.getHelmID() != null){
+			Item helmSearch = new Item();
+			helmSearch.setType(ItemType.HELM);
+			helmSearch.setID(player.getHelmID());
+			List<Item> results = helmSearch.doSearch(database, Item.class, false);
+			player.setHelm(results.get(0));
+		}
+		
+		// Find Braces
+		if(player.getBracesID() != null){
+			Item bracesSearch = new Item();
+			bracesSearch.setType(ItemType.BRACES);
+			bracesSearch.setID(player.getBracesID());
+			List<Item> results = bracesSearch.doSearch(database, Item.class, false);
+			player.setBraces(results.get(0));
+		}
+		
+		// Find Chest
+		if(player.getChestID() != null){
+			Item chestSearch = new Item();
+			chestSearch.setType(ItemType.CHEST);
+			chestSearch.setID(player.getChestID());
+			List<Item> results = chestSearch.doSearch(database, Item.class, false);
+			player.setChest(results.get(0));
+		}
+		
+		// Find Legs
+		if(player.getLegsID() != null){
+			Item legsSearch = new Item();
+			legsSearch.setType(ItemType.LEGS);
+			legsSearch.setID(player.getLegsID());
+			List<Item> results = legsSearch.doSearch(database, Item.class, false);
+			player.setLegs(results.get(0));
+		}
+		
+		// Find Boots
+		if(player.getBootsID() != null){
+			Item bootsSearch = new Item();
+			bootsSearch.setType(ItemType.BOOTS);
+			bootsSearch.setID(player.getBootsID());
+			List<Item> results = bootsSearch.doSearch(database, Item.class, false);
+			player.setBoots(results.get(0));
+		}
+		
+		// Find Left Hand
+		if(player.getLeftHandID() != null){
+			Item leftHandSearch = new Item();
+			leftHandSearch.setType(ItemType.L_HAND);
+			leftHandSearch.setID(player.getLeftHandID());
+			List<Item> results = leftHandSearch.doSearch(database, Item.class, false);
+			player.setLeftHand(results.get(0));
+		}
+		
+		// Find Right Hand
+		if(player.getRightHandID() != null){
+			Item rightHandSearch = new Item();
+			rightHandSearch.setType(ItemType.R_HAND);
+			rightHandSearch.setID(player.getRightHandID());
+			List<Item> results = rightHandSearch.doSearch(database, Item.class, false);
+			player.setRightHand(results.get(0));
+		}
+		
+		// TODO: Find other Items
 	}
 	
+	/** {@inheritDoc} */
 	@Override
-	public List<Character> getAllCharacters(){
-		return null;
+	public DatabaseResult<Player> getPlayerByID(int id){
+		Player player = null;
+		String error = null;
+		try{
+			Player search = new Player();
+			search.setID(id);
+			List<Player> results = search.doSearch(database, Player.class, false);
+			if(results.isEmpty()){
+				error = "No players match that ID number";
+			}else{
+				player = results.get(0);
+				loadPlayerRelatedTypes(player);
+			}
+		}catch(SQLException e){
+			error = "Get Player By ID SQL Error";
+			logger.logError(error, e);
+		}
+		return new DatabaseResult<>(player, error);
 	}
 	
 	@Override
@@ -529,28 +618,8 @@ public class MySQLDatabase implements IDatabase{
 	}
 	
 	@Override
-	public Inventory getInventoryByID(int inventoryID){
-		return null;
-	}
-	
-	@Override
-	public Character getCharacterByName(String characterName){
-		return null;
-	}
-	
-	@Override
-	public Item removeItemFromInventory(Item item, Inventory inventory){
-		return null;
-	}
-	
-	@Override
 	public Item removeItemFromObject(Item item, GameObject object){
 		return null;
-	}
-	
-	@Override
-	public void addItemToInventory(Item item, Inventory inventory){
-	
 	}
 	
 	@Override

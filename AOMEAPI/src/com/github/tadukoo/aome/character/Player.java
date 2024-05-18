@@ -1,49 +1,101 @@
 package com.github.tadukoo.aome.character;
 
 import com.github.tadukoo.aome.Quest;
+import com.github.tadukoo.database.mysql.syntax.ColumnDefinition;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+/**
+ * Player represents a player {@link Character} in the game
+ *
+ * @author Logan Ferree (Tadukoo)
+ * @author Chris Garrety (cgarret3)
+ * @author Matt Hasz (mhasz239)
+ * @version 2.0
+ * @since 1.0 or earlier
+ */
 public class Player extends Character{
-	private int experience;
-	private int carry_weight; // Used for Stat purposes - not current carry weight.
-	private ArrayList<Quest> quests;
-	private int skill_points = 0;
-	private HashMap<Integer, Integer> lvl_up = new HashMap<Integer, Integer>();
+	/** The column name of the experience column */
+	public static final String EXPERIENCE_COLUMN_NAME = "experience";
+	/** The column name of the carry weight column */
+	public static final String CARRY_WEIGHT_COLUMN_NAME = "carry_weight";
 	
+	private List<Quest> quests;
+	private int skill_points = 0;
+	private Map<Integer, Integer> lvl_up = new HashMap<>();
 	
 	public Player(){
-		quests = new ArrayList<Quest>();
+		quests = new ArrayList<>();
 		for (int i = 1; i <= 20; i ++) {
 			lvl_up.put(i, i*50);
 		}
-		experience = 0;
+		setExperience(0);
 	}
 	
-	public int getexperience(){
-		return experience;
+	/** {@inheritDoc} */
+	@Override
+	public String getTableName(){
+		return "Players";
 	}
 	
-	public void setexperience(int experience){
-		this.experience = experience;
-		while (this.experience > lvl_up.get(this.getlevel())) {
-			this.experience = this.experience - lvl_up.get(this.getlevel());
-			this.setlevel(this.getlevel() + 1);
-			this.sethit_points(this.gethit_points() + 10);
-			this.setattack(this.getattack()+1);
-			this.setdefense(this.getdefense()+1);
+	@Override
+	public void setDefaultColumnDefs(){
+		super.setDefaultColumnDefs();
+		
+		// Experience Column
+		addColumnDef(ColumnDefinition.builder()
+				.columnName(EXPERIENCE_COLUMN_NAME)
+				.integer()
+				.defaultSize()
+				.build());
+		
+		// Carry Weight Column
+		addColumnDef(ColumnDefinition.builder()
+				.columnName(CARRY_WEIGHT_COLUMN_NAME)
+				.integer()
+				.defaultSize()
+				.build());
+	}
+	
+	/**
+	 * @return The experience of this {@link Player}
+	 */
+	public int getExperience(){
+		return (int) getItem(EXPERIENCE_COLUMN_NAME);
+	}
+	
+	/**
+	 * @param experience The experience to be set on this {@link Player}
+	 */
+	public void setExperience(int experience){
+		setItem(EXPERIENCE_COLUMN_NAME, experience);
+		while(experience > lvl_up.get(getLevel())){
+			experience -= lvl_up.get(getLevel());
+			setItem(EXPERIENCE_COLUMN_NAME, experience);
+			setLevel(getLevel() + 1);
+			setHP(getHP() + 10);
+			setAttack(getAttack()+1);
+			setDefense(getDefense()+1);
 			
 			setskill_points(3);
 		}
 	}
 	
-	public int getcarry_weight(){
-		return carry_weight;
+	/**
+	 * @return The carry weight of this {@link Player}
+	 */
+	public int getCarryWeight(){
+		return (int) getItem(CARRY_WEIGHT_COLUMN_NAME);
 	}
 	
-	public void setcarry_weight(int carry_weight){
-		this.carry_weight = carry_weight;
+	/**
+	 * @param carryWeight The carry weight to be set on this {@link Player}
+	 */
+	public void setCarryWeight(int carryWeight){
+		setItem(CARRY_WEIGHT_COLUMN_NAME, carryWeight);
 	}
 	
 	public void add_quest(Quest quest){
@@ -54,7 +106,7 @@ public class Player extends Character{
 		this.quests = quests;
 	}
 	
-	public ArrayList<Quest> getquests(){
+	public List<Quest> getquests(){
 		return quests;
 	}
 
@@ -65,6 +117,4 @@ public class Player extends Character{
 	public void setskill_points(int skill_points) {
 		this.skill_points += skill_points;
 	}
-	
-	
 }

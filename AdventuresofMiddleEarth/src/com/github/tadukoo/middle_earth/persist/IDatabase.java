@@ -8,7 +8,6 @@ import com.github.tadukoo.aome.character.Player;
 import com.github.tadukoo.aome.construct.ItemType;
 import com.github.tadukoo.middle_earth.controller.Game;
 import com.github.tadukoo.aome.Quest;
-import com.github.tadukoo.aome.character.Character;
 import com.github.tadukoo.aome.character.Enemy;
 import com.github.tadukoo.aome.construct.Item;
 import com.github.tadukoo.aome.construct.GameObject;
@@ -63,18 +62,13 @@ public interface IDatabase{
 	DatabaseResult<MapTile> getMapTileByID(int id);
 	DatabaseResult<GameMap> getMapByID(int id);
 	
-	Player getPlayer();
+	/*
+	 * Character Related Queries
+	 */
 	
-	List<Character> getAllCharacters();
+	DatabaseResult<Player> getPlayerByID(int id);
+	
 	List<Quest> getAllQuests();
-	
-	Inventory getInventoryByID(int inventoryID);
-	
-	Character getCharacterByName(String characterName);
-	
-	Item removeItemFromInventory(Item item, Inventory inventory);
-	
-	void addItemToInventory(Item item, Inventory inventory);
 	
 	Game loadGame(int gameID);
 	void saveGame(Game game);

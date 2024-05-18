@@ -12,7 +12,12 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 public class CharacterTest{
 	private Character character;
-	private static class Derp extends Character{}
+	private static class Derp extends Character{
+		@Override
+		public String getTableName(){
+			return null;
+		}
+	}
 	
 	@BeforeEach
 	public void setup(){
@@ -20,228 +25,224 @@ public class CharacterTest{
 	}
 	
 	@Test
-	public void testsetRace(){
+	public void testSetRace(){
 		// Set that race
-		character.setrace("Manticorn");
+		character.setRace("Manticorn");
 		
 		// Check that race (Manticorn privilege, anyone?)
-		assertEquals("Manticorn", character.getrace());
+		assertEquals("Manticorn", character.getRace());
 		
 		// Reset race in case of crazy adding
-		character.setrace("Monkey");
+		character.setRace("Monkey");
 		
 		// Check it again (Trans-Ethnic?)
-		assertEquals("Monkey", character.getrace());
+		assertEquals("Monkey", character.getRace());
 	}
 	
 	@Test
-	public void testsetName(){
+	public void testSetName(){
 		// Set my name
-		character.setname("Tadukoo");
+		character.setName("Tadukoo");
 		
 		// Check my name
-		assertEquals("Tadukoo", character.getname());
+		assertEquals("Tadukoo", character.getName());
 		
 		// Then Matt
-		character.setname("mhasz");
+		character.setName("mhasz");
 		
 		// Is Matt
-		assertEquals("mhasz", character.getname());
+		assertEquals("mhasz", character.getName());
 	}
 	
 	@Test
-	public void testsetGender(){
+	public void testSetGender(){
 		// The fairer gender
-		character.setgender("Female");
+		character.setGender("Female");
 		
 		// Yep, she's got the right parts
-		assertEquals("Female", character.getgender());
+		assertEquals("Female", character.getGender());
 		
 		// The other gender
-		character.setgender("Male");
+		character.setGender("Male");
 		
 		// I don't wanna check that
-		assertEquals("Male", character.getgender());
+		assertEquals("Male", character.getGender());
 	}
 	
 	@Test
-	public void testsetLevel(){
+	public void testSetLevel(){
 		// Set my level super high!
-		character.setlevel(10293);
+		character.setLevel(10293);
 		
 		// It's over 9000!
-		assertEquals(10293, character.getlevel());
+		assertEquals(10293, character.getLevel());
 		
 		// Check again!
-		character.setlevel(293);
+		character.setLevel(293);
 		
 		// Guess it's not off the scales after all...
-		assertEquals(293, character.getlevel());
+		assertEquals(293, character.getLevel());
 	}
 	
 	@Test
-	public void testsetHit_Points(){
+	public void testSetHit_Points(){
 		// Set those hps
-		character.sethit_points(10293);
+		character.setHP(10293);
 		
 		// Check them hps
-		assertEquals(10293, character.gethit_points());
+		assertEquals(10293, character.getHP());
 		
 		/// Set the health
-		character.sethit_points(293);
+		character.setHP(293);
 		
 		// Check the health
-		assertEquals(293, character.gethit_points());
+		assertEquals(293, character.getHP());
 	}
 	
 	@Test
-	public void testsetMagic_Points(){
+	public void testSetMagic_Points(){
 		// Set them mps
-		character.setmagic_points(10293);
+		character.setMP(10293);
 		
 		// Check those mps
-		assertEquals(10293, character.getmagic_points());
+		assertEquals(10293, character.getMP());
 		
 		// Set that magic
-		character.setmagic_points(293);
+		character.setMP(293);
 		
 		// Check that magic
-		assertEquals(293, character.getmagic_points());
+		assertEquals(293, character.getMP());
 	}
 	
 	@Test
-	public void testsetAttack(){
+	public void testSetAttack(){
 		// Set that att
-		character.setattack(10293);
+		character.setAttack(10293);
 		
 		// Check that att
-		assertEquals(10293, character.getattack());
+		assertEquals(10293, character.getAttack());
 		
 		// I'm sensing a pattern
-		character.setattack(293);
+		character.setAttack(293);
 		
 		// Is it a pattern?
-		assertEquals(293, character.getattack());
+		assertEquals(293, character.getAttack());
 	}
 	
 	@Test
-	public void testsetDefense(){
+	public void testSetDefense(){
 		// Set that def
-		character.setdefense(10293);
+		character.setDefense(10293);
 		
 		// Check that def
-		assertEquals(10293, character.getdefense());
+		assertEquals(10293, character.getDefense());
 		
 		// These numbers...
-		character.setdefense(293);
+		character.setDefense(293);
 		
 		// They seem familiar...
-		assertEquals(293, character.getdefense());
+		assertEquals(293, character.getDefense());
 	}
 	
 	@Test
-	public void testsetSpecial_Attack(){
+	public void testSetSpecial_Attack(){
 		// Set that spatt
-		character.setspecial_attack(10293);
+		character.setSpecialAttack(10293);
 		
 		// Check that spatt
-		assertEquals(10293, character.getspecial_attack());
+		assertEquals(10293, character.getSpecialAttack());
 		
 		// No really
-		character.setspecial_attack(293);
+		character.setSpecialAttack(293);
 		
 		// They're the same numbers
-		assertEquals(293, character.getspecial_attack());
+		assertEquals(293, character.getSpecialAttack());
 	}
 	
 	@Test
-	public void testsetSpecial_Defense(){
+	public void testSetSpecial_Defense(){
 		// Set that spdef
-		character.setspecial_defense(10293);
+		character.setSpecialDefense(10293);
 		
 		// Check that spdef
-		assertEquals(10293, character.getspecial_defense());
+		assertEquals(10293, character.getSpecialDefense());
 		
 		// Why would anyone be
-		character.setspecial_defense(293);
+		character.setSpecialDefense(293);
 		
 		// That lazy?
-		assertEquals(293, character.getspecial_defense());
+		assertEquals(293, character.getSpecialDefense());
 	}
 	
 	@Test
-	public void testsetCoins(){
+	public void testSetCoins(){
 		// Set that coinage
-		character.setcoins(10293);
+		character.setCoins(10293);
 		
 		// Cheque that coinage
-		assertEquals(10293, character.getcoins());
+		assertEquals(10293, character.getCoins());
 		
 		// It's much simpler
-		character.setcoins(293);
+		character.setCoins(293);
 		
 		// to do it
-		assertEquals(293, character.getcoins());
+		assertEquals(293, character.getCoins());
 	}
 	
 	@Test
-	public void testsetLocation(){
+	public void testSetLocation(){
 		// Set that locashe
-		character.setlocation(10293);
+		character.setLocationID(10293);
 		
 		// Check that locashe
-		assertEquals(10293, character.getlocation());
+		assertEquals(10293, character.getLocationID());
 		
 		// this
-		character.setlocation(293);
+		character.setLocationID(293);
 		
 		// way
-		assertEquals(293, character.getlocation());
+		assertEquals(293, character.getLocationID());
 	}
 	
 	@Test
-	public void testsetInventory(){
+	public void testSetInventory(){
 		// Setup an Inventory
-		Inventory inventory = new Inventory();
 		Item derp = new Item();
 		derp.setName("Derpy Derp");
 		ArrayList<Item> items = new ArrayList<>();
 		items.add(derp);
-		inventory.setitems(items);
 		
 		// Set it to the Character
-		character.setinventory(inventory);
+		character.setInventory(items);
 		
 		// Ensure it's right
-		assertEquals(inventory, character.getinventory());
+		assertEquals(items, character.getInventory());
 		
 		// Setup another Inventory
-		Inventory inventory2 = new Inventory();
 		Item derp2 = new Item();
 		derp2.setName("Not the Same Derp");
 		ArrayList<Item> items2 = new ArrayList<>();
 		items2.add(derp2);
-		inventory.setitems(items2);
 		
 		// reset the character's inventory to it
-		character.setinventory(inventory2);
+		character.setInventory(items2);
 		
 		// Ensure it's again right
-		assertEquals(inventory2, character.getinventory());
+		assertEquals(items2, character.getInventory());
 	}
 	
 	@Test
-	public void testsetHelm(){
+	public void testSetHelm(){
 		// Create Helmet
 		Item helmet = new Item();
 		helmet.setType(ItemType.HELM);
 		helmet.setName("Iron Helm");
 		
 		// Set the Helmet
-		character.sethelm(helmet);
+		character.setHelm(helmet);
 		
 		// Ensure it's right
-		assertEquals(helmet, character.gethelm());
+		assertEquals(helmet, character.getHelm());
 		
 		// Create another Helmet
 		Item helmet2 = new Item();
@@ -249,21 +250,21 @@ public class CharacterTest{
 		helmet2.setName("Golden Helmet");
 		
 		// Set the new helmet
-		character.sethelm(helmet2);
+		character.setHelm(helmet2);
 		
 		// Check it again
-		assertEquals(helmet2, character.gethelm());
+		assertEquals(helmet2, character.getHelm());
 	}
 	
 	@Test
-	public void testsetHelmNotHelm(){
+	public void testSetHelmNotHelm(){
 		// Create fake helmet
 		Item notHelmet = new Item();
 		notHelmet.setType(ItemType.MISC);
 		
 		// Ensure an IllegalArgumentException
 		try{
-			character.sethelm(notHelmet);
+			character.setHelm(notHelmet);
 			fail();
 		}catch(IllegalArgumentException e){
 			// Expected
@@ -271,17 +272,17 @@ public class CharacterTest{
 	}
 	
 	@Test
-	public void testsetBraces(){
+	public void testSetBraces(){
 		// Create Braces
 		Item braces = new Item();
 		braces.setType(ItemType.BRACES);
 		braces.setName("Iron Braces");
 		
 		// Set the Braces
-		character.setbraces(braces);
+		character.setBraces(braces);
 		
 		// Ensure it's right
-		assertEquals(braces, character.getbraces());
+		assertEquals(braces, character.getBraces());
 		
 		// Create another Braces
 		Item braces2 = new Item();
@@ -289,21 +290,21 @@ public class CharacterTest{
 		braces2.setName("Golden Braces");
 		
 		// Set the new braces
-		character.setbraces(braces2);
+		character.setBraces(braces2);
 		
 		// Check it again
-		assertEquals(braces2, character.getbraces());
+		assertEquals(braces2, character.getBraces());
 	}
 	
 	@Test
-	public void testsetBracesNotBraces(){
+	public void testSetBracesNotBraces(){
 		// Create fake braces
 		Item notBraces = new Item();
 		notBraces.setType(ItemType.MISC);
 		
 		// Ensure an IllegalArgumentException
 		try{
-			character.setbraces(notBraces);
+			character.setBraces(notBraces);
 			fail();
 		}catch(IllegalArgumentException e){
 			// Expected
@@ -311,17 +312,17 @@ public class CharacterTest{
 	}
 	
 	@Test
-	public void testsetChest(){
+	public void testSetChest(){
 		// Create Chest
 		Item chest = new Item();
 		chest.setType(ItemType.CHEST);
 		chest.setName("Iron Chest");
 		
 		// Set the Chest
-		character.setchest(chest);
+		character.setChest(chest);
 		
 		// Ensure it's right
-		assertEquals(chest, character.getchest());
+		assertEquals(chest, character.getChest());
 		
 		// Create another Chest
 		Item chest2 = new Item();
@@ -329,21 +330,21 @@ public class CharacterTest{
 		chest2.setName("Golden Chest");
 		
 		// Set the new chest
-		character.setchest(chest2);
+		character.setChest(chest2);
 		
 		// Check it again
-		assertEquals(chest2, character.getchest());
+		assertEquals(chest2, character.getChest());
 	}
 	
 	@Test
-	public void testsetChestNotChest(){
+	public void testSetChestNotChest(){
 		// Create fake chest
 		Item notChest = new Item();
 		notChest.setType(ItemType.MISC);
 		
 		// Ensure an IllegalArgumentException
 		try{
-			character.setchest(notChest);
+			character.setChest(notChest);
 			fail();
 		}catch(IllegalArgumentException e){
 			// Expected
@@ -351,17 +352,17 @@ public class CharacterTest{
 	}
 	
 	@Test
-	public void testsetLegs(){
+	public void testSetLegs(){
 		// Create Legs
 		Item legs = new Item();
 		legs.setType(ItemType.LEGS);
 		legs.setName("Iron Legs");
 		
 		// Set the Legs
-		character.setlegs(legs);
+		character.setLegs(legs);
 		
 		// Ensure it's right
-		assertEquals(legs, character.getlegs());
+		assertEquals(legs, character.getLegs());
 		
 		// Create another Legs
 		Item legs2 = new Item();
@@ -369,21 +370,21 @@ public class CharacterTest{
 		legs2.setName("Golden Legs");
 		
 		// Set the new legs
-		character.setlegs(legs2);
+		character.setLegs(legs2);
 		
 		// Check it again
-		assertEquals(legs2, character.getlegs());
+		assertEquals(legs2, character.getLegs());
 	}
 	
 	@Test
-	public void testsetLegsNotLegs(){
+	public void testSetLegsNotLegs(){
 		// Create fake legs
 		Item notLegs = new Item();
 		notLegs.setType(ItemType.MISC);
 		
 		// Ensure an IllegalArgumentException
 		try{
-			character.setlegs(notLegs);
+			character.setLegs(notLegs);
 			fail();
 		}catch(IllegalArgumentException e){
 			// Expected
@@ -391,17 +392,17 @@ public class CharacterTest{
 	}
 	
 	@Test
-	public void testsetBoots(){
+	public void testSetBoots(){
 		// Create Boots
 		Item boots = new Item();
 		boots.setType(ItemType.BOOTS);
 		boots.setName("Iron Boots");
 		
 		// Set the Boots
-		character.setboots(boots);
+		character.setBoots(boots);
 		
 		// Ensure it's right
-		assertEquals(boots, character.getboots());
+		assertEquals(boots, character.getBoots());
 		
 		// Create another Boots
 		Item boots2 = new Item();
@@ -409,21 +410,21 @@ public class CharacterTest{
 		boots2.setName("Golden Boots");
 		
 		// Set the new boots
-		character.setboots(boots2);
+		character.setBoots(boots2);
 		
 		// Check it again
-		assertEquals(boots2, character.getboots());
+		assertEquals(boots2, character.getBoots());
 	}
 	
 	@Test
-	public void testsetBootsNotBoots(){
+	public void testSetBootsNotBoots(){
 		// Create fake boots
 		Item notBoots = new Item();
 		notBoots.setType(ItemType.MISC);
 		
 		// Ensure an IllegalArgumentException
 		try{
-			character.setboots(notBoots);
+			character.setBoots(notBoots);
 			fail();
 		}catch(IllegalArgumentException e){
 			// Expected
@@ -431,17 +432,17 @@ public class CharacterTest{
 	}
 	
 	@Test
-	public void testsetL_Hand(){
+	public void testSetL_Hand(){
 		// Create hand
 		Item hand = new Item();
 		hand.setType(ItemType.L_HAND);
 		hand.setName("Iron Shield");
 		
 		// Set the Hand
-		character.setl_hand(hand);
+		character.setLeftHand(hand);
 		
 		// Ensure it's right
-		assertEquals(hand, character.getl_hand());
+		assertEquals(hand, character.getLeftHand());
 		
 		// Create another hand
 		Item hand2 = new Item();
@@ -449,21 +450,21 @@ public class CharacterTest{
 		hand2.setName("Golden Shield");
 		
 		// Set the new hand
-		character.setl_hand(hand2);
+		character.setLeftHand(hand2);
 		
 		// Check it again
-		assertEquals(hand2, character.getl_hand());
+		assertEquals(hand2, character.getLeftHand());
 	}
 	
 	@Test
-	public void testsetL_HandNotHand(){
+	public void testSetL_HandNotHand(){
 		// Create fake hand
 		Item notHand = new Item();
 		notHand.setType(ItemType.MISC);
 		
 		// Ensure an IllegalArgumentException
 		try{
-			character.setl_hand(notHand);
+			character.setLeftHand(notHand);
 			fail();
 		}catch(IllegalArgumentException e){
 			// Expected
@@ -471,17 +472,17 @@ public class CharacterTest{
 	}
 	
 	@Test
-	public void testsetR_Hand(){
+	public void testSetR_Hand(){
 		// Create hand
 		Item hand = new Item();
 		hand.setType(ItemType.R_HAND);
 		hand.setName("Iron Sword");
 		
 		// Set the Hand
-		character.setr_hand(hand);
+		character.setRightHand(hand);
 		
 		// Ensure it's right
-		assertEquals(hand, character.getr_hand());
+		assertEquals(hand, character.getRightHand());
 		
 		// Create another hand
 		Item hand2 = new Item();
@@ -489,21 +490,21 @@ public class CharacterTest{
 		hand2.setName("Golden Sword");
 		
 		// Set the new hand
-		character.setr_hand(hand2);
+		character.setRightHand(hand2);
 		
 		// Check it again
-		assertEquals(hand2, character.getr_hand());
+		assertEquals(hand2, character.getRightHand());
 	}
 	
 	@Test
-	public void testsetR_HandNotHand(){
+	public void testSetR_HandNotHand(){
 		// Create fake hand
 		Item notHand = new Item();
 		notHand.setType(ItemType.MISC);
 		
 		// Ensure an IllegalArgumentException
 		try{
-			character.setr_hand(notHand);
+			character.setRightHand(notHand);
 			fail();
 		}catch(IllegalArgumentException e){
 			// Expected

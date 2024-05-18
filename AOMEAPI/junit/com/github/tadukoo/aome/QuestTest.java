@@ -89,7 +89,7 @@ public class QuestTest{
 	public void testSetDialogue(){
 		HashMap<String, NPC> dialogue = new HashMap<>();
 		NPC npc1 = new NPC();
-		npc1.setname("Derpkins");
+		npc1.setName("Derpkins");
 		dialogue.put("My name is Derpkins.", npc1);
 		
 		quest.setDialogue(dialogue);
@@ -101,7 +101,7 @@ public class QuestTest{
 	public void testResetDialogue(){
 		HashMap<String, NPC> dialogue = new HashMap<>();
 		NPC npc1 = new NPC();
-		npc1.setname("Derpkins");
+		npc1.setName("Derpkins");
 		dialogue.put("My name is Derpkins.", npc1);
 		
 		quest.setDialogue(dialogue);
@@ -110,10 +110,10 @@ public class QuestTest{
 		
 		HashMap<String, NPC> dialogue2 = new HashMap<>();
 		NPC npc2 = new NPC();
-		npc2.setname("Derpy Derp");
+		npc2.setName("Derpy Derp");
 		dialogue2.put("Derp derp derp.", npc2);
 		NPC npc3 = new NPC();
-		npc3.setname("No Name");
+		npc3.setName("No Name");
 		dialogue2.put("Invalid NPC", npc3);
 		
 		quest.setDialogue(dialogue2);

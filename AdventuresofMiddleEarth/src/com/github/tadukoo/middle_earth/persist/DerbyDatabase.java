@@ -14,7 +14,6 @@ import com.github.tadukoo.middle_earth.controller.Game;
 import com.github.tadukoo.aome.Quest;
 import com.github.tadukoo.aome.character.Character;
 import com.github.tadukoo.aome.character.Enemy;
-import com.github.tadukoo.aome.character.Inventory;
 import com.github.tadukoo.aome.character.Player;
 import com.github.tadukoo.aome.construct.Item;
 import com.github.tadukoo.aome.construct.ItemType;
@@ -95,140 +94,24 @@ public class DerbyDatabase implements IDatabase {
 	
 	private void loadEnemy(Enemy enemy, ResultSet resultSet) throws SQLException {
 		int index = 1;
-		enemy.setrace(resultSet.getString(index++));
-		enemy.sethit_points(resultSet.getInt(index++));
-		enemy.setmagic_points(resultSet.getInt(index++));
+		enemy.setRace(resultSet.getString(index++));
+		enemy.setHP(resultSet.getInt(index++));
+		enemy.setMP(resultSet.getInt(index++));
 		
 		StringPair randNameGender = getRandomName();
 		
-		enemy.setname(randNameGender.getString1());
-		enemy.setgender(randNameGender.getString2());
-		enemy.setattack(resultSet.getInt(index++));
-		enemy.setdefense(resultSet.getInt(index++));
-		enemy.setspecial_attack(resultSet.getInt(index++));
-		enemy.setspecial_defense(resultSet.getInt(index));
+		enemy.setName(randNameGender.getString1());
+		enemy.setGender(randNameGender.getString2());
+		enemy.setAttack(resultSet.getInt(index++));
+		enemy.setDefense(resultSet.getInt(index++));
+		enemy.setSpecialAttack(resultSet.getInt(index++));
+		enemy.setSpecialDefense(resultSet.getInt(index));
 	}
 	
 	private void loadNameGender(StringPair nameGender, ResultSet resultSet) throws SQLException{
 		int index = 1;
 		nameGender.setString1(resultSet.getString(index++));
 		nameGender.setString2(resultSet.getString(index));
-	}
-	
-	private void loadPlayer(Player player, ResultSet resultSet){
-		int index = 1;
-		try {
-		player.setrace(resultSet.getString(index++));
-		player.setname(resultSet.getString(index++));
-		player.setgender(resultSet.getString(index++));
-		player.setlevel(resultSet.getInt(index++));
-		player.sethit_points(resultSet.getInt(index++));
-		
-		player.setmagic_points(resultSet.getInt(index++));
-		player.setattack(resultSet.getInt(index++));
-		player.setdefense(resultSet.getInt(index++));
-		player.setspecial_attack(resultSet.getInt(index++));
-		player.setspecial_defense(resultSet.getInt(index++));
-		
-		player.setcoins(resultSet.getInt(index++));
-		player.setlocation(resultSet.getInt(index++));
-		player.setinventory_id(resultSet.getInt(index++));
-
-		float carryWeight = 0;
-		player.setinventory(getInventoryByID(player.getinventory_id()));
-		
-		// Sum up inventory weight
-		for(Item item : player.getinventory().getitems()){
-			carryWeight += item.getWeight();
-		}
-
-		Item emptyItemSlot = new Item();
-		emptyItemSlot.setAttackBonus(0);
-		emptyItemSlot.setDefenseBonus(0);
-		emptyItemSlot.setDescriptionUpdate("You haven't equipped one");
-		emptyItemSlot.setHPBonus(0);
-		emptyItemSlot.setLevelRequirement(0);
-		emptyItemSlot.setID(0);
-		emptyItemSlot.setQuestItem(false);
-		emptyItemSlot.setWeight(0);
-		emptyItemSlot.setLongDescription("Empty Slot");
-		emptyItemSlot.setShortDescription("Empty Slot");
-		emptyItemSlot.setName("Empty Slot");
-
-		int itemID;
-		
-		// helm
-		if((itemID = resultSet.getInt(index++)) == 0) {
-			emptyItemSlot.setType(ItemType.HELM);
-			player.sethelm(emptyItemSlot);
-		} else {
-			player.sethelm(getItemByID(itemID).result());
-			carryWeight += player.gethelm().getWeight();
-		}
-		
-		// braces
-		if((itemID = resultSet.getInt(index++)) == 0) {
-			emptyItemSlot.setType(ItemType.BRACES);
-			player.setbraces(emptyItemSlot);
-		} else {
-			player.setbraces(getItemByID(itemID).result());
-			carryWeight += player.getbraces().getWeight();
-		}		
-		
-		// chest
-		if((itemID = resultSet.getInt(index++)) == 0) {
-			emptyItemSlot.setType(ItemType.CHEST);
-			player.setchest(emptyItemSlot);
-		} else {
-			player.setchest(getItemByID(itemID).result());
-			carryWeight += player.getchest().getWeight();
-		}
-		
-		// legs
-		if((itemID = resultSet.getInt(index++)) == 0) {
-			emptyItemSlot.setType(ItemType.LEGS);
-			player.setlegs(emptyItemSlot);
-		} else {
-			player.setlegs(getItemByID(itemID).result());
-			carryWeight += player.getlegs().getWeight();
-		}
-		
-		// boots
-		if((itemID = resultSet.getInt(index++)) == 0) {
-			emptyItemSlot.setType(ItemType.BOOTS);
-			player.setboots(emptyItemSlot);
-		} else {
-			player.setboots(getItemByID(itemID).result());
-			carryWeight += player.getboots().getWeight();
-		}
-		
-		// l_hand
-		if((itemID = resultSet.getInt(index++)) == 0) {
-			emptyItemSlot.setType(ItemType.L_HAND);
-			player.setl_hand(emptyItemSlot);
-		} else {
-			player.setl_hand(getItemByID(itemID).result());
-			carryWeight += player.getl_hand().getWeight();
-		}
-		
-		// r_hand
-		if((itemID = resultSet.getInt(index++)) == 0) {
-			emptyItemSlot.setType(ItemType.R_HAND);
-			player.setr_hand(emptyItemSlot);
-		} else {
-			player.setr_hand(getItemByID(itemID).result());
-			carryWeight += player.getr_hand().getWeight();
-		}
-		
-		player.setcarry_weight(index++);
-		player.setexperience(resultSet.getInt(index));
-		
-		// Add the sum total of weight to the inventory
-		player.getinventory().setweight((int)carryWeight);
-		
-		} catch (SQLException e) {
-			System.out.println(e.getMessage());
-		}
 	}
 	
 	/**************************************************************************************************
@@ -301,45 +184,8 @@ public class DerbyDatabase implements IDatabase {
 	//  								Players
 	///////////////////////////////////////////////////////////////////////////////////////
 	@Override
-	public Player getPlayer() {
-		return executeTransaction(conn -> {
-			PreparedStatement stmt = null;
-			ResultSet resultSet = null;
-			
-			try{
-				stmt = conn.prepareStatement("select * from players");
-				
-				Player result = new Player();
-				resultSet = stmt.executeQuery();
-				
-				boolean found = false;
-				while(resultSet.next()){
-					found = true;
-					
-					loadPlayer(result, resultSet);
-				}
-				
-				if(!found){
-					System.out.println("<players> table is empty");
-				}
-				
-				return result;
-			}finally{
-				DBUtil.closeQuietly(resultSet);
-				DBUtil.closeQuietly(stmt);
-				DBUtil.closeQuietly(conn);
-			}
-		});
-	}
-
-	///////////////////////////////////////////////////////////////////////////////////////
-	//  								Characters 
-	///////////////////////////////////////////////////////////////////////////////////////
-	@Override
-	public ArrayList<Character> getAllCharacters() {
-		ArrayList<Character> characterList = new ArrayList<>();
-		characterList.add(getPlayer());
-		return characterList;
+	public DatabaseResult<Player> getPlayerByID(int id){
+		throw new UnsupportedOperationException("DerbyDatabase not supported anymore!");
 	}
 	
 	///////////////////////////////////////////////////////////////////////////////////////
@@ -478,89 +324,6 @@ public class DerbyDatabase implements IDatabase {
 			}
 		});
 	}
-
-	////////////////////////////////////////////////////////////////////////////////////////
-	//									Inventories
-	////////////////////////////////////////////////////////////////////////////////////////
-	public Inventory getInventoryByID (int inventoryID) {
-		return executeTransaction(conn -> {
-			PreparedStatement stmt = null;
-			ResultSet resultSet = null;
-			
-			try{
-				stmt = conn.prepareStatement(
-						"select items.item_id "
-								+ "from items, itemstoinventories "
-								+ "where items.item_id = itemstoinventories.item_id "
-								+ "AND itemstoinventories.inventory_id = ? "
-				);
-				stmt.setInt(1, inventoryID);
-				
-				resultSet = stmt.executeQuery();
-				
-				Inventory inventory = new Inventory();
-				ArrayList<Item> itemList = new ArrayList<>();
-				
-				boolean found = false;
-				while(resultSet.next()){
-					found = true;
-					
-					Item item = getItemByID(resultSet.getInt(1)).result();
-					itemList.add(item);
-				}
-				if(!found){
-					System.out.println("This inventory is empty");
-				}
-				inventory.setitems(itemList);
-				
-				return inventory;
-			}finally{
-				DBUtil.closeQuietly(resultSet);
-				DBUtil.closeQuietly(stmt);
-				DBUtil.closeQuietly(conn);
-			}
-		});
-	}
-	
-	private Inventory getInventory (String playerName, int inventoryID) {
-		return executeTransaction(conn -> {
-			PreparedStatement stmt = null;
-			ResultSet resultSet = null;
-			
-			try{
-				stmt = conn.prepareStatement(
-						"select items.item_id "
-								+ "from items, itemstoinventories" + playerName
-								+ " where items.item_id = itemstoinventories" + playerName + ".item_id "
-								+ " AND itemstoinventories" + playerName + ".inventory_id = ? "
-				);
-				stmt.setInt(1, inventoryID);
-				
-				resultSet = stmt.executeQuery();
-				
-				Inventory inventory = new Inventory();
-				ArrayList<Item> itemList = new ArrayList<>();
-				
-				boolean found = false;
-				while(resultSet.next()){
-					found = true;
-					
-					Item item = getItemByID(resultSet.getInt(1)).result();
-					itemList.add(item);
-				}
-				if(!found){
-					System.out.println("This inventory is empty");
-				}
-				inventory.setitems(itemList);
-				
-				return inventory;
-			}finally{
-				DBUtil.closeQuietly(resultSet);
-				DBUtil.closeQuietly(stmt);
-				DBUtil.closeQuietly(conn);
-			}
-		});
-	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////
 	//										Users
@@ -617,15 +380,6 @@ public class DerbyDatabase implements IDatabase {
 		});
 	}
 	
-	/******************************************************************************************************
-	 * 										*Get Specific* Methods
-	 ******************************************************************************************************/
-	
-	@Override
-	public Character getCharacterByName(String characterName){
-		throw new UnsupportedOperationException("DerbyDatabase not supported anymore!");
-	}	
-	
 
 	/*******************************************************************************************************
 	*											load/save game
@@ -640,8 +394,8 @@ public class DerbyDatabase implements IDatabase {
 		game.setobjects(getAllObjects().result());
 		game.setitems(getAllItems().result());
 		ArrayList<Character> characterList = new ArrayList<>();
-		characterList.add(getPlayer());
-		characterList.get(0).setinventory(getInventory(characterList.get(0).getname(), characterList.get(0).getinventory_id()));
+		characterList.add(getPlayerByID(1).result());
+		//characterList.get(0).setInventory(getInventory(characterList.get(0).getName(), characterList.get(0).getinventory_id()));
 		game.setcharacters(characterList);
 		
 		return game;
@@ -678,7 +432,7 @@ public class DerbyDatabase implements IDatabase {
 				Player player = createPlayer();
 				
 				// create userObjects -- stmt 1
-				createWorldForNewGame(player.getname());
+				createWorldForNewGame(player.getName());
 				
 				// get gameID from gamestousers -- resultSet
 				stmt2 = conn.prepareStatement(
@@ -695,7 +449,7 @@ public class DerbyDatabase implements IDatabase {
 				stmt3 = conn.prepareStatement(
 						"insert into playerstogames (playername, game_id) values (?, ?) "
 				);
-				stmt3.setString(1, player.getname());
+				stmt3.setString(1, player.getName());
 				stmt3.setInt(2, gameID);
 				
 				insertPlayer(player);
@@ -822,32 +576,32 @@ public class DerbyDatabase implements IDatabase {
 						+ "?, ?)");
 				
 				int i = 1;
-				insertPlayer.setString(i++, player.getrace());
-				insertPlayer.setString(i++, player.getname());
-				insertPlayer.setString(i++, player.getgender());
-				insertPlayer.setInt(i++, player.getlevel());
-				insertPlayer.setInt(i++, player.gethit_points());
+				insertPlayer.setString(i++, player.getRace());
+				insertPlayer.setString(i++, player.getName());
+				insertPlayer.setString(i++, player.getGender());
+				insertPlayer.setInt(i++, player.getLevel());
+				insertPlayer.setInt(i++, player.getHP());
 				
-				insertPlayer.setInt(i++, player.getmagic_points());
-				insertPlayer.setInt(i++, player.getattack());
-				insertPlayer.setInt(i++, player.getdefense());
-				insertPlayer.setInt(i++, player.getspecial_attack());
-				insertPlayer.setInt(i++, player.getspecial_defense());
+				insertPlayer.setInt(i++, player.getMP());
+				insertPlayer.setInt(i++, player.getAttack());
+				insertPlayer.setInt(i++, player.getDefense());
+				insertPlayer.setInt(i++, player.getSpecialAttack());
+				insertPlayer.setInt(i++, player.getSpecialDefense());
 				
-				insertPlayer.setInt(i++, player.getcoins());
-				insertPlayer.setInt(i++, player.getlocation());
-				insertPlayer.setInt(i++, player.getinventory_id());
-				insertPlayer.setInt(i++, player.gethelm().getID());
-				insertPlayer.setInt(i++, player.getbraces().getID());
+				insertPlayer.setInt(i++, player.getCoins());
+				insertPlayer.setInt(i++, player.getLocationID());
+				//insertPlayer.setInt(i++, player.getinventory_id());
+				insertPlayer.setInt(i++, player.getHelm().getID());
+				insertPlayer.setInt(i++, player.getBraces().getID());
 				
-				insertPlayer.setInt(i++, player.getchest().getID());
-				insertPlayer.setInt(i++, player.getlegs().getID());
-				insertPlayer.setInt(i++, player.getboots().getID());
-				insertPlayer.setInt(i++, player.getl_hand().getID());
-				insertPlayer.setInt(i++, player.getr_hand().getID());
+				insertPlayer.setInt(i++, player.getChest().getID());
+				insertPlayer.setInt(i++, player.getLegs().getID());
+				insertPlayer.setInt(i++, player.getBoots().getID());
+				insertPlayer.setInt(i++, player.getLeftHand().getID());
+				insertPlayer.setInt(i++, player.getRightHand().getID());
 				
-				insertPlayer.setInt(i++, player.getexperience());
-				insertPlayer.setInt(i, player.getcarry_weight());
+				insertPlayer.setInt(i++, player.getExperience());
+				insertPlayer.setInt(i, player.getCarryWeight());
 				
 				insertPlayer.addBatch();
 				
@@ -1009,25 +763,25 @@ public class DerbyDatabase implements IDatabase {
 		
 		System.out.println("Choose your name: ");
 		
-		player.setname(keyboard.next());
+		player.setName(keyboard.next());
 		
 		String race = "Human";
-		player.setrace(race);
+		player.setRace(race);
 		
 		System.out.println("Choose your gender");
-		player.setgender(keyboard.next());
+		player.setGender(keyboard.next());
 		
-		player.setlevel(1);
-		player.sethit_points(100);
+		player.setLevel(1);
+		player.setHP(100);
 		
-		player.setmagic_points(25);
-		player.setattack(10);
-		player.setdefense(10);
-		player.setspecial_attack(15);
-		player.setspecial_defense(10);
+		player.setMP(25);
+		player.setAttack(10);
+		player.setDefense(10);
+		player.setSpecialAttack(15);
+		player.setSpecialDefense(10);
 		
-		player.setcoins(0);
-		player.setlocation(1);
+		player.setCoins(0);
+		player.setLocationID(1);
 
 		int carryWeight = 0;
 
@@ -1046,38 +800,38 @@ public class DerbyDatabase implements IDatabase {
 		
 		// helm
 		emptyItemSlot.setType(ItemType.HELM);
-		player.sethelm(emptyItemSlot);
+		player.setHelm(emptyItemSlot);
 		
 		// braces
 		emptyItemSlot.setType(ItemType.BRACES);
-		player.setbraces(emptyItemSlot);
+		player.setBraces(emptyItemSlot);
 		
 		// chest
 		emptyItemSlot.setType(ItemType.CHEST);
-		player.setchest(emptyItemSlot);
+		player.setChest(emptyItemSlot);
 		
 		emptyItemSlot.setType(ItemType.LEGS);
-		player.setlegs(emptyItemSlot);
+		player.setLegs(emptyItemSlot);
 		
 		// boots
 		emptyItemSlot.setType(ItemType.BOOTS);
-		player.setboots(emptyItemSlot);
+		player.setBoots(emptyItemSlot);
 		
 		// l_hand
 		emptyItemSlot.setType(ItemType.L_HAND);
-		player.setl_hand(emptyItemSlot);
+		player.setLeftHand(emptyItemSlot);
 		
 		// r_hand
 		emptyItemSlot.setType(ItemType.R_HAND);
-		player.setr_hand(emptyItemSlot);
+		player.setRightHand(emptyItemSlot);
 		
-		player.setcarry_weight(20);
-		player.setexperience(0);
+		player.setCarryWeight(20);
+		player.setExperience(0);
 		
-		player.setinventory(new Inventory());
+		//player.setInventory(new Inventory());
 		
 		// Add the sum total of weight to the inventory
-		player.getinventory().setweight(carryWeight);
+		//player.getInventory().setweight(carryWeight);
 		
 		//keyboard.close();
 		
@@ -1135,7 +889,7 @@ public class DerbyDatabase implements IDatabase {
 						"delete from players "
 						+ "where players.name = ? "
 				);
-				stmtRemovePlayer.setString(1, player.getname());
+				stmtRemovePlayer.setString(1, player.getName());
 				stmtRemovePlayer.executeUpdate();
 				
 				stmtUpdatePlayer = conn.prepareStatement(
@@ -1154,31 +908,31 @@ public class DerbyDatabase implements IDatabase {
 				);
 				
 					int i = 1;
-					stmtUpdatePlayer.setString(i++, player.getrace());
-					stmtUpdatePlayer.setString(i++, player.getname());
-					stmtUpdatePlayer.setString(i++, player.getgender());
-					stmtUpdatePlayer.setInt(i++, player.getlevel());
-					stmtUpdatePlayer.setInt(i++, player.gethit_points());
+					stmtUpdatePlayer.setString(i++, player.getRace());
+					stmtUpdatePlayer.setString(i++, player.getName());
+					stmtUpdatePlayer.setString(i++, player.getGender());
+					stmtUpdatePlayer.setInt(i++, player.getLevel());
+					stmtUpdatePlayer.setInt(i++, player.getHP());
 					
-					stmtUpdatePlayer.setInt(i++, player.getmagic_points());
-					stmtUpdatePlayer.setInt(i++, player.getattack());
-					stmtUpdatePlayer.setInt(i++, player.getdefense());
-					stmtUpdatePlayer.setInt(i++, player.getspecial_attack());
-					stmtUpdatePlayer.setInt(i++, player.getspecial_defense());
+					stmtUpdatePlayer.setInt(i++, player.getMP());
+					stmtUpdatePlayer.setInt(i++, player.getAttack());
+					stmtUpdatePlayer.setInt(i++, player.getDefense());
+					stmtUpdatePlayer.setInt(i++, player.getSpecialAttack());
+					stmtUpdatePlayer.setInt(i++, player.getSpecialDefense());
 					
-					stmtUpdatePlayer.setInt(i++, player.getcoins());
-					stmtUpdatePlayer.setInt(i++, player.getlocation());
-					stmtUpdatePlayer.setInt(i++, player.getinventory_id());
-					stmtUpdatePlayer.setInt(i++, player.gethelm().getID());
-					stmtUpdatePlayer.setInt(i++, player.getbraces().getID());
+					stmtUpdatePlayer.setInt(i++, player.getCoins());
+					stmtUpdatePlayer.setInt(i++, player.getLocationID());
+					//stmtUpdatePlayer.setInt(i++, player.getinventory_id());
+					stmtUpdatePlayer.setInt(i++, player.getHelm().getID());
+					stmtUpdatePlayer.setInt(i++, player.getBraces().getID());
 					
-					stmtUpdatePlayer.setInt(i++, player.getchest().getID());
-					stmtUpdatePlayer.setInt(i++, player.getlegs().getID());
-					stmtUpdatePlayer.setInt(i++, player.getboots().getID());
-					stmtUpdatePlayer.setInt(i++, player.getl_hand().getID());
-					stmtUpdatePlayer.setInt(i++, player.getr_hand().getID());
-					stmtUpdatePlayer.setInt(i++, player.getexperience());
-					stmtUpdatePlayer.setInt(i, player.getcarry_weight());
+					stmtUpdatePlayer.setInt(i++, player.getChest().getID());
+					stmtUpdatePlayer.setInt(i++, player.getLegs().getID());
+					stmtUpdatePlayer.setInt(i++, player.getBoots().getID());
+					stmtUpdatePlayer.setInt(i++, player.getLeftHand().getID());
+					stmtUpdatePlayer.setInt(i++, player.getRightHand().getID());
+					stmtUpdatePlayer.setInt(i++, player.getExperience());
+					stmtUpdatePlayer.setInt(i, player.getCarryWeight());
 					
 					stmtUpdatePlayer.addBatch();
 					stmtUpdatePlayer.executeBatch();
@@ -1198,7 +952,7 @@ public class DerbyDatabase implements IDatabase {
 			PreparedStatement stmt = null;
 			PreparedStatement stmt1 = null;
 			
-			List<Item> itemList = player.getinventory().getitems();
+			List<Item> itemList = player.getInventory();
 			ArrayList<Integer> itemIDList = new ArrayList<>();
 			for(Item item : itemList) {
 				itemIDList.add(item.getID());
@@ -1206,19 +960,19 @@ public class DerbyDatabase implements IDatabase {
 			
 			try {
 				stmt = conn.prepareStatement(
-						"delete from itemstoinventories" + player.getname() +
+						"delete from itemstoinventories" + player.getName() +
 						" where inventory_id = ? "
 				);
-				stmt.setInt(1, player.getinventory_id());
+				//stmt.setInt(1, player.getinventory_id());
 				stmt.executeUpdate();
 				
 				stmt1 = conn.prepareStatement(
-						"insert into itemstoinventories" + player.getname() +
+						"insert into itemstoinventories" + player.getName() +
 						" (item_id, inventory_id) "
 						+ "values (?, ?)");
 				for(Integer itemID : itemIDList) {
 					stmt1.setInt(1, itemID);
-					stmt1.setInt(2, player.getinventory_id());
+					//stmt1.setInt(2, player.getinventory_id());
 					stmt1.addBatch();
 				}
 				stmt1.executeBatch();
@@ -1235,28 +989,6 @@ public class DerbyDatabase implements IDatabase {
 	/*******************************************************************************************************
 	 * 											addToConstruct Methods
 	 *******************************************************************************************************/
-	
-	// Adds the association in the itemstoinventories table, adds the item to
-	// the inventory's item list.
-	public void addItemToInventory(final Item item, Inventory inventory) {
-		executeTransaction(conn -> {
-			PreparedStatement stmt = null;
-			try {
-				stmt = conn.prepareStatement(
-						"insert into itemstoinventories (item_id, inventory_id) "
-						+ "values (?, ?)");
-				stmt.setInt(1, item.getID());
-				stmt.setInt(2, inventory.getinventory_id());
-				stmt.executeUpdate();
-				
-				inventory.getitems().add(item);
-				return true;
-			} finally {
-				DBUtil.closeQuietly(stmt);
-				DBUtil.closeQuietly(conn);
-			}
-		});
-	}	
 	
 	// Adds an association in the itemstoobjects table and adds the item to the 
 	// object's itemList.
@@ -1303,31 +1035,6 @@ public class DerbyDatabase implements IDatabase {
 	/*******************************************************************************************************
 	 * 											removeFromConstruct Methods
 	 *******************************************************************************************************/
-	
-	// Removes the item from the inventory.  Deletes the association in the 
-	// itemstoinventories table in Derby.  Returns the same item given to it
-	public Item removeItemFromInventory(final Item item, Inventory inventory) {
-		return executeTransaction(conn -> {
-			PreparedStatement stmt = null;
-			
-			try{
-				stmt = conn.prepareStatement(
-						"delete from itemstoinventories "
-								+ "where itemstoinventories.item_id = ? "
-								+ "AND itemstoinventories.inventory_id = ? ");
-				stmt.setInt(1, item.getID());
-				stmt.setInt(2, inventory.getinventory_id());
-				stmt.executeUpdate();
-				
-				inventory.getitems().remove(item);
-				
-				return item;
-			}finally{
-				DBUtil.closeQuietly(stmt);
-				DBUtil.closeQuietly(conn);
-			}
-		});
-	}
 	
 	// Removes the item from the object.  Deletes the association in the
 	// itemstoobjects table in Derby.  Returns the same item given to it

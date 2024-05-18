@@ -5,7 +5,6 @@ import java.util.HashMap;
 
 import com.github.tadukoo.middle_earth.model.CombatSituation;
 import com.github.tadukoo.aome.character.Character;
-import com.github.tadukoo.aome.character.Inventory;
 import com.github.tadukoo.aome.character.Player;
 import com.github.tadukoo.aome.construct.Item;
 import com.github.tadukoo.aome.construct.map.GameMap;
@@ -66,8 +65,6 @@ public class GameHandleCommandTest{
 		playerItems.add(sword);
 		playerItems.add(helmet);
 		playerItems.add(key);
-		Inventory inventory = new Inventory();
-		inventory.setitems(playerItems);
 		player.setInventory(playerItems);
 		
 		// Add Player to Game

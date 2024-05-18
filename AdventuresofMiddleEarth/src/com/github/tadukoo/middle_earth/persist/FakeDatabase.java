@@ -2,6 +2,7 @@ package com.github.tadukoo.middle_earth.persist;
 
 import com.github.tadukoo.aome.InitialData;
 import com.github.tadukoo.aome.User;
+import com.github.tadukoo.aome.character.ItemToPlayerMap;
 import com.github.tadukoo.aome.construct.ItemToObjectMap;
 import com.github.tadukoo.aome.construct.ItemType;
 import com.github.tadukoo.aome.construct.map.GameMap;
@@ -165,6 +166,14 @@ public class FakeDatabase implements IDatabase{
 				if(player.getRightHandID() != null){
 					player.setRightHand(itemsByID.get(player.getRightHandID()));
 				}
+			}
+			
+			// Items to Players
+			List<ItemToPlayerMap> itemsToPlayers = InitialData.getItemsToPlayers();
+			for(ItemToPlayerMap itemToPlayer: itemsToPlayers){
+				Item item = itemsByID.get(itemToPlayer.getItemID());
+				Player player = playersByID.get(itemToPlayer.getPlayerID());
+				player.getInventory().add(item);
 			}
 			
 			quests = InitialData.getQuests();

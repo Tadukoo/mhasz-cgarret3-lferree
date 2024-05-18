@@ -18,6 +18,8 @@ import java.util.Map;
  * @since 1.0 or earlier
  */
 public class Player extends Character{
+	/** The table name */
+	public static final String TABLE_NAME = "Players";
 	/** The column name of the experience column */
 	public static final String EXPERIENCE_COLUMN_NAME = "experience";
 	/** The column name of the carry weight column */
@@ -38,7 +40,7 @@ public class Player extends Character{
 	/** {@inheritDoc} */
 	@Override
 	public String getTableName(){
-		return "Players";
+		return TABLE_NAME;
 	}
 	
 	@Override

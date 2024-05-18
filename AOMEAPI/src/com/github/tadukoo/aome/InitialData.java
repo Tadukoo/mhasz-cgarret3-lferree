@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.github.tadukoo.aome.character.Enemy;
+import com.github.tadukoo.aome.character.ItemToPlayerMap;
 import com.github.tadukoo.aome.character.Player;
 import com.github.tadukoo.aome.construct.GameObject;
 import com.github.tadukoo.aome.construct.ItemToObjectMap;
@@ -30,6 +31,12 @@ import com.github.tadukoo.util.StringUtil;
  */
 public class InitialData{
 	
+	/**
+	 * Used to parse int values from text in the CSV's where the value could be null
+	 *
+	 * @param text The text to be parsed
+	 * @return The integer parsed from the text, or null
+	 */
 	private static Integer parsePotentiallyNullInt(String text){
 		if(StringUtil.equalsIgnoreCase(text, "null")){
 			return null;
@@ -349,24 +356,27 @@ public class InitialData{
 		}
 	}
 	
-	public static ArrayList<Integer> getInventoriesToCharacters() throws IOException {
-		ArrayList<Integer> inventoriesToCharactersList = new ArrayList<>();
-		try(ReadCSV readInventoriesToCharacters = new ReadCSV("inventoriestocharacters.csv")){
-			while(true){
-				List<String> tuple = readInventoriesToCharacters.next();
-				if(tuple == null){
-					break;
-				}
+	/**
+	 * @return A List of {@link ItemToPlayerMap Item to Player mappings} based on the CSV to use for initial data
+	 * @throws IOException If anything goes wrong
+	 */
+	public static List<ItemToPlayerMap> getItemsToPlayers() throws IOException{
+		List<ItemToPlayerMap> itemsToPlayers = new ArrayList<>();
+		// Read Items to Players
+		try(ReadCSV readItemsToPlayers = new ReadCSV("itemstoplayers.csv")){
+			List<String> tuple = readItemsToPlayers.next();
+			while(tuple != null){
+				// Create the Item to Player mapping and add it to the list
+				int itemID = Integer.parseInt(tuple.get(0));
+				int playerID = Integer.parseInt(tuple.get(1));
+				itemsToPlayers.add(new ItemToPlayerMap(itemID, playerID));
 				
-				for(String s: tuple){
-					inventoriesToCharactersList.add(parsePotentiallyNullInt(s));
-				}
+				// Grab next tuple
+				tuple = readItemsToPlayers.next();
 			}
-			return inventoriesToCharactersList;
-			
+			return itemsToPlayers;
 		}
 	}
-	
 	
 	public static ArrayList<StringPair> getNameGenderList() throws IOException {
 		ArrayList<StringPair> nameGenderList = new ArrayList<>();
@@ -407,26 +417,6 @@ public class InitialData{
 				enemyList.add(enemy);
 			}
 			return enemyList;
-		}
-	}
-		
-	public static ArrayList<IntPair> getItemsToInventories() throws IOException {
-		ArrayList<IntPair> itemToInventoryList = new ArrayList<>();
-		try(ReadCSV readItemsToInventories = new ReadCSV("itemstoinventories.csv")){
-			while(true){
-				List<String> tuple = readItemsToInventories.next();
-				if(tuple == null){
-					break;
-				}
-				Iterator<String> i = tuple.iterator();
-				IntPair intPair = new IntPair();
-				intPair.setInt1(Integer.parseInt(i.next()));
-				intPair.setInt2(Integer.parseInt(i.next()));
-				
-				itemToInventoryList.add(intPair);
-			}
-			return itemToInventoryList;
-			
 		}
 	}
 	

@@ -2,6 +2,7 @@ package com.github.tadukoo.dbsetup;
 
 import com.github.tadukoo.aome.InitialData;
 import com.github.tadukoo.aome.User;
+import com.github.tadukoo.aome.character.ItemToPlayerMap;
 import com.github.tadukoo.aome.character.Player;
 import com.github.tadukoo.aome.construct.GameObject;
 import com.github.tadukoo.aome.construct.Item;
@@ -93,20 +94,15 @@ public class SetupDatabase{
 		// Create Players table
 		Player player = new Player();
 		player.createTable(database);
+		
+		// Create Items to Players table
+		ItemToPlayerMap itemToPlayerMap = new ItemToPlayerMap();
+		itemToPlayerMap.createTable(database);
 	}
 	
 	/*
 	 * Other Tables Creation to be moved
 	 *
-	 *  Going to change Items to Inventories to Items to Players (don't have a way to distinguish inventories now)
-				stmt7 = conn.prepareStatement(
-						"create table itemstoinventories ("
-						+ "item_id int, "
-						+ "inventory_id int"
-						+ ")"
-				);
-				stmt7.executeUpdate();
-				
 				stmt12 = conn.prepareStatement(
 						"create table enemies ("
 						+ "race varchar(40), "
@@ -226,6 +222,12 @@ public class SetupDatabase{
 		List<Player> players = InitialData.getPlayers();
 		for(Player player: players){
 			player.storeValues(database, false);
+		}
+		
+		// Load Items to Players
+		List<ItemToPlayerMap> itemsToPlayers = InitialData.getItemsToPlayers();
+		for(ItemToPlayerMap itemToPlayer: itemsToPlayers){
+			itemToPlayer.storeValues(database, false);
 		}
 	}
 }

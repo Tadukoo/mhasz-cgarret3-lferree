@@ -3,7 +3,6 @@ package com.github.tadukoo.middle_earth.persist;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.github.tadukoo.aome.character.Inventory;
 import com.github.tadukoo.aome.character.Player;
 import com.github.tadukoo.aome.construct.ItemType;
 import com.github.tadukoo.middle_earth.controller.Game;

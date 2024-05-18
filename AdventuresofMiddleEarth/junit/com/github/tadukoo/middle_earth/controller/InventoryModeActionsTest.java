@@ -3,7 +3,6 @@ package com.github.tadukoo.middle_earth.controller;
 import java.util.ArrayList;
 
 import com.github.tadukoo.aome.character.Character;
-import com.github.tadukoo.aome.character.Inventory;
 import com.github.tadukoo.aome.character.Player;
 import com.github.tadukoo.aome.construct.Item;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,8 +42,6 @@ public class InventoryModeActionsTest{
 		playerItems.add(sword);
 		playerItems.add(helmet);
 		playerItems.add(key);
-		Inventory inventory = new Inventory();
-		inventory.setitems(playerItems);
 		player.setInventory(playerItems);
 		
 		// Setup Character Array

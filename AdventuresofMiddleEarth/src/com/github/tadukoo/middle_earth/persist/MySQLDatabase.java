@@ -1,6 +1,7 @@
 package com.github.tadukoo.middle_earth.persist;
 
 import com.github.tadukoo.aome.User;
+import com.github.tadukoo.aome.character.ItemToPlayerMap;
 import com.github.tadukoo.aome.construct.ItemToObjectMap;
 import com.github.tadukoo.aome.construct.ItemType;
 import com.github.tadukoo.aome.construct.ObjectCommandResponse;
@@ -17,9 +18,7 @@ import com.github.tadukoo.database.mysql.syntax.reference.ColumnRef;
 import com.github.tadukoo.database.mysql.syntax.reference.TableRef;
 import com.github.tadukoo.database.mysql.syntax.statement.SQLSelectStatement;
 import com.github.tadukoo.middle_earth.controller.Game;
-import com.github.tadukoo.aome.character.Character;
 import com.github.tadukoo.aome.character.Enemy;
-import com.github.tadukoo.aome.character.Inventory;
 import com.github.tadukoo.aome.character.Player;
 import com.github.tadukoo.aome.construct.Item;
 import com.github.tadukoo.aome.construct.map.GameMap;
@@ -587,7 +586,14 @@ public class MySQLDatabase implements IDatabase{
 			player.setRightHand(results.get(0));
 		}
 		
-		// TODO: Find other Items
+		// Find other Items
+		ItemToPlayerMap search = new ItemToPlayerMap();
+		search.setPlayerID(player.getID());
+		List<ItemToPlayerMap> itemsToPlayers = search.doSearch(database, ItemToPlayerMap.class, false);
+		for(ItemToPlayerMap itemToPlayer: itemsToPlayers){
+			Item item = getItemByID(itemToPlayer.getItemID()).result();
+			player.getInventory().add(item);
+		}
 	}
 	
 	/** {@inheritDoc} */

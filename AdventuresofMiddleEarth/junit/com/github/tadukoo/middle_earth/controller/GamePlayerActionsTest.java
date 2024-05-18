@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.github.tadukoo.aome.character.Character;
-import com.github.tadukoo.aome.character.Inventory;
 import com.github.tadukoo.aome.character.Player;
 import com.github.tadukoo.aome.construct.Item;
 import com.github.tadukoo.aome.construct.map.GameMap;
@@ -57,8 +56,6 @@ public class GamePlayerActionsTest{
 		playerItems.add(sword);
 		playerItems.add(helmet);
 		playerItems.add(key);
-		Inventory inventory = new Inventory();
-		inventory.setitems(playerItems);
 		player.setInventory(playerItems);
 		
 		tree = new GameObject();

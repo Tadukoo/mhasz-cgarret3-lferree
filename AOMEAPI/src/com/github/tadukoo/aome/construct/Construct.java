@@ -36,7 +36,7 @@ public abstract class Construct extends AbstractDatabasePojo{
 	 * @param shortDescription The short description of the {@link Construct}
 	 * @param longDescription The long description of the {@link Construct}
 	 */
-	protected Construct(int id, String name, String shortDescription, String longDescription){
+	protected Construct(Integer id, String name, String shortDescription, String longDescription){
 		super();
 		setID(id);
 		setName(name);
@@ -88,13 +88,13 @@ public abstract class Construct extends AbstractDatabasePojo{
 	 * @return The ID of this {@link Construct}
 	 */
 	public int getID(){
-		return (int) getItem(ID_COLUMN_NAME);
+		return (Integer) getItem(ID_COLUMN_NAME);
 	}
 	
 	/**
 	 * @param id The ID to be set on the {@link Construct}
 	 */
-	public void setID(int id){
+	public void setID(Integer id){
 		setItem(ID_COLUMN_NAME, id);
 	}
 	

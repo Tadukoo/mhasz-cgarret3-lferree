@@ -55,7 +55,7 @@ public class Item extends Construct{
 	 * @param weight The weight of the {@link Item}
 	 */
 	public Item(
-			int id, String name, String shortDescription, String longDescription,
+			Integer id, String name, String shortDescription, String longDescription,
 			String descriptionUpdate, ItemType type, int levelRequirement,
 			int attackBonus, int defenseBonus, int hpBonus, float weight){
 		super(id, name, shortDescription, longDescription);

@@ -77,7 +77,6 @@ public class InitialData{
 		List<Item> items = new ArrayList<>();
 		// Read items from the CSV
 		try(ReadCSV readItems = new ReadCSV("items.csv")){
-			int id = 1;
 			List<String> tuple = readItems.next();
 			while(tuple != null){
 				// Grab the parts of the Item
@@ -93,7 +92,7 @@ public class InitialData{
 				int levelRequirement = Integer.parseInt(tuple.get(9));
 				
 				// Create the item and add it to the List
-				items.add(new Item(id++, name, shortDescription, longDescription,
+				items.add(new Item(null, name, shortDescription, longDescription,
 						descriptionUpdate, type, levelRequirement,
 						attackBonus, defenseBonus, hpBonus, weight));
 				
@@ -112,12 +111,10 @@ public class InitialData{
 		List<GameObject> objects = new ArrayList<>();
 		// Read Objects from the CSV
 		try(ReadCSV readObjects = new ReadCSV("objects.csv")){
-			int objectID = 1;
 			List<String> tuple = readObjects.next();
 			while(tuple != null){
 				// Create the object and add it to the list
 				GameObject object = new GameObject();
-				object.setID(objectID++);
 				object.setName(tuple.get(0));
 				object.setLongDescription(tuple.get(1));
 				object.setShortDescription(tuple.get(2));
@@ -185,12 +182,10 @@ public class InitialData{
 		List<MapTile> mapTiles = new ArrayList<>();
 		// Read Map Tiles from the CSV
 		try(ReadCSV readMapTiles = new ReadCSV("maptiles.csv")){
-			int mapTileID = 1;
 			List<String> tuple = readMapTiles.next();
 			while(tuple != null){
 				// Create the Map Tile and add it to the list
 				MapTile mapTile = new MapTile();
-				mapTile.setID(mapTileID++);
 				mapTile.setName(tuple.get(0));
 				mapTile.setLongDescription(tuple.get(1));
 				mapTile.setShortDescription(tuple.get(2));
@@ -266,14 +261,13 @@ public class InitialData{
 		List<GameMap> maps = new ArrayList<>();
 		// Read Maps
 		try(ReadCSV readMaps = new ReadCSV("map.csv")){
-			int mapID = 1;
 			List<String> tuple = readMaps.next();
 			while(tuple != null){
 				// Create the Map and add it to the list
 				String name = tuple.get(0);
 				String shortDescription = tuple.get(1);
 				String longDescription = tuple.get(2);
-				maps.add(new GameMap(mapID++, name, shortDescription, longDescription));
+				maps.add(new GameMap(null, name, shortDescription, longDescription));
 				
 				// Grab next tuple
 				tuple = readMaps.next();
@@ -312,12 +306,10 @@ public class InitialData{
 		List<Player> players = new ArrayList<>();
 		// Read Players
 		try(ReadCSV readPlayers = new ReadCSV("players.csv")){
-			int playerID = 1;
 			List<String> tuple = readPlayers.next();
 			while(tuple != null){
 				// Create the Player and add it to the list
 				Player player = new Player();
-				player.setID(playerID++);
 				player.setName(tuple.get(0));
 				player.setRace(tuple.get(1));
 				player.setGender(tuple.get(2));

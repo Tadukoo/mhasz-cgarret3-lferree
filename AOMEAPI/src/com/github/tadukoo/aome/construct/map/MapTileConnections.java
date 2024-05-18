@@ -22,7 +22,6 @@ public class MapTileConnections extends AbstractDatabasePojo{
 	private static final String SOUTHWEST_TILE_ID_COLUMN_NAME = "southwest_tile_id";
 	private static final String WEST_TILE_ID_COLUMN_NAME = "west_tile_id";
 	private static final String NORTHWEST_TILE_ID_COLUMN_NAME = "northwest_tile_id";
-	private static final String TEMP_MAP_TILE_KEY = "TEMP MAP TILE";
 	
 	public MapTileConnections(){
 	
@@ -43,16 +42,19 @@ public class MapTileConnections extends AbstractDatabasePojo{
 		setNorthwestTileID(northwestTileID);
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public String getTableName(){
 		return "MapTileConnections";
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public String getIDColumnName(){
-		return MAP_TILE_ID_COLUMN_NAME;
+		return null;
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public void setDefaultColumnDefs(){
 		String mapTileTableName = MapTile.TABLE_NAME;

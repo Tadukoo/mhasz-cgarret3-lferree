@@ -12,7 +12,7 @@ public class GameMap extends Construct{
 		mapTiles = new ArrayList<>();
 	}
 	
-	public GameMap(int mapID, String name, String shortDescription, String longDescription){
+	public GameMap(Integer mapID, String name, String shortDescription, String longDescription){
 		super(mapID, name, shortDescription, longDescription);
 		mapTiles = new ArrayList<>();
 	}

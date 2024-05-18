@@ -63,15 +63,22 @@ public class FakeDatabase implements IDatabase{
 			users = InitialData.getUsers();
 			int id = 1;
 			for(User user: users){
-				user.setItem(User.USER_ID_COLUMN_NAME, id);
-				id++;
+				user.setItem(User.USER_ID_COLUMN_NAME, id++);
 			}
 			
 			// Items
 			items = InitialData.getItems();
+			id = 1;
+			for(Item item: items){
+				item.setID(id++);
+			}
 			
 			// Objects
 			objects = InitialData.getObjects();
+			id = 1;
+			for(GameObject object: objects){
+				object.setID(id++);
+			}
 			
 			// Items to Objects
 			List<ItemToObjectMap> itemsToObjects = InitialData.getItemsToObjects();
@@ -94,6 +101,10 @@ public class FakeDatabase implements IDatabase{
 			
 			// Map Tiles
 			mapTiles = InitialData.getMapTiles();
+			id = 1;
+			for(MapTile mapTile: mapTiles){
+				mapTile.setID(id++);
+			}
 			
 			// Objects to Map Tiles
 			List<ObjectToMapTileMap> objectsToMapTiles = InitialData.getObjectsToMapTiles();
@@ -114,6 +125,10 @@ public class FakeDatabase implements IDatabase{
 			
 			// Maps
 			List<GameMap> maps = InitialData.getMaps();
+			id = 1;
+			for(GameMap map: maps){
+				map.setID(id++);
+			}
 			mapsByID = maps.stream()
 					.collect(Collectors.toMap(GameMap::getID, map -> map));
 			
@@ -127,6 +142,10 @@ public class FakeDatabase implements IDatabase{
 			
 			// Players
 			List<Player> players = InitialData.getPlayers();
+			id = 1;
+			for(Player player: players){
+				player.setID(id++);
+			}
 			playersByID = players.stream()
 					.collect(Collectors.toMap(Player::getID, player -> player));
 			

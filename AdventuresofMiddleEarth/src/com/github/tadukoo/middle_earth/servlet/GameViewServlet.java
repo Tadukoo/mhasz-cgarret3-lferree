@@ -1,6 +1,6 @@
 package com.github.tadukoo.middle_earth.servlet;
 
-import com.github.tadukoo.middle_earth.controller.Game;
+import com.github.tadukoo.middle_earth.controller.GameController;
 
 import java.io.IOException;
 
@@ -16,7 +16,7 @@ public class GameViewServlet extends HttpServlet{
             throws ServletException, IOException{
         System.out.println("GameView Servlet: doGet");
         
-        Game game = (Game) req.getSession().getAttribute("game");
+        GameController game = (GameController) req.getSession().getAttribute("game");
 		
         game.setmode("game");
         req.setAttribute("mode", game.getmode());
@@ -51,11 +51,11 @@ public class GameViewServlet extends HttpServlet{
         	}else{
         		req.getSession().setAttribute("exit", false);
         		req.setAttribute("command", null);
-        		req.setAttribute("mode", ((Game) req.getSession().getAttribute("game")).getmode());
+        		req.setAttribute("mode", ((GameController) req.getSession().getAttribute("game")).getmode());
         		req.getRequestDispatcher("/_view/GameView.jsp").forward(req, resp);
         	}
         }else{
-        	Game game = (Game) req.getSession().getAttribute("game");
+        	GameController game = (GameController) req.getSession().getAttribute("game");
         	req.getSession().setAttribute("command", req.getParameter("command"));
          
         	if(req.getParameter("command") != null &&

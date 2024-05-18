@@ -1,6 +1,6 @@
 package com.github.tadukoo.middle_earth.servlet;
 
-import com.github.tadukoo.middle_earth.controller.Game;
+import com.github.tadukoo.middle_earth.controller.GameController;
 import com.github.tadukoo.aome.character.Character;
 import com.github.tadukoo.aome.construct.Item;
 
@@ -20,7 +20,7 @@ public class GameServlet extends HttpServlet{
             throws ServletException, IOException{
         System.out.println("Game Servlet: doGet");
         
-        Game game = (Game) req.getSession().getAttribute("game");
+        GameController game = (GameController) req.getSession().getAttribute("game");
         String command = (String) req.getSession().getAttribute("command");
         
         game.setmode("game");
@@ -114,7 +114,7 @@ public class GameServlet extends HttpServlet{
             throws ServletException, IOException{
         System.out.println("Game Servlet: doPost");
         
-        Game game = (Game) req.getSession().getAttribute("game");
+        GameController game = (GameController) req.getSession().getAttribute("game");
         game.setmode("game");
         
         // holds the error message text, if there is any

@@ -2,14 +2,13 @@ package com.github.tadukoo.middle_earth.controller;
 
 import java.util.ArrayList;
 
+import com.github.tadukoo.aome.game.Game;
 import com.github.tadukoo.middle_earth.model.CombatSituation;
 import com.github.tadukoo.aome.Quest;
 import com.github.tadukoo.aome.character.Character;
 import com.github.tadukoo.aome.character.Player;
-import com.github.tadukoo.aome.construct.Item;
 import com.github.tadukoo.aome.construct.map.GameMap;
 import com.github.tadukoo.aome.construct.map.MapTile;
-import com.github.tadukoo.aome.construct.GameObject;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -23,81 +22,88 @@ public class GameSettersTest{
 	@Test
 	public void testgetGame(){
 		Game game = new Game();
+		GameController gameController = new GameController(game);
 		
-		assertEquals(game, game.getgame());
+		assertEquals(gameController, gameController.getGameController());
 	}
 	
 	@Test
 	public void testsetMode(){
 		Game game = new Game();
+		GameController gameController = new GameController(game);
 		
-		game.setmode("game");
+		gameController.setmode("game");
 		
-		assertEquals("game", game.getmode());
+		assertEquals("game", gameController.getmode());
 	}
 	
 	@Test
 	public void testResetMode(){
 		Game game = new Game();
+		GameController gameController = new GameController(game);
 		
-		game.setmode("game");
+		gameController.setmode("game");
 		
-		assertEquals("game", game.getmode());
+		assertEquals("game", gameController.getmode());
 		
-		game.setmode("inventory");
+		gameController.setmode("inventory");
 		
-		assertEquals("inventory", game.getmode());
+		assertEquals("inventory", gameController.getmode());
 	}
 	
 	@Test
 	public void testsetCharacters(){
 		Game game = new Game();
+		GameController gameController = new GameController(game);
 		ArrayList<Character> chars = new ArrayList<>();
 		Player player = new Player();
 		chars.add(player);
 		
-		game.setcharacters(chars);
+		gameController.setcharacters(chars);
 		
-		assertEquals(1, game.getcharacters().size());
-		assertEquals(player, game.getcharacters().get(0));
+		assertEquals(1, gameController.getcharacters().size());
+		assertEquals(player, gameController.getcharacters().get(0));
 	}
 	
 	@Test
 	public void testResetCharacters(){
 		Game game = new Game();
+		GameController gameController = new GameController(game);
 		ArrayList<Character> chars = new ArrayList<>();
 		Player player = new Player();
 		chars.add(player);
 		
-		game.setcharacters(chars);
+		gameController.setcharacters(chars);
 		
-		assertEquals(1, game.getcharacters().size());
-		assertEquals(player, game.getcharacters().get(0));
+		assertEquals(1, gameController.getcharacters().size());
+		assertEquals(player, gameController.getcharacters().get(0));
 		
 		ArrayList<Character> chars2 = new ArrayList<>();
 		chars2.add(new Player());
 		chars2.add(new Player());
 		
-		game.setcharacters(chars2);
+		gameController.setcharacters(chars2);
 		
-		assertEquals(2, game.getcharacters().size());
+		assertEquals(2, gameController.getcharacters().size());
 	}
 	
 	@Test
 	public void testgetPlayer(){
 		Game game = new Game();
+		GameController gameController = new GameController(game);
 		
 		ArrayList<Character> characters = new ArrayList<>();
 		characters.add(new Player());
 		
-		game.setcharacters(characters);
+		gameController.setcharacters(characters);
 		
-		assertEquals(game.getcharacters().get(0), game.getplayer());
+		assertEquals(gameController.getcharacters().get(0), gameController.getplayer());
 	}
 	
 	@Test
 	public void testgetPlayer_setCharacters(){
 		Game game = new Game();
+		GameController gameController = new GameController(game);
 		ArrayList<Character> chars = new ArrayList<>();
 		Player player = new Player();
 		player.setHP(100);
@@ -108,294 +114,236 @@ public class GameSettersTest{
 		chars.add(player);
 		chars.add(player2);
 		
-		game.setcharacters(chars);
+		gameController.setcharacters(chars);
 		
-		assertEquals(2, game.getcharacters().size());
-		assertEquals(player, game.getcharacters().get(0));
-		assertEquals(player2, game.getcharacters().get(1));
+		assertEquals(2, gameController.getcharacters().size());
+		assertEquals(player, gameController.getcharacters().get(0));
+		assertEquals(player2, gameController.getcharacters().get(1));
 		
-		assertEquals(player, game.getplayer());
+		assertEquals(player, gameController.getplayer());
 	}
 	
 	@Test
 	public void testsetMap(){
 		Game game = new Game();
+		GameController gameController = new GameController(game);
 		GameMap mappy = new GameMap();
-		game.setmap(mappy);
+		gameController.setmap(mappy);
 		
-		assertEquals(mappy, game.getmap());
+		assertEquals(mappy, gameController.getmap());
 	}
 	
 	@Test
 	public void testResetMap(){
 		Game game = new Game();
+		GameController gameController = new GameController(game);
 		GameMap mappy = new GameMap();
-		game.setmap(mappy);
+		gameController.setmap(mappy);
 		
-		assertEquals(mappy, game.getmap());
+		assertEquals(mappy, gameController.getmap());
 		
 		GameMap mappy2 = new GameMap();
 		mappy2.addMapTile(new MapTile());
-		game.setmap(mappy2);
+		gameController.setmap(mappy2);
 		
-		assertEquals(mappy2, game.getmap());
-	}
-	
-	@Test
-	public void testsetObjects(){
-		Game game = new Game();
-		ArrayList<GameObject> objs = new ArrayList<>();
-		GameObject bloop = new GameObject();
-		objs.add(bloop);
-		game.setobjects(objs);
-		
-		assertEquals(1, game.getobjects().size());
-		assertEquals(bloop, game.getobjects().get(0));
-	}
-	
-	@Test
-	public void testResetObjects(){
-		Game game = new Game();
-		ArrayList<GameObject> objs = new ArrayList<>();
-		GameObject bloop = new GameObject();
-		objs.add(bloop);
-		game.setobjects(objs);
-		
-		assertEquals(1, game.getobjects().size());
-		assertEquals(bloop, game.getobjects().get(0));
-		
-		ArrayList<GameObject> objs2 = new ArrayList<>();
-		GameObject bloop2 = new GameObject();
-		GameObject derpy = new GameObject();
-		objs2.add(bloop2);
-		objs2.add(derpy);
-		game.setobjects(objs2);
-		
-		assertEquals(2, game.getobjects().size());
-		assertEquals(bloop2, game.getobjects().get(0));
-		assertEquals(derpy, game.getobjects().get(1));
-	}
-	
-	@Test
-	public void testsetItems(){
-		Game game = new Game();
-		ArrayList<Item> itms = new ArrayList<>();
-		Item plop = new Item();
-		itms.add(plop);
-		game.setitems(itms);
-		
-		assertEquals(1, game.getitems().size());
-		assertEquals(plop, game.getitems().get(0));
-	}
-	
-	@Test
-	public void testResetItems(){
-		Game game = new Game();
-		ArrayList<Item> itms = new ArrayList<>();
-		Item plop = new Item();
-		itms.add(plop);
-		game.setitems(itms);
-		
-		assertEquals(1, game.getitems().size());
-		assertEquals(plop, game.getitems().get(0));
-		
-		ArrayList<Item> itms2 = new ArrayList<>();
-		Item plop2 = new Item();
-		Item derp = new Item();
-		itms2.add(plop2);
-		itms2.add(derp);
-		game.setitems(itms2);
-		
-		assertEquals(2, game.getitems().size());
-		assertEquals(plop2, game.getitems().get(0));
-		assertEquals(derp, game.getitems().get(1));
+		assertEquals(mappy2, gameController.getmap());
 	}
 	
 	@Test
 	public void testsetDialog(){
 		Game game = new Game();
+		GameController gameController = new GameController(game);
 		
 		ArrayList<String> test_dialog = new ArrayList<>();
 		test_dialog.add("This is a ");
 		test_dialog.add("pretty simple ");
 		test_dialog.add(" test.");
 		
-		game.setdialog(test_dialog);
+		gameController.setdialog(test_dialog);
 		
-		assertEquals(3, game.getdialog().size());
-		assertEquals("This is a ", game.getdialog().get(0));
-		assertEquals("pretty simple ", game.getdialog().get(1));
-		assertEquals(" test.", game.getdialog().get(2));
+		assertEquals(3, gameController.getdialog().size());
+		assertEquals("This is a ", gameController.getdialog().get(0));
+		assertEquals("pretty simple ", gameController.getdialog().get(1));
+		assertEquals(" test.", gameController.getdialog().get(2));
 	}
 	
 	@Test
 	public void testResetDialog(){
 		Game game = new Game();
+		GameController gameController = new GameController(game);
 		
 		ArrayList<String> test_dialog = new ArrayList<>();
 		test_dialog.add("This is a ");
 		test_dialog.add("pretty simple ");
 		test_dialog.add(" test.");
 		
-		game.setdialog(test_dialog);
+		gameController.setdialog(test_dialog);
 		
-		assertEquals(3, game.getdialog().size());
-		assertEquals("This is a ", game.getdialog().get(0));
-		assertEquals("pretty simple ", game.getdialog().get(1));
-		assertEquals(" test.", game.getdialog().get(2));
+		assertEquals(3, gameController.getdialog().size());
+		assertEquals("This is a ", gameController.getdialog().get(0));
+		assertEquals("pretty simple ", gameController.getdialog().get(1));
+		assertEquals(" test.", gameController.getdialog().get(2));
 		
 		ArrayList<String> test_dialog2 = new ArrayList<>();
 		test_dialog2.add("Another");
 		test_dialog2.add("simple");
 		
-		game.setdialog(test_dialog2);
+		gameController.setdialog(test_dialog2);
 		
-		assertEquals(2, game.getdialog().size());
-		assertEquals("Another", game.getdialog().get(0));
-		assertEquals("simple", game.getdialog().get(1));
+		assertEquals(2, gameController.getdialog().size());
+		assertEquals("Another", gameController.getdialog().get(0));
+		assertEquals("simple", gameController.getdialog().get(1));
 	}
 	
 	@Test
 	public void testAdd_Dialog(){
 		Game game = new Game();
+		GameController gameController = new GameController(game);
 		
-		assertEquals(0, game.getdialog().size());
+		assertEquals(0, gameController.getdialog().size());
 		
-		game.add_dialog("Test");
+		gameController.add_dialog("Test");
 		
-		assertEquals(1, game.getdialog().size());
-		assertEquals("Test", game.getdialog().get(0));
+		assertEquals(1, gameController.getdialog().size());
+		assertEquals("Test", gameController.getdialog().get(0));
 		
-		game.add_dialog("Testy 2");
+		gameController.add_dialog("Testy 2");
 		
-		assertEquals(2, game.getdialog().size());
-		assertEquals("Test", game.getdialog().get(0));
-		assertEquals("Testy 2", game.getdialog().get(1));
+		assertEquals(2, gameController.getdialog().size());
+		assertEquals("Test", gameController.getdialog().get(0));
+		assertEquals("Testy 2", gameController.getdialog().get(1));
 	}
 	
 	@Test
 	public void testAdd_Dialog_Over25(){
 		Game game = new Game();
+		GameController gameController = new GameController(game);
 		
-		assertEquals(0, game.getdialog().size());
+		assertEquals(0, gameController.getdialog().size());
 		
 		for(int i = 0; i < 35; i++){
-			game.add_dialog("Test: " + i);
-			assertEquals(i+1, game.getdialog().size());
+			gameController.add_dialog("Test: " + i);
+			assertEquals(i+1, gameController.getdialog().size());
 			for(int j = 0; j < i; j++){
-				assertEquals("Test: " + j, game.getdialog().get(j));
+				assertEquals("Test: " + j, gameController.getdialog().get(j));
 			}
 		}
-		assertEquals(35, game.getdialog().size());
+		assertEquals(35, gameController.getdialog().size());
 		
-		game.add_dialog("Derp");
+		gameController.add_dialog("Derp");
 		
 		// 35 = max dialog length
-		assertEquals(35, game.getdialog().size());
+		assertEquals(35, gameController.getdialog().size());
 		
 		for(int i = 0; i < 34; i++){
-			assertEquals("Test: " + (i+1), game.getdialog().get(i));
+			assertEquals("Test: " + (i+1), gameController.getdialog().get(i));
 		}
-		assertEquals("Derp", game.getdialog().get(34));
+		assertEquals("Derp", gameController.getdialog().get(34));
 	}
 	
 	@Test
 	public void testgetDisplay_Text(){
 		Game game = new Game();
+		GameController gameController = new GameController(game);
 		
 		ArrayList<String> test_dialog = new ArrayList<>();
 		test_dialog.add("This is a ");
 		test_dialog.add("pretty simple ");
 		test_dialog.add(" test.");
 		
-		game.setdialog(test_dialog);
+		gameController.setdialog(test_dialog);
 		
-		assertEquals("This is a ;pretty simple ; test.", game.getdisplay_text());
+		assertEquals("This is a ;pretty simple ; test.", gameController.getdisplay_text());
 	}
 	
 	@Test
 	public void testsetQuests(){
 		Game game = new Game();
+		GameController gameController = new GameController(game);
 		
 		ArrayList<Quest> quests = new ArrayList<>();
-		game.setquests(quests);
+		gameController.setquests(quests);
 		
-		assertEquals(quests, game.getquests());
+		assertEquals(quests, gameController.getquests());
 	}
 	
 	@Test
 	public void testResetQuests(){
 		Game game = new Game();
+		GameController gameController = new GameController(game);
 		
 		ArrayList<Quest> quests = new ArrayList<>();
-		game.setquests(quests);
+		gameController.setquests(quests);
 		
-		assertEquals(quests, game.getquests());
+		assertEquals(quests, gameController.getquests());
 		
 		ArrayList<Quest> quests2 = new ArrayList<>();
 		quests2.add(new Quest());
-		game.setquests(quests2);
+		gameController.setquests(quests2);
 		
-		assertEquals(quests2, game.getquests());
+		assertEquals(quests2, gameController.getquests());
 	}
 	
 	@Test
 	public void testgetMapTile_LongDescription(){
 		Game game = new Game();
+		GameController gameController = new GameController(game);
 		ArrayList<Character> chars = new ArrayList<>();
 		Player player = new Player();
 		player.setLocationID(0);
 		chars.add(player);
-		game.setcharacters(chars);
+		gameController.setcharacters(chars);
 		
 		GameMap map = new GameMap();
 		MapTile starting = new MapTile();
 		starting.setName("Derp");
 		starting.setLongDescription("Just a long description here. Nothing more.");
 		map.addMapTile(starting);
-		game.setmap(map);
+		gameController.setmap(map);
 		
-		assertEquals(starting.getLongDescription(), game.getmapTile_longDescription());
+		assertEquals(starting.getLongDescription(), gameController.getmapTile_longDescription());
 	}
 	
 	@Test
 	public void testgetMapTile_Name(){
 		Game game = new Game();
+		GameController gameController = new GameController(game);
 		ArrayList<Character> chars = new ArrayList<>();
 		Player player = new Player();
 		player.setLocationID(0);
 		chars.add(player);
-		game.setcharacters(chars);
+		gameController.setcharacters(chars);
 		
 		GameMap map = new GameMap();
 		MapTile starting = new MapTile();
 		starting.setName("Derp");
 		starting.setLongDescription("Just a long description here. Nothing more.");
 		map.addMapTile(starting);
-		game.setmap(map);
+		gameController.setmap(map);
 		
-		assertEquals(starting.getName(), game.getmapTile_name());
+		assertEquals(starting.getName(), gameController.getmapTile_name());
 	}
 	
 	@Test
 	public void testsetBattle(){
 		Game game = new Game();
+		GameController gameController = new GameController(game);
 		
 		ArrayList<Character> chars = new ArrayList<>();
 		Player player = new Player();
 		player.setLocationID(1);
 		chars.add(player);
-		game.setcharacters(chars);
+		gameController.setcharacters(chars);
 		
-		CombatSituation sitch = new CombatSituation(game, 1, 0);
-		game.setBattle(sitch);
+		CombatSituation sitch = new CombatSituation(gameController, 1, 0);
+		gameController.setBattle(sitch);
 		
-		assertEquals(sitch, game.getBattle());
+		assertEquals(sitch, gameController.getBattle());
 		
 		// Do it again (for weird adding)
-		CombatSituation burp = new CombatSituation(game, 2, 0);
-		game.setBattle(burp);
+		CombatSituation burp = new CombatSituation(gameController, 2, 0);
+		gameController.setBattle(burp);
 		
-		assertEquals(burp, game.getBattle());
+		assertEquals(burp, gameController.getBattle());
 	}
 }

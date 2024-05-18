@@ -3,6 +3,7 @@ package com.github.tadukoo.middle_earth.controller;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.github.tadukoo.aome.game.Game;
 import com.github.tadukoo.aome.character.Character;
 import com.github.tadukoo.aome.character.Player;
 import com.github.tadukoo.aome.construct.map.GameMap;
@@ -14,12 +15,13 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class HandleObjectCommandsTest{
-	private Game game;
+	private GameController gameController;
 	
 	@BeforeEach
 	public void setup(){
 		// Create the Game
-		game = new Game();
+		Game game = new Game();
+		gameController = new GameController(game);
 		
 		// Create Player
 		Player player = new Player();
@@ -30,7 +32,7 @@ public class HandleObjectCommandsTest{
 		chars.add(player);
 		
 		// Set Characters Array in Game
-		game.setcharacters(chars);
+		gameController.setcharacters(chars);
 		
 		// Create a generic MapTile
 		MapTile tile = new MapTile();
@@ -46,7 +48,7 @@ public class HandleObjectCommandsTest{
 		map.setMapTiles(tiles);
 		
 		// Set the Map to the Game
-		game.setmap(map);
+		gameController.setmap(map);
 		
 		// Create a tree
 		GameObject IDontKnowAnymore = new GameObject();
@@ -66,20 +68,20 @@ public class HandleObjectCommandsTest{
 	@Test
 	public void testClimbTreeCommand(){
 		// Run the command
-		game.handle_command("climb tree");
+		gameController.handle_command("climb tree");
 		
 		// Check that dialog was updated correctly
-		assertEquals(1, game.getdialog().size());
-		assertEquals("Hello now", game.getdialog().get(0));
+		assertEquals(1, gameController.getdialog().size());
+		assertEquals("Hello now", gameController.getdialog().get(0));
 	}
 	
 	@Test
 	public void testClimbTreeCommandWeirdCapitals(){
 		// Run the command
-		game.handle_command("cLImB TReE");
+		gameController.handle_command("cLImB TReE");
 		
 		// Check that dialog was updated correctly
-		assertEquals(1, game.getdialog().size());
-		assertEquals("Hello now", game.getdialog().get(0));
+		assertEquals(1, gameController.getdialog().size());
+		assertEquals("Hello now", gameController.getdialog().get(0));
 	}
 }

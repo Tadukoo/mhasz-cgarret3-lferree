@@ -2,6 +2,7 @@ package com.github.tadukoo.middle_earth.controller;
 
 import java.util.ArrayList;
 
+import com.github.tadukoo.aome.game.Game;
 import com.github.tadukoo.aome.character.Character;
 import com.github.tadukoo.aome.character.Player;
 import com.github.tadukoo.aome.construct.map.GameMap;
@@ -17,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * The movement commands are in here separate due to how many there are. It's insane.
  */
 public class HandleMovementCommandsTest{
-	private Game game;
+	private GameController gameController;
 	private Player player;
 	private GameMap map;
 	private MapTile starting;
@@ -35,14 +36,15 @@ public class HandleMovementCommandsTest{
 	@BeforeEach
 	public void setup(){
 		DatabaseProvider.setInstance(new FakeDatabase());
-		game = new Game();
+		Game game = new Game();
+		gameController = new GameController(game);
 		// This is here just in case the Game doesn't initialize the current mode to this.
-		game.setmode("game");
+		gameController.setmode("game");
 		player = new Player();
 		player.setLocationID(0);
 		ArrayList<Character> characters = new ArrayList<>();
 		characters.add(player);
-		game.setcharacters(characters);
+		gameController.setcharacters(characters);
 		
 		// MapTiles		8 1 2
 		//				7 0 3
@@ -117,13 +119,13 @@ public class HandleMovementCommandsTest{
 		tiles.add(northWestOfStarting);
 		map.setMapTiles(tiles);
 		
-		game.setmap(map);
+		gameController.setmap(map);
 	}
 	
 	/**
 	 * This method is to be used by this class. It ensures that a move command functions in valid conditions
 	 */
-	public void checkValidMoveUpdates(Game game, MapTile original, MapTile destination, String command){
+	public void checkValidMoveUpdates(GameController game, MapTile original, MapTile destination, String command){
 		checkValidMovePreconditions(game, original);
 		
 		// Run the command.
@@ -135,7 +137,7 @@ public class HandleMovementCommandsTest{
 	/**
 	 * This method is to be used by any class that checks that movement preconditions are setup correctly.
 	 */
-	public static void checkValidMovePreconditions(Game game, MapTile original){
+	public static void checkValidMovePreconditions(GameController game, MapTile original){
 		// Ensure the player is in the correct starting location.
 		assertEquals(original.getID(), game.getplayer().getLocationID());
 	}
@@ -144,7 +146,7 @@ public class HandleMovementCommandsTest{
 	 * This method is to be used by any class that checks that movement has worked correctly.
 	 * It ensures that conditions after the movement are correct.
 	 */
-	public static void checkValidMovePostConditions(Game game, MapTile destination){
+	public static void checkValidMovePostConditions(GameController game, MapTile destination){
 		// Ensure the player moved to the correct destination.
 		assertEquals(destination.getID(), game.getplayer().getLocationID());
 		
@@ -161,7 +163,7 @@ public class HandleMovementCommandsTest{
 	/**
 	 * This method is to be used by this class. It ensures that move commands behave properly in invalid conditions.
 	 */
-	public static void checkInvalidMoveUpdates(Game game, MapTile setup, String command){
+	public static void checkInvalidMoveUpdates(GameController game, MapTile setup, String command){
 		setupInvalidMovePreConditions(game, setup);
 		
 		// Run the command
@@ -174,7 +176,7 @@ public class HandleMovementCommandsTest{
 	 * This method is meant to be used by any class that checks invalid movement conditions.
 	 * It sets up the location for the player.
 	 */
-	public static void setupInvalidMovePreConditions(Game game, MapTile setup){
+	public static void setupInvalidMovePreConditions(GameController game, MapTile setup){
 		// Set the player's location to the requested maptile.
 		game.getplayer().setLocationID(setup.getID());
 		// Ensure the player's location is properly set.
@@ -185,7 +187,7 @@ public class HandleMovementCommandsTest{
 	 * This method is meant to be used by any class that checks invalid movement conditions.
 	 * It ensures the method has responded properly to not being able to move that direction.
 	 */
-	public static void checkInvalidMovePostConditions(Game game, MapTile setup){
+	public static void checkInvalidMovePostConditions(GameController game, MapTile setup){
 		// Ensure the player's location hasn't changed.
 		assertEquals(setup.getID(), game.getplayer().getLocationID());
 		// Ensure the game's dialog got one new line.
@@ -197,7 +199,7 @@ public class HandleMovementCommandsTest{
 	/**
 	 * This method is to be used by any class that checks movement commands when not in mode = Game.
 	 */
-	public static void checkNotInModeGame(Game game, MapTile original, String command){
+	public static void checkNotInModeGame(GameController game, MapTile original, String command){
 		// Set mode to anything other than game
 		game.setmode("inventory");
 		
@@ -219,11 +221,11 @@ public class HandleMovementCommandsTest{
 	@Test
 	public void testInvalidDirection(){
 		// Run command
-		game.handle_command("move deprirber0oger");
+		gameController.handle_command("move deprirber0oger");
 		
 		// Check that correct error stuff is set
-		assertEquals(1, game.getdialog().size());
-		assertEquals("I don't understand that direction.", game.getdialog().get(0));
+		assertEquals(1, gameController.getdialog().size());
+		assertEquals("I don't understand that direction.", gameController.getdialog().get(0));
 	}
 	
 	/*
@@ -231,17 +233,17 @@ public class HandleMovementCommandsTest{
 	 */
 	@Test
 	public void testNCommand(){
-		checkValidMoveUpdates(game, starting, northOfStarting, "n");
+		checkValidMoveUpdates(gameController, starting, northOfStarting, "n");
 	}
 	
 	@Test
 	public void testNorthCommand(){
-		checkValidMoveUpdates(game, starting, northOfStarting, "north");
+		checkValidMoveUpdates(gameController, starting, northOfStarting, "north");
 	}
 	
 	@Test
 	public void testMoveNorthCommand(){
-		checkValidMoveUpdates(game, starting, northOfStarting, "move north");
+		checkValidMoveUpdates(gameController, starting, northOfStarting, "move north");
 	}
 	
 	/*
@@ -249,17 +251,17 @@ public class HandleMovementCommandsTest{
 	 */
 	@Test
 	public void testNECommand(){
-		checkValidMoveUpdates(game, starting, northEastOfStarting, "ne");
+		checkValidMoveUpdates(gameController, starting, northEastOfStarting, "ne");
 	}
 	
 	@Test
 	public void testNorthEastCommand(){
-		checkValidMoveUpdates(game, starting, northEastOfStarting, "northeast");
+		checkValidMoveUpdates(gameController, starting, northEastOfStarting, "northeast");
 	}
 	
 	@Test
 	public void testMoveNorthEastCommand(){
-		checkValidMoveUpdates(game, starting, northEastOfStarting, "move northeast");
+		checkValidMoveUpdates(gameController, starting, northEastOfStarting, "move northeast");
 	}
 	
 	/*
@@ -267,17 +269,17 @@ public class HandleMovementCommandsTest{
 	 */
 	@Test
 	public void testECommand(){
-		checkValidMoveUpdates(game, starting, eastOfStarting, "e");
+		checkValidMoveUpdates(gameController, starting, eastOfStarting, "e");
 	}
 	
 	@Test
 	public void testEastCommand(){
-		checkValidMoveUpdates(game, starting, eastOfStarting, "east");
+		checkValidMoveUpdates(gameController, starting, eastOfStarting, "east");
 	}
 	
 	@Test
 	public void testMoveEastCommand(){
-		checkValidMoveUpdates(game, starting, eastOfStarting, "move east");
+		checkValidMoveUpdates(gameController, starting, eastOfStarting, "move east");
 	}
 	
 	/*
@@ -285,17 +287,17 @@ public class HandleMovementCommandsTest{
 	 */
 	@Test
 	public void testSECommand(){
-		checkValidMoveUpdates(game, starting, southEastOfStarting, "se");
+		checkValidMoveUpdates(gameController, starting, southEastOfStarting, "se");
 	}
 	
 	@Test
 	public void testSouthEastCommand(){
-		checkValidMoveUpdates(game, starting, southEastOfStarting, "southeast");
+		checkValidMoveUpdates(gameController, starting, southEastOfStarting, "southeast");
 	}
 	
 	@Test
 	public void testMoveSouthEastCommand(){
-		checkValidMoveUpdates(game, starting, southEastOfStarting, "move southeast");
+		checkValidMoveUpdates(gameController, starting, southEastOfStarting, "move southeast");
 	}
 	
 	/*
@@ -303,17 +305,17 @@ public class HandleMovementCommandsTest{
 	 */
 	@Test
 	public void testSCommand(){
-		checkValidMoveUpdates(game, starting, southOfStarting, "s");
+		checkValidMoveUpdates(gameController, starting, southOfStarting, "s");
 	}
 	
 	@Test
 	public void testSouthCommand(){
-		checkValidMoveUpdates(game, starting, southOfStarting, "south");
+		checkValidMoveUpdates(gameController, starting, southOfStarting, "south");
 	}
 	
 	@Test
 	public void testMoveSouthCommand(){
-		checkValidMoveUpdates(game, starting, southOfStarting, "move south");
+		checkValidMoveUpdates(gameController, starting, southOfStarting, "move south");
 	}
 	
 	/*
@@ -321,17 +323,17 @@ public class HandleMovementCommandsTest{
 	 */
 	@Test
 	public void testSWCommand(){
-		checkValidMoveUpdates(game, starting, southWestOfStarting, "sw");
+		checkValidMoveUpdates(gameController, starting, southWestOfStarting, "sw");
 	}
 	
 	@Test
 	public void testSouthWestCommand(){
-		checkValidMoveUpdates(game, starting, southWestOfStarting, "southwest");
+		checkValidMoveUpdates(gameController, starting, southWestOfStarting, "southwest");
 	}
 	
 	@Test
 	public void testMoveSouthWestCommand(){
-		checkValidMoveUpdates(game, starting, southWestOfStarting, "move southwest");
+		checkValidMoveUpdates(gameController, starting, southWestOfStarting, "move southwest");
 	}
 	
 	/*
@@ -339,17 +341,17 @@ public class HandleMovementCommandsTest{
 	 */
 	@Test
 	public void testWCommand(){
-		checkValidMoveUpdates(game, starting, westOfStarting, "w");
+		checkValidMoveUpdates(gameController, starting, westOfStarting, "w");
 	}
 	
 	@Test
 	public void testWestCommand(){
-		checkValidMoveUpdates(game, starting, westOfStarting, "west");
+		checkValidMoveUpdates(gameController, starting, westOfStarting, "west");
 	}
 	
 	@Test
 	public void testMoveWestCommand(){
-		checkValidMoveUpdates(game, starting, westOfStarting, "move west");
+		checkValidMoveUpdates(gameController, starting, westOfStarting, "move west");
 	}
 	
 	/*
@@ -357,17 +359,17 @@ public class HandleMovementCommandsTest{
 	 */
 	@Test
 	public void testNWCommand(){
-		checkValidMoveUpdates(game, starting, northWestOfStarting, "nw");
+		checkValidMoveUpdates(gameController, starting, northWestOfStarting, "nw");
 	}
 	
 	@Test
 	public void testNorthWestCommand(){
-		checkValidMoveUpdates(game, starting, northWestOfStarting, "northwest");
+		checkValidMoveUpdates(gameController, starting, northWestOfStarting, "northwest");
 	}
 	
 	@Test
 	public void testMoveNorthWestCommand(){
-		checkValidMoveUpdates(game, starting, northWestOfStarting, "move northwest");
+		checkValidMoveUpdates(gameController, starting, northWestOfStarting, "move northwest");
 	}
 	
 	/*
@@ -382,17 +384,17 @@ public class HandleMovementCommandsTest{
 	 */
 	@Test
 	public void testNCommandInvalid(){
-		checkInvalidMoveUpdates(game, northOfStarting, "n");
+		checkInvalidMoveUpdates(gameController, northOfStarting, "n");
 	}
 	
 	@Test
 	public void testNorthCommandInvalid(){
-		checkInvalidMoveUpdates(game, northOfStarting, "north");
+		checkInvalidMoveUpdates(gameController, northOfStarting, "north");
 	}
 	
 	@Test
 	public void testMoveNorthCommandInvalid(){
-		checkInvalidMoveUpdates(game, northOfStarting, "move north");
+		checkInvalidMoveUpdates(gameController, northOfStarting, "move north");
 	}
 	
 	/*
@@ -400,17 +402,17 @@ public class HandleMovementCommandsTest{
 	 */
 	@Test
 	public void testNECommandInvalid(){
-		checkInvalidMoveUpdates(game, northOfStarting, "ne");
+		checkInvalidMoveUpdates(gameController, northOfStarting, "ne");
 	}
 	
 	@Test
 	public void testNorthEastCommandInvalid(){
-		checkInvalidMoveUpdates(game, northOfStarting, "northeast");
+		checkInvalidMoveUpdates(gameController, northOfStarting, "northeast");
 	}
 	
 	@Test
 	public void testMoveNorthEastCommandInvalid(){
-		checkInvalidMoveUpdates(game, northOfStarting, "move northeast");
+		checkInvalidMoveUpdates(gameController, northOfStarting, "move northeast");
 	}
 	
 	/*
@@ -418,17 +420,17 @@ public class HandleMovementCommandsTest{
 	 */
 	@Test
 	public void testECommandInvalid(){
-		checkInvalidMoveUpdates(game, northOfStarting, "e");
+		checkInvalidMoveUpdates(gameController, northOfStarting, "e");
 	}
 	
 	@Test
 	public void testEastCommandInvalid(){
-		checkInvalidMoveUpdates(game, northOfStarting, "east");
+		checkInvalidMoveUpdates(gameController, northOfStarting, "east");
 	}
 	
 	@Test
 	public void testMoveEastCommandInvalid(){
-		checkInvalidMoveUpdates(game, northOfStarting, "move east");
+		checkInvalidMoveUpdates(gameController, northOfStarting, "move east");
 	}
 	
 	/*
@@ -436,17 +438,17 @@ public class HandleMovementCommandsTest{
 	 */
 	@Test
 	public void testSECommandInvalid(){
-		checkInvalidMoveUpdates(game, northOfStarting, "se");
+		checkInvalidMoveUpdates(gameController, northOfStarting, "se");
 	}
 	
 	@Test
 	public void testSouthEastCommandInvalid(){
-		checkInvalidMoveUpdates(game, northOfStarting, "southeast");
+		checkInvalidMoveUpdates(gameController, northOfStarting, "southeast");
 	}
 	
 	@Test
 	public void testMoveSouthEastCommandInvalid(){
-		checkInvalidMoveUpdates(game, northOfStarting, "move southeast");
+		checkInvalidMoveUpdates(gameController, northOfStarting, "move southeast");
 	}
 	
 	/*
@@ -454,17 +456,17 @@ public class HandleMovementCommandsTest{
 	 */
 	@Test
 	public void testSCommandInvalid(){
-		checkInvalidMoveUpdates(game, northOfStarting, "s");
+		checkInvalidMoveUpdates(gameController, northOfStarting, "s");
 	}
 	
 	@Test
 	public void testSouthCommandInvalid(){
-		checkInvalidMoveUpdates(game, northOfStarting, "south");
+		checkInvalidMoveUpdates(gameController, northOfStarting, "south");
 	}
 	
 	@Test
 	public void testMoveSouthCommandInvalid(){
-		checkInvalidMoveUpdates(game, northOfStarting, "move south");
+		checkInvalidMoveUpdates(gameController, northOfStarting, "move south");
 	}
 	
 	/*
@@ -472,17 +474,17 @@ public class HandleMovementCommandsTest{
 	 */
 	@Test
 	public void testSWCommandInvalid(){
-		checkInvalidMoveUpdates(game, northOfStarting, "sw");
+		checkInvalidMoveUpdates(gameController, northOfStarting, "sw");
 	}
 	
 	@Test
 	public void testSouthWestCommandInvalid(){
-		checkInvalidMoveUpdates(game, northOfStarting, "southwest");
+		checkInvalidMoveUpdates(gameController, northOfStarting, "southwest");
 	}
 	
 	@Test
 	public void testMoveSouthWestCommandInvalid(){
-		checkInvalidMoveUpdates(game, northOfStarting, "move southwest");
+		checkInvalidMoveUpdates(gameController, northOfStarting, "move southwest");
 	}
 	
 	/*
@@ -490,17 +492,17 @@ public class HandleMovementCommandsTest{
 	 */
 	@Test
 	public void testWCommandInvalid(){
-		checkInvalidMoveUpdates(game, northOfStarting, "w");
+		checkInvalidMoveUpdates(gameController, northOfStarting, "w");
 	}
 	
 	@Test
 	public void testWestCommandInvalid(){
-		checkInvalidMoveUpdates(game, northOfStarting, "west");
+		checkInvalidMoveUpdates(gameController, northOfStarting, "west");
 	}
 	
 	@Test
 	public void testMoveWestCommandInvalid(){
-		checkInvalidMoveUpdates(game, northOfStarting, "move west");
+		checkInvalidMoveUpdates(gameController, northOfStarting, "move west");
 	}
 	
 	/*
@@ -508,17 +510,17 @@ public class HandleMovementCommandsTest{
 	 */
 	@Test
 	public void testNWCommandInvalid(){
-		checkInvalidMoveUpdates(game, northOfStarting, "nw");
+		checkInvalidMoveUpdates(gameController, northOfStarting, "nw");
 	}
 	
 	@Test
 	public void testNorthWestCommandInvalid(){
-		checkInvalidMoveUpdates(game, northOfStarting, "northwest");
+		checkInvalidMoveUpdates(gameController, northOfStarting, "northwest");
 	}
 	
 	@Test
 	public void testMoveNorthWestCommandInvalid(){
-		checkInvalidMoveUpdates(game, northOfStarting, "move northwest");
+		checkInvalidMoveUpdates(gameController, northOfStarting, "move northwest");
 	}
 	
 	/*
@@ -532,17 +534,17 @@ public class HandleMovementCommandsTest{
 	 */
 	@Test
 	public void testNCommandNotInModeGame(){
-		checkNotInModeGame(game, starting, "n");
+		checkNotInModeGame(gameController, starting, "n");
 	}
 	
 	@Test
 	public void testNorthCommandNotInModeGame(){
-		checkNotInModeGame(game, starting, "north");
+		checkNotInModeGame(gameController, starting, "north");
 	}
 	
 	@Test
 	public void testMoveNorthCommandNotInModeGame(){
-		checkNotInModeGame(game, starting, "move north");
+		checkNotInModeGame(gameController, starting, "move north");
 	}
 	
 	/*
@@ -550,17 +552,17 @@ public class HandleMovementCommandsTest{
 	 */
 	@Test
 	public void testNECommandNotInModeGame(){
-		checkNotInModeGame(game, starting, "ne");
+		checkNotInModeGame(gameController, starting, "ne");
 	}
 	
 	@Test
 	public void testNorthEastCommandNotInModeGame(){
-		checkNotInModeGame(game, starting, "northeast");
+		checkNotInModeGame(gameController, starting, "northeast");
 	}
 	
 	@Test
 	public void testMoveNorthEastCommandNotInModeGame(){
-		checkNotInModeGame(game, starting, "move northeast");
+		checkNotInModeGame(gameController, starting, "move northeast");
 	}
 	
 	/*
@@ -568,17 +570,17 @@ public class HandleMovementCommandsTest{
 	 */
 	@Test
 	public void testECommandNotInModeGame(){
-		checkNotInModeGame(game, starting, "e");
+		checkNotInModeGame(gameController, starting, "e");
 	}
 	
 	@Test
 	public void testEastCommandNotInModeGame(){
-		checkNotInModeGame(game, starting, "east");
+		checkNotInModeGame(gameController, starting, "east");
 	}
 	
 	@Test
 	public void testMoveEastCommandNotInModeGame(){
-		checkNotInModeGame(game, starting, "move east");
+		checkNotInModeGame(gameController, starting, "move east");
 	}
 	
 	/*
@@ -586,17 +588,17 @@ public class HandleMovementCommandsTest{
 	 */
 	@Test
 	public void testSECommandNotInModeGame(){
-		checkNotInModeGame(game, starting, "se");
+		checkNotInModeGame(gameController, starting, "se");
 	}
 	
 	@Test
 	public void testSouthEastCommandNotInModeGame(){
-		checkNotInModeGame(game, starting, "southeast");
+		checkNotInModeGame(gameController, starting, "southeast");
 	}
 	
 	@Test
 	public void testMoveSouthEastCommandNotInModeGame(){
-		checkNotInModeGame(game, starting, "move southeast");
+		checkNotInModeGame(gameController, starting, "move southeast");
 	}
 	
 	/*
@@ -604,17 +606,17 @@ public class HandleMovementCommandsTest{
 	 */
 	@Test
 	public void testSCommandNotInModeGame(){
-		checkNotInModeGame(game, starting, "s");
+		checkNotInModeGame(gameController, starting, "s");
 	}
 	
 	@Test
 	public void testSouthCommandNotInModeGame(){
-		checkNotInModeGame(game, starting, "south");
+		checkNotInModeGame(gameController, starting, "south");
 	}
 	
 	@Test
 	public void testMoveSouthCommandNotInModeGame(){
-		checkNotInModeGame(game, starting, "move south");
+		checkNotInModeGame(gameController, starting, "move south");
 	}
 	
 	/*
@@ -622,17 +624,17 @@ public class HandleMovementCommandsTest{
 	 */
 	@Test
 	public void testSWCommandNotInModeGame(){
-		checkNotInModeGame(game, starting, "sw");
+		checkNotInModeGame(gameController, starting, "sw");
 	}
 	
 	@Test
 	public void testSouthWestCommandNotInModeGame(){
-		checkNotInModeGame(game, starting, "southwest");
+		checkNotInModeGame(gameController, starting, "southwest");
 	}
 	
 	@Test
 	public void testMoveSouthWestCommandNotInModeGame(){
-		checkNotInModeGame(game, starting, "move southwest");
+		checkNotInModeGame(gameController, starting, "move southwest");
 	}
 	
 	/*
@@ -640,17 +642,17 @@ public class HandleMovementCommandsTest{
 	 */
 	@Test
 	public void testWCommandNotInModeGame(){
-		checkNotInModeGame(game, starting, "w");
+		checkNotInModeGame(gameController, starting, "w");
 	}
 	
 	@Test
 	public void testWestCommandNotInModeGame(){
-		checkNotInModeGame(game, starting, "west");
+		checkNotInModeGame(gameController, starting, "west");
 	}
 	
 	@Test
 	public void testMoveWestCommandNotInModeGame(){
-		checkNotInModeGame(game, starting, "move west");
+		checkNotInModeGame(gameController, starting, "move west");
 	}
 	
 	/*
@@ -658,16 +660,16 @@ public class HandleMovementCommandsTest{
 	 */
 	@Test
 	public void testNWCommandNotInModeGame(){
-		checkNotInModeGame(game, starting, "nw");
+		checkNotInModeGame(gameController, starting, "nw");
 	}
 	
 	@Test
 	public void testNorthWestCommandNotInModeGame(){
-		checkNotInModeGame(game, starting, "northwest");
+		checkNotInModeGame(gameController, starting, "northwest");
 	}
 	
 	@Test
 	public void testMoveNorthWestCommandNotInModeGame(){
-		checkNotInModeGame(game, starting, "move northwest");
+		checkNotInModeGame(gameController, starting, "move northwest");
 	}
 }

@@ -19,6 +19,7 @@ import com.github.tadukoo.aome.construct.ObjectCommandResponse;
 import com.github.tadukoo.aome.construct.map.MapTileConnections;
 import com.github.tadukoo.aome.construct.map.MapTileToMapMap;
 import com.github.tadukoo.aome.construct.map.ObjectToMapTileMap;
+import com.github.tadukoo.aome.game.Game;
 import com.github.tadukoo.util.StringUtil;
 
 /**
@@ -415,6 +416,28 @@ public class InitialData{
 				tuple = readNameGenderPairs.next();
 			}
 			return nameGenderPairs;
+		}
+	}
+	
+	/**
+	 * @return A List of {@link Game games} based on the CSV to use for initial data
+	 * @throws IOException If anything goes wrong
+	 */
+	public static List<Game> getGames() throws IOException{
+		List<Game> games = new ArrayList<>();
+		// Read games
+		try(ReadCSV readGames = new ReadCSV("games.csv")){
+			List<String> tuple = readGames.next();
+			while(tuple != null){
+				// Create the Game and add it to the list
+				Game game = new Game();
+				game.setName(tuple.get(0));
+				games.add(game);
+				
+				// Grab next tuple
+				tuple = readGames.next();
+			}
+			return games;
 		}
 	}
 	

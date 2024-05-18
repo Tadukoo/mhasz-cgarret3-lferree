@@ -1,14 +1,14 @@
 package com.github.tadukoo.middle_earth.controller;
 
 public class GameEditor implements Editor{
-	private Game model;
+	private GameController model;
 	private boolean testing;
 	
-	public Game getModel(){
+	public GameController getModel(){
 		return model;
 	}
 	
-	public void setModel(Game model){
+	public void setModel(GameController model){
 		this.model = model;
 	}
 	

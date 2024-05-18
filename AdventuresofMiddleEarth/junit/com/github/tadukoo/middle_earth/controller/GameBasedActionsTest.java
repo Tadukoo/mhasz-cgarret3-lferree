@@ -1,5 +1,6 @@
 package com.github.tadukoo.middle_earth.controller;
 
+import com.github.tadukoo.aome.game.Game;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -10,11 +11,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * Other methods are tested in other classes.
  */
 public class GameBasedActionsTest{
-	private Game game;
+	private GameController gameController;
 	
 	@BeforeEach
 	public void setup(){
-		game = new Game();
+		Game game = new Game();
+		gameController = new GameController(game);
 	}
 	
 	/*
@@ -22,9 +24,9 @@ public class GameBasedActionsTest{
 	 */
 	@Test
 	public void testCheckCharacterSheetCommand(){
-		game.check_character_sheet();
+		gameController.check_character_sheet();
 		
-		assertEquals("character", game.getmode());
+		assertEquals("character", gameController.getmode());
 	}
 	
 	/* TODO: JUNIT: Remove? Note: Commented out these in Game.
@@ -45,9 +47,9 @@ public class GameBasedActionsTest{
 	 */
 	@Test
 	public void testCheckInventoryCommand(){
-		game.check_inventory();
+		gameController.check_inventory();
 		
-		assertEquals("inventory", game.getmode());
+		assertEquals("inventory", gameController.getmode());
 	}
 	
 	/* TODO: JUNIT: Remove? Note: Commented out these in Game.
@@ -68,9 +70,9 @@ public class GameBasedActionsTest{
 	 */
 	@Test
 	public void testMapCommand(){
-		game.check_map();
+		gameController.check_map();
 		
-		assertEquals("map", game.getmode());
+		assertEquals("map", gameController.getmode());
 	}
 	
 	/* TODO: JUNIT: Remove? Note: Commented out these in Game.
@@ -91,29 +93,29 @@ public class GameBasedActionsTest{
 	 */
 	@Test
 	public void testBackToGameFromCharacterSheet(){
-		game.setmode("character");
+		gameController.setmode("character");
 		
-		game.return_to_game();
+		gameController.return_to_game();
 		
-		assertEquals("game", game.getmode());
+		assertEquals("game", gameController.getmode());
 	}
 	
 	@Test
 	public void testBackToGameFromInventory(){
-		game.setmode("inventory");
+		gameController.setmode("inventory");
 		
-		game.return_to_game();
+		gameController.return_to_game();
 		
-		assertEquals("game", game.getmode());
+		assertEquals("game", gameController.getmode());
 	}
 	
 	@Test
 	public void testBackToGameFromMap(){
-		game.setmode("map");
+		gameController.setmode("map");
 		
-		game.return_to_game();
+		gameController.return_to_game();
 		
-		assertEquals("game", game.getmode());
+		assertEquals("game", gameController.getmode());
 	}
 	
 	/* TODO: JUNIT: Remove? Note: Commented out these in Game.

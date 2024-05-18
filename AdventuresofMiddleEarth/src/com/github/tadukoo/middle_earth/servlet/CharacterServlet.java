@@ -1,6 +1,6 @@
 package com.github.tadukoo.middle_earth.servlet;
 
-import com.github.tadukoo.middle_earth.controller.Game;
+import com.github.tadukoo.middle_earth.controller.GameController;
 import com.github.tadukoo.aome.character.Player;
 import com.github.tadukoo.aome.construct.Item;
 import com.github.tadukoo.aome.construct.ItemType;
@@ -21,7 +21,7 @@ public class CharacterServlet extends HttpServlet{
 		System.out.println("Character Servlet: doGet");
 		
 		// Load data for the initial call to the inventory jsp
-		Game game = (Game) req.getSession().getAttribute("game");
+		GameController game = (GameController) req.getSession().getAttribute("game");
 		String command = (String) req.getSession().getAttribute("command");
 		Player player = (Player) game.getplayer();
 		
@@ -67,7 +67,7 @@ public class CharacterServlet extends HttpServlet{
 			throws ServletException, IOException{
 		System.out.println("Character: doPost");
 		
-		Game game = (Game) req.getSession().getAttribute("game");
+		GameController game = (GameController) req.getSession().getAttribute("game");
 		Player player = (Player) game.getplayer();
 		
 		if(req.getParameter("remove") != null){

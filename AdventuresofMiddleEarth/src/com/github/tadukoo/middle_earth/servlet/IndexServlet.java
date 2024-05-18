@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import com.github.tadukoo.middle_earth.controller.Account;
-import com.github.tadukoo.middle_earth.controller.Game;
+import com.github.tadukoo.middle_earth.controller.GameController;
 import com.github.tadukoo.middle_earth.persist.DatabaseProvider;
 import com.github.tadukoo.middle_earth.persist.IDatabase;
 
@@ -97,7 +97,7 @@ public class IndexServlet extends HttpServlet{
 			int id = db.createNewGame((String) req.getSession().getAttribute("player"));
 			req.getSession().setAttribute("gameID", id);
 			account.setcurrent_game(id);
-			Game game = db.loadGame(id);
+			GameController game = db.loadGame(id);
 			game.startMap("new", id);
 			game.setuser(account);
 			game.save();
@@ -108,7 +108,7 @@ public class IndexServlet extends HttpServlet{
 			req.getRequestDispatcher("/_view/GameView.jsp").forward(req, resp);
 		}
 		else if (form.startsWith("Load Game")){
-			Game game = null;
+			GameController game = null;
 			for (int i = 1; i <= 6; i++) {
 				if (form.endsWith(""+i)) {
 					game = db.loadGame(games.get(i-1));

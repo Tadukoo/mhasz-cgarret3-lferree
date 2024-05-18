@@ -1,5 +1,6 @@
 package com.github.tadukoo.middle_earth.controller;
 
+import com.github.tadukoo.aome.game.Game;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -8,50 +9,51 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class GameModeChangeTest{
-	private Game game;
+	private GameController gameController;
 	
 	@BeforeEach
 	public void setup(){
-		game = new Game();
-		game.setmode("game");
+		Game game = new Game();
+		gameController = new GameController(game);
+		gameController.setmode("game");
 	}
 	
 	@Test
 	public void testModeChangeNullCommand(){
-		assertFalse(game.mode_change(null));
+		assertFalse(gameController.mode_change(null));
 	}
 	
 	@Test
 	public void testModeChangeEmptyCommand(){
-		assertFalse(game.mode_change(""));
+		assertFalse(gameController.mode_change(""));
 	}
 	
 	@Test
 	public void testModeChangeGameCommand(){
-		game.setmode("inventory");
-		assertTrue(game.mode_change("game"));
+		gameController.setmode("inventory");
+		assertTrue(gameController.mode_change("game"));
 		
-		assertEquals("game", game.getmode());
+		assertEquals("game", gameController.getmode());
 	}
 	
 	@Test
 	public void testModeChangeInventoryCommand(){
-		assertTrue(game.mode_change("inventory"));
+		assertTrue(gameController.mode_change("inventory"));
 		
-		assertEquals("inventory", game.getmode());
+		assertEquals("inventory", gameController.getmode());
 	}
 	
 	@Test
 	public void testModeChangeMapCommand(){
-		assertTrue(game.mode_change("map"));
+		assertTrue(gameController.mode_change("map"));
 		
-		assertEquals("map", game.getmode());
+		assertEquals("map", gameController.getmode());
 	}
 	
 	@Test
 	public void testModeChangeCharacterCommand(){
-		assertTrue(game.mode_change("character"));
+		assertTrue(gameController.mode_change("character"));
 		
-		assertEquals("character", game.getmode());
+		assertEquals("character", gameController.getmode());
 	}
 }

@@ -1,5 +1,6 @@
 package com.github.tadukoo.dbsetup;
 
+import com.github.tadukoo.aome.game.Game;
 import com.github.tadukoo.aome.InitialData;
 import com.github.tadukoo.aome.User;
 import com.github.tadukoo.aome.character.Enemy;
@@ -108,6 +109,10 @@ public class SetupDatabase{
 		// Create NamesAndGender table
 		NameAndGenderPair nameGenderPair = new NameAndGenderPair();
 		nameGenderPair.createTable(database);
+		
+		// Create Games table
+		Game game = new Game();
+		game.createTable(database);
 	}
 	
 	/*
@@ -227,6 +232,12 @@ public class SetupDatabase{
 		List<NameAndGenderPair> nameGenderPairs = InitialData.getNameGenderPairs();
 		for(NameAndGenderPair nameGenderPair: nameGenderPairs){
 			nameGenderPair.storeValues(database, false);
+		}
+		
+		// Load Games
+		List<Game> games = InitialData.getGames();
+		for(Game game: games){
+			game.storeValues(database, false);
 		}
 	}
 }

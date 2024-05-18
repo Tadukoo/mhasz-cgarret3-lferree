@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import com.github.tadukoo.aome.construct.ItemType;
-import com.github.tadukoo.middle_earth.controller.Game;
+import com.github.tadukoo.middle_earth.controller.GameController;
 import com.github.tadukoo.aome.character.Player;
 import com.github.tadukoo.aome.character.Character;
 import com.github.tadukoo.aome.character.Enemy;
@@ -24,7 +24,7 @@ public class CombatSituation{
 	 * @param enemies How many Enemies in this CombatSituation
 	 * @param players Any Players involved in the Combat.
 	 */
-	public CombatSituation(Game game, int enemies, int ... players){		
+	public CombatSituation(GameController game, int enemies, int ... players){
 		setup(game, enemies, null, players);
 	}
 	
@@ -34,12 +34,12 @@ public class CombatSituation{
 	 * @param races The possible races separated by commas (if more than 1 race)
 	 * @param players Any Players involved in the Combat.
 	 */
-	public CombatSituation(Game game, int enemies, String races, int ... players){
+	public CombatSituation(GameController game, int enemies, String races, int ... players){
 		setup(game, enemies, races, players);
 	}
 	
 	// Actually does the work of the constructors
-	public void setup(Game game, int enemies, String races, int[] players){
+	public void setup(GameController game, int enemies, String races, int[] players){
 		// Change game mode to combat
 		game.setmode("combat");
 		
@@ -141,7 +141,7 @@ public class CombatSituation{
 		}
 	}
 	
-	public void playerAttackEnemy(Game game, int playerIndex, String target){
+	public void playerAttackEnemy(GameController game, int playerIndex, String target){
 		// Check that it's the player's turn
 		if(characterIDs.get(characterIDs.get(currentIDsIndex)) == playerIndex){
 			Character enemy = null;
@@ -180,7 +180,7 @@ public class CombatSituation{
 		}
 	}
 	
-	public void advanceTurn(Game game){
+	public void advanceTurn(GameController game){
 		if(!done){
 			// Advance index
 			currentIDsIndex++;
@@ -198,7 +198,7 @@ public class CombatSituation{
 		}
 	}
 	
-	public void enemyAttackPlayer(Game game){
+	public void enemyAttackPlayer(GameController game){
 		// Get number of Players
 		ArrayList<Integer> playerIndices = new ArrayList<Integer>();
 		for(int characterIndex: characterIDs){
@@ -235,7 +235,7 @@ public class CombatSituation{
 		advanceTurn(game);
 	}
 	
-	public int calculateDamage(Game game, int attacker, int defender){
+	public int calculateDamage(GameController game, int attacker, int defender){
 		int attackDamage = calculateAttack(game, attacker);
 		int defense = calculateDefense(game, defender);
 		int damage = attackDamage - defense;
@@ -253,7 +253,7 @@ public class CombatSituation{
 	// Escape/Flee (chance on enemy)
 	// Only 1 Enemy for now (grab possibilities from MapTile)
 	
-	public int calculateAttack(Game game, int character){
+	public int calculateAttack(GameController game, int character){
 		Character chr = game.getcharacters().get(character);
 		int attack = chr.getAttack();
 		if(chr.getHelm() != null){
@@ -282,7 +282,7 @@ public class CombatSituation{
 		return attack;
 	}
 	
-	public int calculateDefense(Game game, int character){
+	public int calculateDefense(GameController game, int character){
 		Character chr = game.getcharacters().get(character);
 		int defense = chr.getDefense();
 		if(chr.getHelm() != null){
@@ -313,7 +313,7 @@ public class CombatSituation{
 		return done;
 	}
 	
-	public void doPlayerWon(Game game, int playerIndex, int killedIndex){
+	public void doPlayerWon(GameController game, int playerIndex, int killedIndex){
 		// Let player know what they have done.
 		game.add_dialog("You killed " + game.getcharacters().get(killedIndex).getName() + "!");
 		
@@ -367,7 +367,7 @@ public class CombatSituation{
 		}
 	}
 	
-	public void doPlayerDied(Game game, int playerIndex){
+	public void doPlayerDied(GameController game, int playerIndex){
 		// TODO: Change this for multiple players and stuff
 		// Not sure how to notify correct player or whatever
 		

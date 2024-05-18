@@ -2,6 +2,7 @@ package com.github.tadukoo.middle_earth.controller;
 
 import java.util.ArrayList;
 
+import com.github.tadukoo.aome.game.Game;
 import com.github.tadukoo.aome.character.Character;
 import com.github.tadukoo.aome.character.Player;
 import com.github.tadukoo.aome.construct.Item;
@@ -11,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class InventoryModeActionsTest{
-	private Game game;
+	private GameController gameController;
 	private Player player;
 	private Item sword;
 	private Item helmet;
@@ -19,7 +20,8 @@ public class InventoryModeActionsTest{
 	
 	@BeforeEach
 	public void setup(){
-		game = new Game();
+		Game game = new Game();
+		gameController = new GameController(game);
 		player = new Player();
 		
 		// Populate Player's inventory
@@ -49,7 +51,7 @@ public class InventoryModeActionsTest{
 		chars.add(player);
 		
 		// Put Player into Game
-		game.setcharacters(chars);
+		gameController.setcharacters(chars);
 	}
 	
 	/*
@@ -59,7 +61,7 @@ public class InventoryModeActionsTest{
 	@Test
 	public void testItemDetailsLowEndOf0(){
 		// Run and get response
-		String response = game.item_details(0);
+		String response = gameController.item_details(0);
 		
 		// Set item to sword for easier stuff
 		Item item = sword;
@@ -72,7 +74,7 @@ public class InventoryModeActionsTest{
 	@Test
 	public void testItemDetailsMidIndexOf1(){
 		// Run and get response
-		String response = game.item_details(1);
+		String response = gameController.item_details(1);
 		
 		// Set item to helmet for easiness
 		Item item = helmet;
@@ -85,7 +87,7 @@ public class InventoryModeActionsTest{
 	@Test
 	public void testItemDetailsHighEndOf2(){
 		// Run and get response
-		String response = game.item_details(2);
+		String response = gameController.item_details(2);
 		
 		// Set item to key for easy sauce
 		Item item = key;

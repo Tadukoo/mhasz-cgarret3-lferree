@@ -1,5 +1,6 @@
 package com.github.tadukoo.middle_earth.persist;
 
+import com.github.tadukoo.aome.game.Game;
 import com.github.tadukoo.aome.InitialData;
 import com.github.tadukoo.aome.User;
 import com.github.tadukoo.aome.character.ItemToPlayerMap;
@@ -23,7 +24,7 @@ import com.github.tadukoo.aome.construct.ObjectCommandResponse;
 import com.github.tadukoo.aome.construct.map.MapTileConnections;
 import com.github.tadukoo.aome.construct.map.MapTileToMapMap;
 import com.github.tadukoo.aome.construct.map.ObjectToMapTileMap;
-import com.github.tadukoo.middle_earth.controller.Game;
+import com.github.tadukoo.middle_earth.controller.GameController;
 import com.github.tadukoo.aome.Quest;
 import com.github.tadukoo.aome.character.Enemy;
 import com.github.tadukoo.aome.character.Player;
@@ -53,6 +54,7 @@ public class FakeDatabase implements IDatabase{
 	private final Map<Integer, Player> playersByID;
 	private final List<Enemy> enemies;
 	private final List<NameAndGenderPair> nameGenderPairs;
+	private final List<Game> games;
 	private final List<Quest> quests;
 	
 	public FakeDatabase(){
@@ -204,6 +206,9 @@ public class FakeDatabase implements IDatabase{
 			
 			// Name-Gender Pairs
 			nameGenderPairs = InitialData.getNameGenderPairs();
+			
+			// Games
+			games = InitialData.getGames();
 			
 			quests = InitialData.getQuests();
 		}catch(IOException e){
@@ -435,7 +440,7 @@ public class FakeDatabase implements IDatabase{
 	}
 
 	@Override
-	public void saveGame(Game game) {
+	public void saveGame(GameController game) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -447,7 +452,7 @@ public class FakeDatabase implements IDatabase{
 	}
 
 	@Override
-	public Game loadGame(int gameID) {
+	public GameController loadGame(int id) {
 		// TODO Auto-generated method stub
 		return null;
 	}

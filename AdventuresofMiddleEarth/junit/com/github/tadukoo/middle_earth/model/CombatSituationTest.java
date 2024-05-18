@@ -2,7 +2,8 @@ package com.github.tadukoo.middle_earth.model;
 
 import java.util.ArrayList;
 
-import com.github.tadukoo.middle_earth.controller.Game;
+import com.github.tadukoo.aome.game.Game;
+import com.github.tadukoo.middle_earth.controller.GameController;
 import com.github.tadukoo.aome.character.Character;
 import com.github.tadukoo.aome.character.Enemy;
 import com.github.tadukoo.aome.character.Player;
@@ -19,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CombatSituationTest{
-	private Game game;
+	private GameController gameController;
 	private Player player;
 	private CombatSituation battle;
 	
@@ -27,7 +28,8 @@ public class CombatSituationTest{
 	public void setup(){
 		DatabaseProvider.setInstance(new FakeDatabase());
 		// Create Game
-		game = new Game();
+		Game game = new Game();
+		gameController = new GameController(game);
 		
 		// Create Player
 		player = new Player();
@@ -40,10 +42,10 @@ public class CombatSituationTest{
 		// Add Player to Game
 		ArrayList<Character> characters = new ArrayList<>();
 		characters.add(player);
-		game.setcharacters(characters);
+		gameController.setcharacters(characters);
 		
 		// Create CombatSituation
-		battle = new CombatSituation(game, 1, 0);
+		battle = new CombatSituation(gameController, 1, 0);
 	}
 	
 	@Test
@@ -52,12 +54,12 @@ public class CombatSituationTest{
 		assertEquals(2, battle.getCharacterIDs().size());
 		
 		// Check that Player is present
-		assertEquals(player, game.getcharacters().get(battle.getCharacterIDs().get(0)));
+		assertEquals(player, gameController.getcharacters().get(battle.getCharacterIDs().get(0)));
 		
 		// Check that dialog was updated appropriately
-		assertEquals(1, game.getdialog().size());
-		assertEquals("Me is staring into the eyes of a " + game.getcharacters().get(battle.getCharacterIDs().get(1)).getRace(),
-				game.getdialog().get(0));
+		assertEquals(1, gameController.getdialog().size());
+		assertEquals("Me is staring into the eyes of a " + gameController.getcharacters().get(battle.getCharacterIDs().get(1)).getRace(),
+				gameController.getdialog().get(0));
     
 		// Check that done is false
 		assertFalse(battle.isDone());
@@ -88,7 +90,7 @@ public class CombatSituationTest{
 		int maxs = 0;
 		
 		for(int i = 0; i < 300; i++){
-			int result = battle.calculateAttack(game, 1);
+			int result = battle.calculateAttack(gameController, 1);
 			if(result == 14 || result == 15){
 				mins++;
 			}else if(result == 16){
@@ -114,7 +116,7 @@ public class CombatSituationTest{
 		int max = 44;
 		
 		// Get attack calculated and ensure it falls inside range
-		int attack = battle.calculateAttack(game, 0);
+		int attack = battle.calculateAttack(gameController, 0);
 		assertTrue(attack >= min && attack <= max);
 	}
 	
@@ -134,7 +136,7 @@ public class CombatSituationTest{
 		int max = 55;
 		
 		// Get attack calculated and ensure it falls inside range
-		int attack = battle.calculateAttack(game, 0);
+		int attack = battle.calculateAttack(gameController, 0);
 		assertTrue(attack >= min && attack <= max);
 	}
 	
@@ -154,7 +156,7 @@ public class CombatSituationTest{
 		int max = 55;
 		
 		// Get attack calculated and ensure it falls inside range
-		int attack = battle.calculateAttack(game, 0);
+		int attack = battle.calculateAttack(gameController, 0);
 		assertTrue(attack >= min && attack <= max);
 	}
 	
@@ -174,7 +176,7 @@ public class CombatSituationTest{
 		int max = 55;
 		
 		// Get attack calculated and ensure it falls inside range
-		int attack = battle.calculateAttack(game, 0);
+		int attack = battle.calculateAttack(gameController, 0);
 		assertTrue(attack >= min && attack <= max);
 	}
 	
@@ -194,7 +196,7 @@ public class CombatSituationTest{
 		int max = 55;
 		
 		// Get attack calculated and ensure it falls inside range
-		int attack = battle.calculateAttack(game, 0);
+		int attack = battle.calculateAttack(gameController, 0);
 		assertTrue(attack >= min && attack <= max);
 	}
 	
@@ -214,7 +216,7 @@ public class CombatSituationTest{
 		int max = 55;
 		
 		// Get attack calculated and ensure it falls inside range
-		int attack = battle.calculateAttack(game, 0);
+		int attack = battle.calculateAttack(gameController, 0);
 		assertTrue(attack >= min && attack <= max);
 	}
 	
@@ -234,7 +236,7 @@ public class CombatSituationTest{
 		int max = 55;
 		
 		// Get attack calculated and ensure it falls inside range
-		int attack = battle.calculateAttack(game, 0);
+		int attack = battle.calculateAttack(gameController, 0);
 		assertTrue(attack >= min && attack <= max);
 	}
 	
@@ -254,7 +256,7 @@ public class CombatSituationTest{
 		int max = 55;
 		
 		// Get attack calculated and ensure it falls inside range
-		int attack = battle.calculateAttack(game, 0);
+		int attack = battle.calculateAttack(gameController, 0);
 		assertTrue(attack >= min && attack <= max);
 	}
 	
@@ -328,20 +330,20 @@ public class CombatSituationTest{
 		int max = 121;
 		
 		// Get attack calculated and ensure it falls inside range
-		int attack = battle.calculateAttack(game, 0);
+		int attack = battle.calculateAttack(gameController, 0);
 		assertTrue(attack >= min && attack <= max);
 	}
 	
 	@Test
 	public void testCalculateDefenseEnemy(){
 		// Default Enemy's defense is 0
-		assertEquals(0, battle.calculateDefense(game, 1));
+		assertEquals(0, battle.calculateDefense(gameController, 1));
 	}
 	
 	@Test
 	public void testCalculateDefensePlayerNoArmor(){
 		// Default Player's defense is 5
-		assertEquals(5, battle.calculateDefense(game, 0));
+		assertEquals(5, battle.calculateDefense(gameController, 0));
 	}
 	
 	@Test
@@ -356,7 +358,7 @@ public class CombatSituationTest{
 		player.setHelm(helmet);
 		
 		// Check that defense is 15
-		assertEquals(15, battle.calculateDefense(game, 0));
+		assertEquals(15, battle.calculateDefense(gameController, 0));
 	}
 	
 	@Test
@@ -371,7 +373,7 @@ public class CombatSituationTest{
 		player.setBraces(braces);
 		
 		// Check that defense is 15
-		assertEquals(15, battle.calculateDefense(game, 0));
+		assertEquals(15, battle.calculateDefense(gameController, 0));
 	}
 	
 	@Test
@@ -386,7 +388,7 @@ public class CombatSituationTest{
 		player.setChest(chest);
 		
 		// Check that defense is 15
-		assertEquals(15, battle.calculateDefense(game, 0));
+		assertEquals(15, battle.calculateDefense(gameController, 0));
 	}
 	
 	@Test
@@ -401,7 +403,7 @@ public class CombatSituationTest{
 		player.setLegs(legs);
 		
 		// Check that defense is 15
-		assertEquals(15, battle.calculateDefense(game, 0));
+		assertEquals(15, battle.calculateDefense(gameController, 0));
 	}
 	
 	@Test
@@ -416,7 +418,7 @@ public class CombatSituationTest{
 		player.setBoots(boots);
 		
 		// Check that defense is 15
-		assertEquals(15, battle.calculateDefense(game, 0));
+		assertEquals(15, battle.calculateDefense(gameController, 0));
 	}
 	
 	@Test
@@ -431,7 +433,7 @@ public class CombatSituationTest{
 		player.setLeftHand(shield);
 		
 		// Check that defense is 15
-		assertEquals(15, battle.calculateDefense(game, 0));
+		assertEquals(15, battle.calculateDefense(gameController, 0));
 	}
 	
 	@Test
@@ -446,7 +448,7 @@ public class CombatSituationTest{
 		player.setRightHand(sword);
 		
 		// Check that defense is 15
-		assertEquals(15, battle.calculateDefense(game, 0));
+		assertEquals(15, battle.calculateDefense(gameController, 0));
 	}
 	
 	@Test
@@ -515,27 +517,27 @@ public class CombatSituationTest{
 		player.setRightHand(sword);
 		
 		// Check that defense is 75
-		assertEquals(75, battle.calculateDefense(game, 0));
+		assertEquals(75, battle.calculateDefense(gameController, 0));
 	}
 	
 	@Test
 	public void testDoPlayerWon(){
 		// Set Bob's HP to 0 (to make sure combat will be done at the end)
-		game.getcharacters().get(1).setHP(0);
+		gameController.getcharacters().get(1).setHP(0);
 		
 		// Check that Player has 0 experience (to confirm 10 was added later)
 		assertEquals(0, player.getExperience());
 		
 		// Run doPlayerWon
-		battle.doPlayerWon(game, 0, 1);
+		battle.doPlayerWon(gameController, 0, 1);
 		
 		// Check that dialog was added to appropriately
-		assertEquals(5, game.getdialog().size());
-		assertEquals("You killed " + game.getcharacters().get(battle.getCharacterIDs().get(1)).getName() + "!",
-				game.getdialog().get(1));
-		assertEquals("You have been awarded 300 experience!", game.getdialog().get(2));
+		assertEquals(5, gameController.getdialog().size());
+		assertEquals("You killed " + gameController.getcharacters().get(battle.getCharacterIDs().get(1)).getName() + "!",
+				gameController.getdialog().get(1));
+		assertEquals("You have been awarded 300 experience!", gameController.getdialog().get(2));
 		// Skip getting items line
-		assertEquals("You have killed everyone! (in this combat situation here)", game.getdialog().get(4));
+		assertEquals("You have killed everyone! (in this combat situation here)", gameController.getdialog().get(4));
 		
 		// Check that Player got 300 experience (levels work it out to 150)
 		assertEquals(150, player.getExperience());
@@ -547,12 +549,12 @@ public class CombatSituationTest{
 	@Test
 	public void testDoPlayerDied(){
 		// Run doPlayerDied
-		battle.doPlayerDied(game, 0);
+		battle.doPlayerDied(gameController, 0);
 		
 		// Check that dialog was added to appropriately
-		assertEquals(3, game.getdialog().size());
-		assertEquals("You have died!", game.getdialog().get(1));
-		assertEquals("Restart if you think you can do better!", game.getdialog().get(2));
+		assertEquals(3, gameController.getdialog().size());
+		assertEquals("You have died!", gameController.getdialog().get(1));
+		assertEquals("Restart if you think you can do better!", gameController.getdialog().get(2));
 		
 		// Check that Battle is Done
 		assertTrue(battle.isDone());
@@ -565,7 +567,7 @@ public class CombatSituationTest{
 		int max = 12;
 		
 		// Get damage calculated
-		int damage = battle.calculateDamage(game, 1, 0);
+		int damage = battle.calculateDamage(gameController, 1, 0);
 		
 		// Check that damage is calculated properly
 		assertTrue(damage >= min && damage <= max);
@@ -578,7 +580,7 @@ public class CombatSituationTest{
 		int max = 44;
 		
 		// Get damage calculated
-		int damage = battle.calculateDamage(game, 0, 1);
+		int damage = battle.calculateDamage(gameController, 0, 1);
 		
 		// Check that damage is calculated properly
 		assertTrue(damage >= min && damage <= max);
@@ -590,6 +592,6 @@ public class CombatSituationTest{
 		player.setDefense(20);
 		
 		// Enemy can do 13-17, so 20 defense = 0 damage
-		assertEquals(0, battle.calculateDamage(game, 1, 0));
+		assertEquals(0, battle.calculateDamage(gameController, 1, 0));
 	}
 }

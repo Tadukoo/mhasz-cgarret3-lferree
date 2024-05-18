@@ -6,6 +6,7 @@ import java.util.Random;
 
 import javax.swing.JFrame;
 
+import com.github.tadukoo.aome.game.Game;
 import com.github.tadukoo.aome.construct.GameObject;
 import com.github.tadukoo.aome.construct.map.MapTile;
 import com.github.tadukoo.middle_earth.images.MapPanel;
@@ -18,20 +19,29 @@ import com.github.tadukoo.aome.construct.map.GameMap;
 import com.github.tadukoo.middle_earth.persist.DatabaseProvider;
 import com.github.tadukoo.middle_earth.persist.IDatabase;
 
-public class Game implements Engine{
+/**
+ * The main Game Controller for playing the Game
+ *
+ * @author Logan Ferree (Tadukoo)
+ * @author Chris Garrety (cgarret3)
+ * @author Matt Hasz (mhasz239)
+ * @version 2.0
+ * @since 1.0 or earlier
+ */
+public class GameController implements Engine{
+	private Game game;
 	private GameMap map;
-	private ArrayList<Quest> quests;
-	private ArrayList<Character> characters;
-	private List<GameObject> objects;
-	private List<Item> items;
-	private ArrayList<String> dialog;
+	private List<Quest> quests;
+	private List<Character> characters;
+	private List<String> dialog;
 	private String mode;
 	private CombatSituation battle;
 	private JFrame mapIMG = new JFrame("Map");
 	private MapPanel mapPanel = new MapPanel();
 	private Account user;
 	
-	public Game(){
+	public GameController(Game game){
+		this.game = game;
 		// dialog and mode are passed back and forth with each servlet/jsp call
 		dialog = new ArrayList<>();
 		mode = "game";
@@ -56,7 +66,7 @@ public class Game implements Engine{
 		//map.getMapTiles().get(getplayer().getlocation()).setVisited(true);
 	}
 	
-	public Game getgame() {
+	public GameController getGameController() {
 		return this;
 	}
 
@@ -68,7 +78,7 @@ public class Game implements Engine{
 		this.mode = mode;
 	}
 	
-	public ArrayList<String> getdialog() {
+	public List<String> getdialog() {
 		return dialog;
 	}
 	
@@ -99,7 +109,7 @@ public class Game implements Engine{
 		this.map = map;
 	}
 
-	public ArrayList<Quest> getquests(){
+	public List<Quest> getquests(){
 		return quests;
 	}
 	
@@ -107,7 +117,7 @@ public class Game implements Engine{
 		this.quests = quests;
 	}
 	
-	public ArrayList<Character> getcharacters(){
+	public List<Character> getcharacters(){
 		return characters;
 	}
 	
@@ -116,24 +126,8 @@ public class Game implements Engine{
 		return characters.get(0);
 	}
 	
-	public void setcharacters(ArrayList<Character> characters){
+	public void setcharacters(List<Character> characters){
 		this.characters = characters;
-	}
-	
-	public List<GameObject> getobjects(){
-		return objects;
-	}
-	
-	public void setobjects(List<GameObject> objects){
-		this.objects = objects;
-	}
-	
-	public List<Item> getitems(){
-		return items;
-	}
-	
-	public void setitems(List<Item> items){
-		this.items = items;
 	}
 	
 	public String getmapTile_longDescription(){

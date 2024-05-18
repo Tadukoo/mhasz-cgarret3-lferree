@@ -2,6 +2,7 @@ package com.github.tadukoo.middle_earth.controller;
 
 import java.util.ArrayList;
 
+import com.github.tadukoo.aome.game.Game;
 import com.github.tadukoo.aome.character.Character;
 import com.github.tadukoo.aome.character.Player;
 import com.github.tadukoo.aome.construct.map.GameMap;
@@ -16,7 +17,7 @@ import org.junit.jupiter.api.Test;
  * Other methods in Game are tested elsewhere.
  */
 public class GameCharacterActionsTest{
-	private Game game;
+	private GameController gameController;
 	private GameMap map;
 	private Player player;
 	private MapTile starting;
@@ -32,14 +33,15 @@ public class GameCharacterActionsTest{
 	@BeforeEach
 	public void setup(){
 		DatabaseProvider.setInstance(new FakeDatabase());
-		game = new Game();
+		Game game = new Game();
+		gameController = new GameController(game);
 		// This is here in case Game doesn't set mode to game by default.
-		game.setmode("game");
+		gameController.setmode("game");
 		player = new Player();
 		player.setLocationID(0);
 		ArrayList<Character> characters = new ArrayList<Character>();
 		characters.add(player);
-		game.setcharacters(characters);
+		gameController.setcharacters(characters);
 		starting = new MapTile();
 		starting.setID(0);
 		northOfStarting = new MapTile();
@@ -94,10 +96,10 @@ public class GameCharacterActionsTest{
 		tiles.add(northWestOfStarting);
 		map.setMapTiles(tiles);
 		
-		game.setmap(map);
+		gameController.setmap(map);
 	}
 	
-	public void testValidMove(Game game, MapTile original, MapTile destination, String direction){
+	public void testValidMove(GameController game, MapTile original, MapTile destination, String direction){
 		HandleMovementCommandsTest.checkValidMovePreconditions(game, original);
 		
 		game.move(direction);
@@ -105,7 +107,7 @@ public class GameCharacterActionsTest{
 		HandleMovementCommandsTest.checkValidMovePostConditions(game, destination);
 	}
 	
-	public void testInvalidMove(Game game, MapTile setup, String direction){
+	public void testInvalidMove(GameController game, MapTile setup, String direction){
 		HandleMovementCommandsTest.setupInvalidMovePreConditions(game, setup);
 		
 		game.move(direction);
@@ -120,42 +122,42 @@ public class GameCharacterActionsTest{
 	
 	@Test
 	public void testMoveNorth(){
-		testValidMove(game, starting, northOfStarting, "north");
+		testValidMove(gameController, starting, northOfStarting, "north");
 	}
 	
 	@Test
 	public void testMoveNorthEast(){
-		testValidMove(game, starting, northEastOfStarting, "northeast");
+		testValidMove(gameController, starting, northEastOfStarting, "northeast");
 	}
 	
 	@Test
 	public void testMoveEast(){
-		testValidMove(game, starting, eastOfStarting, "east");
+		testValidMove(gameController, starting, eastOfStarting, "east");
 	}
 	
 	@Test
 	public void testMoveSouthEast(){
-		testValidMove(game, starting, southEastOfStarting, "southeast");
+		testValidMove(gameController, starting, southEastOfStarting, "southeast");
 	}
 	
 	@Test
 	public void testMoveSouth(){
-		testValidMove(game, starting, southOfStarting, "south");
+		testValidMove(gameController, starting, southOfStarting, "south");
 	}
 	
 	@Test
 	public void testMoveSouthWest(){
-		testValidMove(game, starting, southWestOfStarting, "southwest");
+		testValidMove(gameController, starting, southWestOfStarting, "southwest");
 	}
 	
 	@Test
 	public void testMoveWest(){
-		testValidMove(game, starting, westOfStarting, "west");
+		testValidMove(gameController, starting, westOfStarting, "west");
 	}
 	
 	@Test
 	public void testMoveNorthWest(){
-		testValidMove(game, starting, northWestOfStarting, "northwest");
+		testValidMove(gameController, starting, northWestOfStarting, "northwest");
 	}
 	
 	/*
@@ -164,41 +166,41 @@ public class GameCharacterActionsTest{
 	
 	@Test
 	public void testMoveNorthInvalid(){
-		testInvalidMove(game, northOfStarting, "north");
+		testInvalidMove(gameController, northOfStarting, "north");
 	}
 	
 	@Test
 	public void testMoveNorthEastInvalid(){
-		testInvalidMove(game, northOfStarting, "northeast");
+		testInvalidMove(gameController, northOfStarting, "northeast");
 	}
 	
 	@Test
 	public void testMoveEastInvalid(){
-		testInvalidMove(game, northOfStarting, "east");
+		testInvalidMove(gameController, northOfStarting, "east");
 	}
 	
 	@Test
 	public void testMoveSouthEastInvalid(){
-		testInvalidMove(game, northOfStarting, "southeast");
+		testInvalidMove(gameController, northOfStarting, "southeast");
 	}
 	
 	@Test
 	public void testMoveSouthInvalid(){
-		testInvalidMove(game, northOfStarting, "south");
+		testInvalidMove(gameController, northOfStarting, "south");
 	}
 	
 	@Test
 	public void testMoveSouthWestInvalid(){
-		testInvalidMove(game, northOfStarting, "southwest");
+		testInvalidMove(gameController, northOfStarting, "southwest");
 	}
 	
 	@Test
 	public void testMoveWestInvalid(){
-		testInvalidMove(game, northOfStarting, "west");
+		testInvalidMove(gameController, northOfStarting, "west");
 	}
 	
 	@Test
 	public void testMoveNorthWestInvalid(){
-		testInvalidMove(game, northOfStarting, "northwest");
+		testInvalidMove(gameController, northOfStarting, "northwest");
 	}
 }

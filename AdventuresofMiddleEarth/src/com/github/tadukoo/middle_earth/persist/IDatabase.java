@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.github.tadukoo.aome.character.Player;
 import com.github.tadukoo.aome.construct.ItemType;
-import com.github.tadukoo.middle_earth.controller.Game;
+import com.github.tadukoo.middle_earth.controller.GameController;
 import com.github.tadukoo.aome.Quest;
 import com.github.tadukoo.aome.character.Enemy;
 import com.github.tadukoo.aome.construct.Item;
@@ -74,11 +74,14 @@ public interface IDatabase{
 	DatabaseResult<List<String>> getAllEnemyRaces();
 	DatabaseResult<Enemy> getEnemyByRace(String race);
 	
-	List<Quest> getAllQuests();
-	
-	Game loadGame(int gameID);
-	void saveGame(Game game);
+	/*
+	 * Game Related Queries
+	 */
 	
 	Integer createNewGame(String username);
+	GameController loadGame(int id);
+	void saveGame(GameController game);
 	ArrayList<Integer> getGameIDs(String username);
+	
+	List<Quest> getAllQuests();
 }

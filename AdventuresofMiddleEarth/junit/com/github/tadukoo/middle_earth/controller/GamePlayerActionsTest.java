@@ -2,7 +2,10 @@ package com.github.tadukoo.middle_earth.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import com.github.tadukoo.aome.game.Game;
 import com.github.tadukoo.aome.character.Character;
 import com.github.tadukoo.aome.character.Player;
 import com.github.tadukoo.aome.construct.Item;
@@ -15,7 +18,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class GamePlayerActionsTest{
-	private Game game;
+	private GameController gameController;
 	private Player player;
 	private GameObject tree;
 	private GameObject ladder;
@@ -29,15 +32,16 @@ public class GamePlayerActionsTest{
 	
 	@BeforeEach
 	public void setup(){
-		game = new Game();
+		Game game = new Game();
+		gameController = new GameController(game);
 		player = new Player();
 		player.setLocationID(0);
-		ArrayList<Character> characters = new ArrayList<>();
+		List<Character> characters = new ArrayList<>();
 		characters.add(player);
-		game.setcharacters(characters);
+		gameController.setcharacters(characters);
 		
 		// Populate Player's inventory
-		ArrayList<Item> playerItems = new ArrayList<>();
+		List<Item> playerItems = new ArrayList<>();
 		sword = new Item();
 		sword.setName("Sword");
 		sword.setLongDescription("A Long sword. Probably stolen from a giant golem or something.");
@@ -60,7 +64,7 @@ public class GamePlayerActionsTest{
 		
 		tree = new GameObject();
 		tree.setName("Tree");
-		HashMap<String, String> responses = new HashMap<>();
+		Map<String, String> responses = new HashMap<>();
 		responses.put("climb", "It's high up here!");
 		tree.setCommandResponses(responses);
 		
@@ -80,18 +84,14 @@ public class GamePlayerActionsTest{
 		map.addMapTile(starting);
 		map.addMapTile(northOfStarting);
 		map.addMapTile(northEastOfStarting);
-		game.setmap(map);
+		gameController.setmap(map);
 		
-		ArrayList<Item> items = new ArrayList<>();
-		wood = new Item();
-		wood.setName("Wood");
-		items.add(wood);
-		game.setitems(items);
-		
-		ArrayList<GameObject> objs = new ArrayList<>();
+		List<GameObject> objs = new ArrayList<>();
 		objs.add(tree);
 		GameObject derp = new GameObject();
-		ArrayList<Item> its = new ArrayList<>();
+		List<Item> its = new ArrayList<>();
+		wood = new Item();
+		wood.setName("Wood");
 		its.add(wood);
 		derp.setItems(its);
 		objs.add(derp);
@@ -107,15 +107,15 @@ public class GamePlayerActionsTest{
 		assertEquals(1, starting.getObjects().get(1).getItems().size());
 		assertEquals(wood, starting.getObjects().get(1).getItems().get(0));
 		
-		game.take(wood.getName());
+		gameController.take(wood.getName());
 		
 		assertEquals(0, starting.getObjects().get(1).getItems().size());
 		assertEquals(4, player.getInventory().size());
 		assertEquals(wood, player.getInventory().get(3));
 		
 		// Check dialog
-		assertEquals(1, game.getdialog().size());
-		assertEquals("You have taken " + wood.getName(), game.getdialog().get(0));
+		assertEquals(1, gameController.getdialog().size());
+		assertEquals("You have taken " + wood.getName(), gameController.getdialog().get(0));
 	}
 	
 	/*
@@ -125,24 +125,24 @@ public class GamePlayerActionsTest{
 	public void testLookAtStarting(){
 		assertEquals(0, player.getLocationID());
 		
-		game.look();
+		gameController.look();
 		
-		assertEquals(2, game.getdialog().size());
-		assertEquals(starting.getName(), game.getdialog().get(0));
+		assertEquals(2, gameController.getdialog().size());
+		assertEquals(starting.getName(), gameController.getdialog().get(0));
 		// TODO: We're now doing String.valueOf here because of it being null and weirdness - maybe should handle this better though
-		assertEquals(String.valueOf(starting.getLongDescription()), game.getdialog().get(1));
+		assertEquals(String.valueOf(starting.getLongDescription()), gameController.getdialog().get(1));
 	}
 	
 	@Test
 	public void testLookAtNorthOfStarting(){
-		game.getcharacters().get(0).setLocationID(1);
+		gameController.getcharacters().get(0).setLocationID(1);
 		
 		assertEquals(1, player.getLocationID());
 		
-		game.look();
+		gameController.look();
 		
-		assertEquals(2, game.getdialog().size());
-		assertEquals(northOfStarting.getName(), game.getdialog().get(0));
-		assertEquals(northOfStarting.getLongDescription(), game.getdialog().get(1));
+		assertEquals(2, gameController.getdialog().size());
+		assertEquals(northOfStarting.getName(), gameController.getdialog().get(0));
+		assertEquals(northOfStarting.getLongDescription(), gameController.getdialog().get(1));
 	}
 }

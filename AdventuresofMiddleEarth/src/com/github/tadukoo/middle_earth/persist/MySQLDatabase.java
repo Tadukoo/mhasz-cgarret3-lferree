@@ -18,7 +18,7 @@ import com.github.tadukoo.database.mysql.syntax.conditional.SQLOperator;
 import com.github.tadukoo.database.mysql.syntax.reference.ColumnRef;
 import com.github.tadukoo.database.mysql.syntax.reference.TableRef;
 import com.github.tadukoo.database.mysql.syntax.statement.SQLSelectStatement;
-import com.github.tadukoo.middle_earth.controller.Game;
+import com.github.tadukoo.middle_earth.controller.GameController;
 import com.github.tadukoo.aome.character.Enemy;
 import com.github.tadukoo.aome.character.Player;
 import com.github.tadukoo.aome.construct.Item;
@@ -701,12 +701,12 @@ public class MySQLDatabase implements IDatabase{
 	}
 	
 	@Override
-	public Game loadGame(int gameID){
+	public GameController loadGame(int id){
 		return null;
 	}
 	
 	@Override
-	public void saveGame(Game game){
+	public void saveGame(GameController game){
 	
 	}
 	

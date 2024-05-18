@@ -1,5 +1,6 @@
 package com.github.tadukoo.middle_earth.controller;
 
+import com.github.tadukoo.aome.game.Game;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -8,12 +9,13 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class GameModeChangeTests{
-	private Game game;
+	private GameController gameController;
 	
 	@BeforeEach
 	public void setup(){
-		game = new Game();
-		game.setmode("game");
+		Game game = new Game();
+		gameController = new GameController(game);
+		gameController.setmode("game");
 	}
 	
 	/*
@@ -22,7 +24,7 @@ public class GameModeChangeTests{
 	@Test
 	public void testNullCommand(){
 		// Check that it simply returns false
-		assertFalse(game.mode_change(null));
+		assertFalse(gameController.mode_change(null));
 	}
 	
 	/*
@@ -31,19 +33,19 @@ public class GameModeChangeTests{
 	@Test
 	public void testCheckInventoryCommand(){
 		// Change mode
-		assertTrue(game.mode_change("inventory"));
+		assertTrue(gameController.mode_change("inventory"));
 		
 		// Check that mode was changed
-		assertEquals("inventory", game.getmode());
+		assertEquals("inventory", gameController.getmode());
 	}
 	
 	@Test
 	public void testCheckInventoryCommandWEiRdCAsE(){
 		// Change mode
-		assertTrue(game.mode_change("iNVenTOrY"));
+		assertTrue(gameController.mode_change("iNVenTOrY"));
 		
 		// Check that mode was changed
-		assertEquals("inventory", game.getmode());
+		assertEquals("inventory", gameController.getmode());
 	}
 	
 	/*
@@ -52,19 +54,19 @@ public class GameModeChangeTests{
 	@Test
 	public void testCheckCharacterSheetCommand(){
 		// Change mode
-		assertTrue(game.mode_change("character"));
+		assertTrue(gameController.mode_change("character"));
 		
 		// Check that mode was changed
-		assertEquals("character", game.getmode());
+		assertEquals("character", gameController.getmode());
 	}
 	
 	@Test
 	public void testCheckCharacterSheetCommandWeirdCase(){
 		// Change mode
-		assertTrue(game.mode_change("ChARActEr"));
+		assertTrue(gameController.mode_change("ChARActEr"));
 		
 		// Check that mode was changed
-		assertEquals("character", game.getmode());
+		assertEquals("character", gameController.getmode());
 	}
 	
 	/*
@@ -73,19 +75,19 @@ public class GameModeChangeTests{
 	@Test
 	public void testMapCommand(){
 		// Change mode
-		assertTrue(game.mode_change("map"));
+		assertTrue(gameController.mode_change("map"));
 		
 		// Check that mode was changed
-		assertEquals("map", game.getmode());
+		assertEquals("map", gameController.getmode());
 	}
 	
 	@Test
 	public void testMapCommandWEirDcASe(){
 		// Change mode
-		assertTrue(game.mode_change("mAP"));
+		assertTrue(gameController.mode_change("mAP"));
 		
 		// Check that mode was changed
-		assertEquals("map", game.getmode());
+		assertEquals("map", gameController.getmode());
 	}
 	
 	/*
@@ -94,25 +96,25 @@ public class GameModeChangeTests{
 	@Test
 	public void testGameCommand(){
 		// Set mode to character
-		game.setmode("character");
+		gameController.setmode("character");
 		
 		// Run command
-		assertTrue(game.mode_change("game"));
+		assertTrue(gameController.mode_change("game"));
 		
 		// Check that mode was changed
-		assertEquals("game", game.getmode());
+		assertEquals("game", gameController.getmode());
 	}
 	
 	@Test
 	public void testGameCommandWEiRdCAsE(){
 		// Set mode to character
-		game.setmode("character");
+		gameController.setmode("character");
 		
 		// Run command
-		assertTrue(game.mode_change("gAmE"));
+		assertTrue(gameController.mode_change("gAmE"));
 		
 		// Check that mode was changed
-		assertEquals("game", game.getmode());
+		assertEquals("game", gameController.getmode());
 	}
 	
 	/*
@@ -121,12 +123,12 @@ public class GameModeChangeTests{
 	@Test
 	public void testNonCommand(){
 		// Check that it simply returns false
-		assertFalse(game.mode_change("Derptiy doodly"));
+		assertFalse(gameController.mode_change("Derptiy doodly"));
 	}
 	
 	@Test
 	public void testEmptyCommand(){
 		// Check that it simply returns false
-		assertFalse(game.mode_change(""));
+		assertFalse(gameController.mode_change(""));
 	}
 }

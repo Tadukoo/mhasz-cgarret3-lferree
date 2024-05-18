@@ -1,6 +1,6 @@
 package com.github.tadukoo.middle_earth.servlet;
 
-import com.github.tadukoo.middle_earth.controller.Game;
+import com.github.tadukoo.middle_earth.controller.GameController;
 import com.github.tadukoo.aome.construct.Item;
 
 import jakarta.servlet.ServletException;
@@ -21,7 +21,7 @@ public class InventoryServlet extends HttpServlet{
 		
 		//Load data for the initial call to the inventory jsp
 		
-		Game game = (Game) req.getSession().getAttribute("game");
+		GameController game = (GameController) req.getSession().getAttribute("game");
 		String command = (String) req.getSession().getAttribute("command");
 		int counter = 1;
 		
@@ -65,7 +65,7 @@ public class InventoryServlet extends HttpServlet{
 			throws ServletException, IOException{
 		System.out.println("Inventory Servlet: doPost");
 		
-		Game game = (Game) req.getSession().getAttribute("game");
+		GameController game = (GameController) req.getSession().getAttribute("game");
 		game.setmode("inventory");
 		// Gets the inventory of the player
 		List<Item> inventory_list =  game.getplayer().getInventory();

@@ -9,7 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import com.github.tadukoo.middle_earth.controller.Game;
+import com.github.tadukoo.aome.game.Game;
+import com.github.tadukoo.middle_earth.controller.GameController;
 import com.github.tadukoo.aome.Quest;
 import com.github.tadukoo.aome.character.Character;
 import com.github.tadukoo.aome.character.Enemy;
@@ -237,23 +238,23 @@ public class DerbyDatabase implements IDatabase {
 	*											load/save game
 	********************************************************************************************************/
 	// Will need to take gameID in future
-	public Game loadGame(int gameID) {
-		
+	public GameController loadGame(int id) {
 		Game game = new Game();
+		GameController gameController = new GameController(game);
 
-		game.setmap(getMapByID(-1).result());
+		gameController.setmap(getMapByID(-1).result());
 		
-		game.setobjects(getAllObjects().result());
-		game.setitems(getAllItems().result());
+		//game.setobjects(getAllObjects().result());
+		//game.setitems(getAllItems().result());
 		ArrayList<Character> characterList = new ArrayList<>();
 		characterList.add(getPlayerByID(1).result());
 		//characterList.get(0).setInventory(getInventory(characterList.get(0).getName(), characterList.get(0).getinventory_id()));
-		game.setcharacters(characterList);
+		gameController.setcharacters(characterList);
 		
-		return game;
+		return gameController;
 	}
 	
-	public void saveGame(Game game) {
+	public void saveGame(GameController game) {
 		updateMap(game.getmap());
 		updateCharacters(game.getcharacters());
 	} 
@@ -722,7 +723,7 @@ public class DerbyDatabase implements IDatabase {
 		}
 	}
 	
-	private void updateCharacters(ArrayList<Character> characterList) {
+	private void updateCharacters(List<Character> characterList) {
 		//Inventory inventory = characterList.get(0).getinventory();
 		updatePlayer(characterList.get(0));
 		updateInventory(characterList.get(0));

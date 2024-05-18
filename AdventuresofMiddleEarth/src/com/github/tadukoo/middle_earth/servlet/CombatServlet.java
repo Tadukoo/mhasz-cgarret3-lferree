@@ -1,7 +1,7 @@
 package com.github.tadukoo.middle_earth.servlet;
 
 import com.github.tadukoo.aome.character.Character;
-import com.github.tadukoo.middle_earth.controller.Game;
+import com.github.tadukoo.middle_earth.controller.GameController;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ public class CombatServlet extends HttpServlet{
 			throws ServletException, IOException{
 		System.out.println("Combat Servlet: doGet");
 		
-		Game game = (Game) req.getSession().getAttribute("game");
+		GameController game = (GameController) req.getSession().getAttribute("game");
         String command = (String) req.getSession().getAttribute("command");
         System.out.println(command);
         game.setmode("combat");

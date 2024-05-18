@@ -3,6 +3,7 @@ package com.github.tadukoo.middle_earth.controller;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.github.tadukoo.aome.game.Game;
 import com.github.tadukoo.middle_earth.model.CombatSituation;
 import com.github.tadukoo.aome.character.Character;
 import com.github.tadukoo.aome.character.Player;
@@ -23,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
  * Movement Commands are in a separate class due to there being a lot of different ones.
  */
 public class GameHandleCommandTest{
-	private Game game;
+	private GameController gameController;
 	private Player player;
 	private Item sword;
 	private Item helmet;
@@ -38,12 +39,13 @@ public class GameHandleCommandTest{
 	
 	@BeforeEach
 	public void setup(){
-		game = new Game();
+		Game game = new Game();
+		gameController = new GameController(game);
 		player = new Player();
 		player.setLocationID(0);
 		
 		// In case not already in game mode
-		game.setmode("game");
+		gameController.setmode("game");
 		
 		// Populate Player's inventory
 		ArrayList<Item> playerItems = new ArrayList<>();
@@ -70,7 +72,7 @@ public class GameHandleCommandTest{
 		// Add Player to Game
 		ArrayList<Character> characters = new ArrayList<>();
 		characters.add(player);
-		game.setcharacters(characters);
+		gameController.setcharacters(characters);
 		
 		// MapTiles		8 1 2
 		//				7 0 3
@@ -91,7 +93,7 @@ public class GameHandleCommandTest{
 		map.addMapTile(starting);
 		map.addMapTile(northOfStarting);
 		map.addMapTile(northEastOfStarting);
-		game.setmap(map);
+		gameController.setmap(map);
 		
 		ladder = new GameObject();
 		ladder.setName("Ladder");
@@ -127,51 +129,51 @@ public class GameHandleCommandTest{
 	
 	@Test
 	public void testInvalidCommand(){
-		game.handle_command("blofjerf");
+		gameController.handle_command("blofjerf");
 		
-		assertEquals(1, game.getdialog().size());
-		assertEquals(noComprend, game.getdialog().get(0));
+		assertEquals(1, gameController.getdialog().size());
+		assertEquals(noComprend, gameController.getdialog().get(0));
 	}
 	
 	@Test
 	public void testTooManyArgumentsInCommand(){
-		String response = game.handle_command("test command long");
+		String response = gameController.handle_command("test command long");
 		
 		assertEquals("Too many arguments in your command", response);
 	}
 	
 	@Test
 	public void testNullCommandInModeGame(){
-		String response = game.handle_command("");
+		String response = gameController.handle_command("");
 		
-		assertEquals(1, game.getdialog().size());
-		assertEquals(noComprend, game.getdialog().get(0));
+		assertEquals(1, gameController.getdialog().size());
+		assertEquals(noComprend, gameController.getdialog().get(0));
 		assertNull(response);
 	}
 	
 	@Test
 	public void testNullCommandInModeInventory(){
-		game.setmode("inventory");
+		gameController.setmode("inventory");
 		
-		String response = game.handle_command("");
+		String response = gameController.handle_command("");
 		
 		assertEquals(noComprend, response);
 	}
 	
 	@Test
 	public void testSpaceCommandInModeGame(){
-		String response = game.handle_command(" ");
+		String response = gameController.handle_command(" ");
 		
-		assertEquals(1, game.getdialog().size());
-		assertEquals(noComprend, game.getdialog().get(0));
+		assertEquals(1, gameController.getdialog().size());
+		assertEquals(noComprend, gameController.getdialog().get(0));
 		assertNull(response);
 	}
 	
 	@Test
 	public void testSpaceCommandInModeInventory(){
-		game.setmode("inventory");
+		gameController.setmode("inventory");
 		
-		String response = game.handle_command(" ");
+		String response = gameController.handle_command(" ");
 		
 		assertEquals(noComprend, response);
 	}
@@ -188,10 +190,10 @@ public class GameHandleCommandTest{
 	@Test
 	public void testItemCommandNoNumber(){
 		// Set mode to inventory
-		game.setmode("inventory");
+		gameController.setmode("inventory");
 		
 		// Run command and get response
-		String response = game.handle_command("item");
+		String response = gameController.handle_command("item");
 		
 		// Check that response is correct
 		assertEquals("Please designate the item # you want to view more details of.", response);
@@ -199,19 +201,19 @@ public class GameHandleCommandTest{
 	
 	@Test
 	public void testItemCommandNotInInventoryMode(){
-		game.handle_command("item");
+		gameController.handle_command("item");
 		
-		assertEquals(1, game.getdialog().size());
-		assertEquals("Sorry, I didn't understand that.", game.getdialog().get(0));
+		assertEquals(1, gameController.getdialog().size());
+		assertEquals("Sorry, I didn't understand that.", gameController.getdialog().get(0));
 	}
 	
 	@Test
 	public void testItemCommandNotANumber(){
 		// Set mode to inventory
-		game.setmode("inventory");
+		gameController.setmode("inventory");
 		
 		// Run command and get response
-		String response = game.handle_command("item derpykinsmcgee");
+		String response = gameController.handle_command("item derpykinsmcgee");
 		
 		// Check that response is correct
 		assertEquals("Invalid item selection. Example: 'item 1' to see the item at position 1", response);
@@ -220,10 +222,10 @@ public class GameHandleCommandTest{
 	@Test
 	public void testItemCommandInvalidNumber0(){
 		// Set mode to inventory
-		game.setmode("inventory");
+		gameController.setmode("inventory");
 		
 		// Run command and get response
-		String response = game.handle_command("item 0");
+		String response = gameController.handle_command("item 0");
 		
 		// Check that response is correct
 		assertEquals("Sorry you dont have an item at that index", response);
@@ -232,10 +234,10 @@ public class GameHandleCommandTest{
 	@Test
 	public void testItemCommandInvalidNumberAboveRange(){
 		// Set mode to inventory
-		game.setmode("inventory");
+		gameController.setmode("inventory");
 		
 		// Run command and get response
-		String response = game.handle_command("item 4");
+		String response = gameController.handle_command("item 4");
 		
 		// Check that response is correct
 		assertEquals("Sorry you dont have an item at that index", response);
@@ -244,10 +246,10 @@ public class GameHandleCommandTest{
 	@Test
 	public void testItemCommandLowEndOf1(){
 		// Set mode to inventory
-		game.setmode("inventory");
+		gameController.setmode("inventory");
 		
 		// Run command and get response
-		String response = game.handle_command("item 1");
+		String response = gameController.handle_command("item 1");
 		
 		// Set item to sword (for copy-pasting)
 		Item item = sword;
@@ -260,10 +262,10 @@ public class GameHandleCommandTest{
 	@Test
 	public void testItemCommandMidRangeOf2(){
 		// Set mode to inventory
-		game.setmode("inventory");
+		gameController.setmode("inventory");
 		
 		// Run command and get response
-		String response = game.handle_command("item 2");
+		String response = gameController.handle_command("item 2");
 		
 		// Set item to helmet (for copy-pasting)
 		Item item = helmet;
@@ -276,10 +278,10 @@ public class GameHandleCommandTest{
 	@Test
 	public void testItemCommandHighEndOf3(){
 		// Set mode to inventory
-		game.setmode("inventory");
+		gameController.setmode("inventory");
 		
 		// Run command and get response
-		String response = game.handle_command("item 3");
+		String response = gameController.handle_command("item 3");
 		
 		// Set item to key (for copy-pasting)
 		Item item = key;
@@ -295,57 +297,57 @@ public class GameHandleCommandTest{
 	 */
 	@Test
 	public void testClimbTreeCommand(){
-		game.handle_command("climb tree");
+		gameController.handle_command("climb tree");
 		
-		assertEquals(1, game.getdialog().size());
-		assertEquals(tree.getCommandResponses().get("climb"), game.getdialog().get(0));
+		assertEquals(1, gameController.getdialog().size());
+		assertEquals(tree.getCommandResponses().get("climb"), gameController.getdialog().get(0));
 	}
 	
 	@Test
 	public void testClimbTreeCommandNoClimbablePresent(){
-		game.getcharacters().get(0).setLocationID(2);
+		gameController.getcharacters().get(0).setLocationID(2);
 		
-		game.handle_command("climb tree");
+		gameController.handle_command("climb tree");
 		
-		assertEquals(1, game.getdialog().size());
-		assertEquals("Sorry, I didn't understand that.", game.getdialog().get(0));
+		assertEquals(1, gameController.getdialog().size());
+		assertEquals("Sorry, I didn't understand that.", gameController.getdialog().get(0));
 	}
 	
 	@Test
 	public void testClimbTreeCommandOtherClimbablePresent(){
-		game.getcharacters().get(0).setLocationID(1);
+		gameController.getcharacters().get(0).setLocationID(1);
 		
-		game.handle_command("climb tree");
+		gameController.handle_command("climb tree");
 		
-		assertEquals(1, game.getdialog().size());
-		assertEquals("Sorry, I didn't understand that.", game.getdialog().get(0));
+		assertEquals(1, gameController.getdialog().size());
+		assertEquals("Sorry, I didn't understand that.", gameController.getdialog().get(0));
 	}
 	
 	@Test
 	public void testClimbLadderCommand(){
-		game.getcharacters().get(0).setLocationID(1);
-		game.handle_command("climb ladder");
+		gameController.getcharacters().get(0).setLocationID(1);
+		gameController.handle_command("climb ladder");
 		
-		assertEquals(1, game.getdialog().size());
-		assertEquals(ladder.getCommandResponses().get("climb"), game.getdialog().get(0));
+		assertEquals(1, gameController.getdialog().size());
+		assertEquals(ladder.getCommandResponses().get("climb"), gameController.getdialog().get(0));
 	}
 	
 	@Test
 	public void testClimbLadderCommandNoClimbable(){
-		game.getcharacters().get(0).setLocationID(2);
+		gameController.getcharacters().get(0).setLocationID(2);
 		
-		game.handle_command("climb ladder");
+		gameController.handle_command("climb ladder");
 		
-		assertEquals(1, game.getdialog().size());
-		assertEquals("Sorry, I didn't understand that.", game.getdialog().get(0));
+		assertEquals(1, gameController.getdialog().size());
+		assertEquals("Sorry, I didn't understand that.", gameController.getdialog().get(0));
 	}
 	
 	@Test
 	public void testClimbLadderCommandOtherClimbablePresent(){
-		game.handle_command("climb ladder");
+		gameController.handle_command("climb ladder");
 		
-		assertEquals(1, game.getdialog().size());
-		assertEquals("Sorry, I didn't understand that.", game.getdialog().get(0));
+		assertEquals(1, gameController.getdialog().size());
+		assertEquals("Sorry, I didn't understand that.", gameController.getdialog().get(0));
 	}
 	
 	/*
@@ -358,15 +360,15 @@ public class GameHandleCommandTest{
 		assertEquals(1, starting.getObjects().get(1).getItems().size());
 		assertEquals(wood, starting.getObjects().get(1).getItems().get(0));
 		
-		game.handle_command("take wood");
+		gameController.handle_command("take wood");
 		
 		assertEquals(0, starting.getObjects().get(1).getItems().size());
 		assertEquals(4, player.getInventory().size());
 		assertEquals(wood, player.getInventory().get(3));
 		
 		// Check dialog
-		assertEquals(1, game.getdialog().size());
-		assertEquals("You have taken " + wood.getName(), game.getdialog().get(0));
+		assertEquals(1, gameController.getdialog().size());
+		assertEquals("You have taken " + wood.getName(), gameController.getdialog().get(0));
 	}
 	
 	@Test
@@ -384,38 +386,38 @@ public class GameHandleCommandTest{
 		assertEquals(3, player.getInventory().size());
 		assertEquals(wood, northOfStarting.getObjects().get(0).getItems().get(0));
 		
-		game.handle_command("take wood");
+		gameController.handle_command("take wood");
 		
 		assertEquals(1, northOfStarting.getObjects().get(0).getItems().size());
 		assertEquals(wood, northOfStarting.getObjects().get(0).getItems().get(0));
 		assertEquals(3, player.getInventory().size());
 		
 		// Check dialog
-		assertEquals(1, game.getdialog().size());
-		assertEquals("There is nothing to take here.", game.getdialog().get(0));
+		assertEquals(1, gameController.getdialog().size());
+		assertEquals("There is nothing to take here.", gameController.getdialog().get(0));
 	}
 	
 	@Test
 	public void testTakeCommandItemDoesntExist(){
 		assertEquals(3, player.getInventory().size());
 		
-		game.handle_command("take cheese");
+		gameController.handle_command("take cheese");
 		
 		assertEquals(3, player.getInventory().size());
-		assertEquals(1, game.getdialog().size());
-		assertEquals("You cannot take cheese here.", game.getdialog().get(0));
+		assertEquals(1, gameController.getdialog().size());
+		assertEquals("You cannot take cheese here.", gameController.getdialog().get(0));
 	}
 	
 	@Test
 	public void testTakeCommandNotInModeGame(){
 		// Set mode to inventory
-		game.setmode("inventory");
+		gameController.setmode("inventory");
 		
 		// Check that stuff is like this before command run
 		assertEquals(3, player.getInventory().size());
 		
 		// Run command and get response
-		String response = game.handle_command("take wood");
+		String response = gameController.handle_command("take wood");
 		
 		// Make sure stuff wasn't changed
 		assertEquals(3, player.getInventory().size());
@@ -430,31 +432,31 @@ public class GameHandleCommandTest{
 	 */
 	@Test
 	public void testLookCommandAtStarting(){
-		game.handle_command("look");
+		gameController.handle_command("look");
 		
-		assertEquals(2, game.getdialog().size());
-		assertEquals(starting.getName(), game.getdialog().get(0));
-		assertEquals(starting.getLongDescription(), game.getdialog().get(1));
+		assertEquals(2, gameController.getdialog().size());
+		assertEquals(starting.getName(), gameController.getdialog().get(0));
+		assertEquals(starting.getLongDescription(), gameController.getdialog().get(1));
 	}
 	
 	@Test
 	public void testLookCommandAtNorthOfStarting(){
-		game.getcharacters().get(0).setLocationID(1);
+		gameController.getcharacters().get(0).setLocationID(1);
 		
-		game.handle_command("look");
+		gameController.handle_command("look");
 		
-		assertEquals(2, game.getdialog().size());
-		assertEquals(northOfStarting.getName(), game.getdialog().get(0));
-		assertEquals(northOfStarting.getLongDescription(), game.getdialog().get(1));
+		assertEquals(2, gameController.getdialog().size());
+		assertEquals(northOfStarting.getName(), gameController.getdialog().get(0));
+		assertEquals(northOfStarting.getLongDescription(), gameController.getdialog().get(1));
 	}
 	
 	@Test
 	public void testLookCommandNotInModeGame(){
 		// Set mode to inventory
-		game.setmode("inventory");
+		gameController.setmode("inventory");
 		
 		// Run command and get response
-		String response = game.handle_command("look");
+		String response = gameController.handle_command("look");
 		
 		// Check that response is correct
 		assertEquals("Sorry, I didn't understand that.", response);
@@ -467,11 +469,11 @@ public class GameHandleCommandTest{
 	@Test
 	public void testAttackNotInCombat(){
 		// Run command
-		game.handle_command("attack");
+		gameController.handle_command("attack");
 		
 		// Check proper error stuff
-		assertEquals(1, game.getdialog().size());
-		assertEquals("You're not in combat!", game.getdialog().get(0));
+		assertEquals(1, gameController.getdialog().size());
+		assertEquals("You're not in combat!", gameController.getdialog().get(0));
 	}
 	
 	/*@Test			No Longer a Valid Test
@@ -495,28 +497,28 @@ public class GameHandleCommandTest{
 	@Test
 	public void testAttackNoTarget(){
 		// Set up pre-conditions
-		game.setBattle(new CombatSituation(game, 1, 0));
-		game.setdialog(new ArrayList<>());
+		gameController.setBattle(new CombatSituation(gameController, 1, 0));
+		gameController.setdialog(new ArrayList<>());
 		
 		// Run command
-		game.handle_command("attack");
+		gameController.handle_command("attack");
 		
 		// Check error
-		assertEquals(1, game.getdialog().size());
-		assertEquals("What do you want to attack? (use name or race)", game.getdialog().get(0));
+		assertEquals(1, gameController.getdialog().size());
+		assertEquals("What do you want to attack? (use name or race)", gameController.getdialog().get(0));
 	}
 	
 	@Test
 	public void testNonAttackCommandInCombat(){
 		// Set up pre-conditions
-		game.setBattle(new CombatSituation(game, 1, 0));
-		game.setdialog(new ArrayList<>());
+		gameController.setBattle(new CombatSituation(gameController, 1, 0));
+		gameController.setdialog(new ArrayList<>());
 		
 		// Run command
-		game.handle_command("boogledee boo");
+		gameController.handle_command("boogledee boo");
 		
 		// Check error
-		assertEquals(1, game.getdialog().size());
-		assertEquals("You're in combat!", game.getdialog().get(0));
+		assertEquals(1, gameController.getdialog().size());
+		assertEquals("You're in combat!", gameController.getdialog().get(0));
 	}
 }

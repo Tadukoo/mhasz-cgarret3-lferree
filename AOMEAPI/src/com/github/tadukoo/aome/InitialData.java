@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.github.tadukoo.aome.character.Enemy;
 import com.github.tadukoo.aome.character.ItemToPlayerMap;
+import com.github.tadukoo.aome.character.NameAndGenderPair;
 import com.github.tadukoo.aome.character.Player;
 import com.github.tadukoo.aome.construct.GameObject;
 import com.github.tadukoo.aome.construct.ItemToObjectMap;
@@ -395,23 +396,25 @@ public class InitialData{
 		}
 	}
 	
-	public static ArrayList<StringPair> getNameGenderList() throws IOException {
-		ArrayList<StringPair> nameGenderList = new ArrayList<>();
-		try(ReadCSV readNames = new ReadCSV("names.csv")){
-			while(true){
-				List<String> tuple = readNames.next();
-				if(tuple == null){
-					break;
-				}
-				Iterator<String> i = tuple.iterator();
+	/**
+	 * @return A List of {@link NameAndGenderPair name-gender pairs} based on the CSV to use for initial data
+	 * @throws IOException If anything goes wrong
+	 */
+	public static List<NameAndGenderPair> getNameGenderPairs() throws IOException{
+		List<NameAndGenderPair> nameGenderPairs = new ArrayList<>();
+		// Read name and gender pairs
+		try(ReadCSV readNameGenderPairs = new ReadCSV("names.csv")){
+			List<String> tuple = readNameGenderPairs.next();
+			while(tuple != null){
+				// Create the Name-Gender Pair and add it to the list
+				String name = tuple.get(0);
+				String gender = tuple.get(1);
+				nameGenderPairs.add(new NameAndGenderPair(name, gender));
 				
-				StringPair nameGender = new StringPair();
-				nameGender.setString1(i.next());
-				nameGender.setString2(i.next());
-				nameGenderList.add(nameGender);
+				// Grab next tuple
+				tuple = readNameGenderPairs.next();
 			}
-			return nameGenderList;
-			
+			return nameGenderPairs;
 		}
 	}
 	

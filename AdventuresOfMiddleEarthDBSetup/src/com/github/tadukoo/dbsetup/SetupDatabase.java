@@ -4,6 +4,7 @@ import com.github.tadukoo.aome.InitialData;
 import com.github.tadukoo.aome.User;
 import com.github.tadukoo.aome.character.Enemy;
 import com.github.tadukoo.aome.character.ItemToPlayerMap;
+import com.github.tadukoo.aome.character.NameAndGenderPair;
 import com.github.tadukoo.aome.character.Player;
 import com.github.tadukoo.aome.construct.GameObject;
 import com.github.tadukoo.aome.construct.Item;
@@ -103,21 +104,15 @@ public class SetupDatabase{
 		// Create Enemies table
 		Enemy enemy = new Enemy();
 		enemy.createTable(database);
+		
+		// Create NamesAndGender table
+		NameAndGenderPair nameGenderPair = new NameAndGenderPair();
+		nameGenderPair.createTable(database);
 	}
 	
 	/*
 	 * Other Tables Creation to be moved
 	 *
-				stmt13 = conn.prepareStatement(
-						"create table names ("
-						+ "number int primary key "
-						+ "		generated always as identity (start with 1, increment by 1), "
-						+ "name varchar(40), "
-						+ "gender varchar(10)"
-						+ ")"
-				);
-				stmt13.executeUpdate();
-				
 				stmt14 = conn.prepareStatement(
 						"create table gamestousers ("
 						+ "game_id int primary key "
@@ -226,6 +221,12 @@ public class SetupDatabase{
 		List<Enemy> enemies = InitialData.getEnemies();
 		for(Enemy enemy: enemies){
 			enemy.storeValues(database, false);
+		}
+		
+		// Load Name-Gender Pairs
+		List<NameAndGenderPair> nameGenderPairs = InitialData.getNameGenderPairs();
+		for(NameAndGenderPair nameGenderPair: nameGenderPairs){
+			nameGenderPair.storeValues(database, false);
 		}
 	}
 }

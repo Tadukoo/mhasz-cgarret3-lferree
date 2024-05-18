@@ -2,6 +2,7 @@ package com.github.tadukoo.middle_earth.persist;
 
 import com.github.tadukoo.aome.User;
 import com.github.tadukoo.aome.character.ItemToPlayerMap;
+import com.github.tadukoo.aome.character.NameAndGenderPair;
 import com.github.tadukoo.aome.construct.ItemToObjectMap;
 import com.github.tadukoo.aome.construct.ItemType;
 import com.github.tadukoo.aome.construct.ObjectCommandResponse;
@@ -630,7 +631,12 @@ public class MySQLDatabase implements IDatabase{
 	 * @throws SQLException If anything goes wrong
 	 */
 	private void loadEnemyRelatedTypes(Enemy enemy) throws SQLException{
-		// TODO: Name + Gender
+		// Name + Gender
+		NameAndGenderPair search = new NameAndGenderPair();
+		List<NameAndGenderPair> nameGenderPairs = search.doSearch(database, NameAndGenderPair.class, false);
+		NameAndGenderPair nameGenderPair = nameGenderPairs.get(random.nextInt(nameGenderPairs.size()));
+		enemy.setName(nameGenderPair.getName());
+		enemy.setGender(nameGenderPair.getGender());
 	}
 	
 	/** {@inheritDoc} */

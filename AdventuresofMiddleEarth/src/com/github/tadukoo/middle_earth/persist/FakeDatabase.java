@@ -3,6 +3,7 @@ package com.github.tadukoo.middle_earth.persist;
 import com.github.tadukoo.aome.InitialData;
 import com.github.tadukoo.aome.User;
 import com.github.tadukoo.aome.character.ItemToPlayerMap;
+import com.github.tadukoo.aome.character.NameAndGenderPair;
 import com.github.tadukoo.aome.construct.ItemToObjectMap;
 import com.github.tadukoo.aome.construct.ItemType;
 import com.github.tadukoo.aome.construct.map.GameMap;
@@ -28,7 +29,6 @@ import com.github.tadukoo.aome.character.Enemy;
 import com.github.tadukoo.aome.character.Player;
 import com.github.tadukoo.middle_earth.persist.pojo.DatabaseResult;
 import com.github.tadukoo.util.StringUtil;
-import com.github.tadukoo.aome.StringPair;
 
 /**
  * A Fake Database implementation of {@link IDatabase}, mostly to use for testing purposes
@@ -52,8 +52,8 @@ public class FakeDatabase implements IDatabase{
 	private final Map<Integer, GameMap> mapsByID;
 	private final Map<Integer, Player> playersByID;
 	private final List<Enemy> enemies;
+	private final List<NameAndGenderPair> nameGenderPairs;
 	private final List<Quest> quests;
-	private final List<StringPair> nameGenders;
 	
 	public FakeDatabase(){
 		try{
@@ -202,8 +202,10 @@ public class FakeDatabase implements IDatabase{
 				enemy.setID(id++);
 			}
 			
+			// Name-Gender Pairs
+			nameGenderPairs = InitialData.getNameGenderPairs();
+			
 			quests = InitialData.getQuests();
-			nameGenders = InitialData.getNameGenderList();
 		}catch(IOException e){
 			throw new IllegalStateException("Couldn't read initial data", e);
 		}
@@ -393,7 +395,9 @@ public class FakeDatabase implements IDatabase{
 			return new DatabaseResult<>(null, "No enemies found");
 		}
 		Enemy enemy = foundEnemies.get(random.nextInt(foundEnemies.size()));
-		enemy.setName(nameGenders.get(random.nextInt(nameGenders.size())).getString1());
+		NameAndGenderPair nameGenderPair = nameGenderPairs.get(random.nextInt(nameGenderPairs.size()));
+		enemy.setName(nameGenderPair.getName());
+		enemy.setGender(nameGenderPair.getGender());
 		return new DatabaseResult<>(enemy, null);
 	}
 	

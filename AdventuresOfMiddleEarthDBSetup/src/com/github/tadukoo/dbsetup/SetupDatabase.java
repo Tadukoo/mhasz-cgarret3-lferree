@@ -2,6 +2,7 @@ package com.github.tadukoo.dbsetup;
 
 import com.github.tadukoo.aome.InitialData;
 import com.github.tadukoo.aome.User;
+import com.github.tadukoo.aome.character.Enemy;
 import com.github.tadukoo.aome.character.ItemToPlayerMap;
 import com.github.tadukoo.aome.character.Player;
 import com.github.tadukoo.aome.construct.GameObject;
@@ -98,24 +99,15 @@ public class SetupDatabase{
 		// Create Items to Players table
 		ItemToPlayerMap itemToPlayerMap = new ItemToPlayerMap();
 		itemToPlayerMap.createTable(database);
+		
+		// Create Enemies table
+		Enemy enemy = new Enemy();
+		enemy.createTable(database);
 	}
 	
 	/*
 	 * Other Tables Creation to be moved
 	 *
-				stmt12 = conn.prepareStatement(
-						"create table enemies ("
-						+ "race varchar(40), "
-						+ "hp int, "
-						+ "mp int, "
-						+ "attack int, "
-						+ "defense int, "
-						+ "sp_atk int, "
-						+ "sp_def int "
-						+ ")"
-				);
-				stmt12.executeUpdate();
-				
 				stmt13 = conn.prepareStatement(
 						"create table names ("
 						+ "number int primary key "
@@ -228,6 +220,12 @@ public class SetupDatabase{
 		List<ItemToPlayerMap> itemsToPlayers = InitialData.getItemsToPlayers();
 		for(ItemToPlayerMap itemToPlayer: itemsToPlayers){
 			itemToPlayer.storeValues(database, false);
+		}
+		
+		// Load Enemies
+		List<Enemy> enemies = InitialData.getEnemies();
+		for(Enemy enemy: enemies){
+			enemy.storeValues(database, false);
 		}
 	}
 }

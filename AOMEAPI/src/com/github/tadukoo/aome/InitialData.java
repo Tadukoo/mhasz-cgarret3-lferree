@@ -370,6 +370,31 @@ public class InitialData{
 		}
 	}
 	
+	/**
+	 * @return A List of {@link Enemy enemies} based on the CSV to use for initial data
+	 * @throws IOException If anything goes wrong
+	 */
+	public static List<Enemy> getEnemies() throws IOException{
+		List<Enemy> enemies = new ArrayList<>();
+		// Read Enemies
+		try(ReadCSV readEnemies = new ReadCSV("enemies.csv")){
+			List<String> tuple = readEnemies.next();
+			while(tuple != null){
+				// Create the Enemy and add it to the list
+				Enemy enemy = new Enemy();
+				enemy.setRace(tuple.get(0));
+				enemy.setAttack(Integer.parseInt(tuple.get(1)));
+				enemy.setDefense(Integer.parseInt(tuple.get(2)));
+				enemy.setHP(Integer.parseInt(tuple.get(3)));
+				enemies.add(enemy);
+				
+				// Grab next tuple
+				tuple = readEnemies.next();
+			}
+			return enemies;
+		}
+	}
+	
 	public static ArrayList<StringPair> getNameGenderList() throws IOException {
 		ArrayList<StringPair> nameGenderList = new ArrayList<>();
 		try(ReadCSV readNames = new ReadCSV("names.csv")){
@@ -387,28 +412,6 @@ public class InitialData{
 			}
 			return nameGenderList;
 			
-		}
-	}
-	
-	public static ArrayList<Enemy> getEnemies() throws IOException {
-		ArrayList<Enemy> enemyList = new ArrayList<>();
-		try(ReadCSV readEnemies = new ReadCSV("enemies.csv")){
-			while(true){
-				List<String> tuple = readEnemies.next();
-				if(tuple == null){
-					break;
-				}
-				Iterator<String> i = tuple.iterator();
-				Enemy enemy = new Enemy();
-				
-				enemy.setRace(i.next());
-				enemy.setAttack(Integer.parseInt(i.next()));
-				enemy.setDefense(Integer.parseInt(i.next()));
-				enemy.setHP(Integer.parseInt(i.next()));
-				
-				enemyList.add(enemy);
-			}
-			return enemyList;
 		}
 	}
 	

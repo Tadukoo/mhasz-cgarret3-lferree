@@ -39,6 +39,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Random;
 import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 /**
  * Represents a MySQL database implementation of {@link IDatabase}
@@ -618,6 +619,66 @@ public class MySQLDatabase implements IDatabase{
 		return new DatabaseResult<>(player, error);
 	}
 	
+	/*
+	 * Enemy Related Queries
+	 */
+	
+	/**
+	 * Used to load related data for the given {@link Enemy}
+	 *
+	 * @param enemy The {@link Enemy} to load other data for
+	 * @throws SQLException If anything goes wrong
+	 */
+	private void loadEnemyRelatedTypes(Enemy enemy) throws SQLException{
+		// TODO: Name + Gender
+	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public DatabaseResult<List<String>> getAllEnemyRaces(){
+		List<String> races = null;
+		String error = null;
+		try{
+			Enemy search = new Enemy();
+			List<Enemy> results = search.doSearch(database, Enemy.class, false);
+			if(results.isEmpty()){
+				error = "No enemies found";
+			}else{
+				races = results.stream()
+						.map(Enemy::getRace)
+						.collect(Collectors.toList());
+			}
+		}catch(SQLException e){
+			error = "Get All Enemy Races SQL Error";
+			logger.logError(e);
+		}
+		return new DatabaseResult<>(races, error);
+	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public DatabaseResult<Enemy> getEnemyByRace(String race){
+		Enemy enemy = null;
+		String error = null;
+		try{
+			Enemy search = new Enemy();
+			List<Enemy> results = search.doSearch(database, Enemy.class, false);
+			if(results.isEmpty()){
+				error = "No enemies found";
+			}else if(results.size() == 1){
+				enemy = results.get(0);
+				loadEnemyRelatedTypes(enemy);
+			}else{
+				enemy = results.get(random.nextInt(results.size()));
+				loadEnemyRelatedTypes(enemy);
+			}
+		}catch(SQLException e){
+			error = "Get Enemy by Race SQL Error";
+			logger.logError(e);
+		}
+		return new DatabaseResult<>(enemy, error);
+	}
+	
 	@Override
 	public List<Quest> getAllQuests(){
 		return null;
@@ -650,21 +711,6 @@ public class MySQLDatabase implements IDatabase{
 	
 	@Override
 	public ArrayList<Integer> getGameIDs(String username){
-		return null;
-	}
-	
-	@Override
-	public Enemy getEnemyByRace(String race){
-		return null;
-	}
-	
-	@Override
-	public ArrayList<Enemy> getAllEnemies(){
-		return null;
-	}
-	
-	@Override
-	public ArrayList<String> getAllEnemyRaces(){
 		return null;
 	}
 }

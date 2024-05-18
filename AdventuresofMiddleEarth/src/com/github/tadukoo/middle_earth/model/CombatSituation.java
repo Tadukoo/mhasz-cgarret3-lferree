@@ -1,6 +1,7 @@
 package com.github.tadukoo.middle_earth.model;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import com.github.tadukoo.aome.construct.ItemType;
@@ -118,24 +119,24 @@ public class CombatSituation{
 		return currentIDsIndex;
 	}
 	
-	public Enemy createEnemy(ArrayList<String> races, int playerLocation){
+	public Enemy createEnemy(List<String> races, int playerLocation){
 		IDatabase db = DatabaseProvider.getInstance();
 		
 		// If races is empty, get all races from the database instead.
 		if(races.isEmpty()){
-			races = db.getAllEnemyRaces();
+			races = db.getAllEnemyRaces().result();
 		}
 		
 		if(playerLocation == 7) {
-			Enemy demon = db.getEnemyByRace("Greater Demon");
+			Enemy demon = db.getEnemyByRace("Greater Demon").result();
 			demon.setName("Balrog");
 			return demon;
 		} else {
 			// Return an enemy by a random race from the list
 			if (races.size() == 1) {
-				return db.getEnemyByRace(races.get(0));
+				return db.getEnemyByRace(races.get(0)).result();
 			} else {
-				return db.getEnemyByRace(races.get(random.nextInt(races.size() - 1)));
+				return db.getEnemyByRace(races.get(random.nextInt(races.size() - 1))).result();
 			}
 		}
 	}

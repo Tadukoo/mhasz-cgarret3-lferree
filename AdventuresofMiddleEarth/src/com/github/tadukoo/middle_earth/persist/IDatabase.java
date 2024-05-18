@@ -62,10 +62,17 @@ public interface IDatabase{
 	DatabaseResult<GameMap> getMapByID(int id);
 	
 	/*
-	 * Character Related Queries
+	 * Player Related Queries
 	 */
 	
 	DatabaseResult<Player> getPlayerByID(int id);
+	
+	/*
+	 * Enemy Related Queries
+	 */
+	
+	DatabaseResult<List<String>> getAllEnemyRaces();
+	DatabaseResult<Enemy> getEnemyByRace(String race);
 	
 	List<Quest> getAllQuests();
 	
@@ -74,8 +81,4 @@ public interface IDatabase{
 	
 	Integer createNewGame(String username);
 	ArrayList<Integer> getGameIDs(String username);
-	
-	Enemy getEnemyByRace(String race);
-	ArrayList<Enemy> getAllEnemies();
-	ArrayList<String> getAllEnemyRaces();
 }

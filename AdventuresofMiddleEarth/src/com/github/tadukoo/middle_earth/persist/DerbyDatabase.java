@@ -7,7 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.Scanner;
 
 import com.github.tadukoo.middle_earth.controller.Game;
@@ -19,7 +18,6 @@ import com.github.tadukoo.aome.construct.Item;
 import com.github.tadukoo.aome.construct.ItemType;
 import com.github.tadukoo.aome.construct.GameObject;
 import com.github.tadukoo.middle_earth.persist.pojo.DatabaseResult;
-import com.github.tadukoo.aome.StringPair;
 import com.github.tadukoo.aome.construct.map.GameMap;
 import com.github.tadukoo.aome.construct.map.MapTile;
 
@@ -90,28 +88,6 @@ public class DerbyDatabase implements IDatabase {
 		conn.setAutoCommit(false);
 		
 		return conn;
-	}
-	
-	private void loadEnemy(Enemy enemy, ResultSet resultSet) throws SQLException {
-		int index = 1;
-		enemy.setRace(resultSet.getString(index++));
-		enemy.setHP(resultSet.getInt(index++));
-		enemy.setMP(resultSet.getInt(index++));
-		
-		StringPair randNameGender = getRandomName();
-		
-		enemy.setName(randNameGender.getString1());
-		enemy.setGender(randNameGender.getString2());
-		enemy.setAttack(resultSet.getInt(index++));
-		enemy.setDefense(resultSet.getInt(index++));
-		enemy.setSpecialAttack(resultSet.getInt(index++));
-		enemy.setSpecialDefense(resultSet.getInt(index));
-	}
-	
-	private void loadNameGender(StringPair nameGender, ResultSet resultSet) throws SQLException{
-		int index = 1;
-		nameGender.setString1(resultSet.getString(index++));
-		nameGender.setString2(resultSet.getString(index));
 	}
 	
 	/**************************************************************************************************
@@ -192,137 +168,13 @@ public class DerbyDatabase implements IDatabase {
 	//  								Enemies 
 	///////////////////////////////////////////////////////////////////////////////////////
 	@Override
-	public ArrayList<String> getAllEnemyRaces() {
-		return executeTransaction(conn -> {
-			ResultSet resultSet = null;
-			PreparedStatement stmt = null;
-			ArrayList<String> enemyRaceList = new ArrayList<>();
-			try{
-				stmt = conn.prepareStatement(
-						"select enemies.race "
-								+ "from enemies"
-				);
-				resultSet = stmt.executeQuery();
-				while(resultSet.next()){
-					enemyRaceList.add(resultSet.getString(1));
-				}
-				return enemyRaceList;
-			}finally{
-				DBUtil.closeQuietly(conn);
-				DBUtil.closeQuietly(resultSet);
-				DBUtil.closeQuietly(stmt);
-			}
-		});
-	}
-
-	public ArrayList<Enemy> getAllEnemies() {
-		return executeTransaction(conn -> {
-			PreparedStatement stmt = null;
-			ResultSet resultSet = null;
-			
-			try{
-				stmt = conn.prepareStatement(
-						"select * "
-								+ "from enemies");
-				resultSet = stmt.executeQuery();
-				
-				ArrayList<Enemy> enemyList = new ArrayList<>();
-				
-				boolean found = false;
-				while(resultSet.next()){
-					found = true;
-					Enemy enemy = new Enemy();
-					loadEnemy(enemy, resultSet);
-					enemyList.add(enemy);
-				}
-				
-				if(!found){
-					System.out.println("EnemyList is empty");
-				}
-				
-				return enemyList;
-			}finally{
-				DBUtil.closeQuietly(resultSet);
-				DBUtil.closeQuietly(stmt);
-				DBUtil.closeQuietly(conn);
-			}
-		});
+	public DatabaseResult<List<String>> getAllEnemyRaces(){
+		throw new UnsupportedOperationException("DerbyDatabase not supported anymore!");
 	}
 	
 	@Override
-	public Enemy getEnemyByRace(String race) {
-		return executeTransaction(conn -> {
-			PreparedStatement stmt = null;
-			ResultSet resultSet = null;
-			
-			try{
-				stmt = conn.prepareStatement(
-						"select * "
-								+ "from enemies "
-								+ "where enemies.race = ?"
-				);
-				stmt.setString(1, race);
-				resultSet = stmt.executeQuery();
-				
-				Enemy enemy = new Enemy();
-				
-				// for testing that a result was returned
-				boolean found = false;
-				
-				while(resultSet.next()){
-					found = true;
-					loadEnemy(enemy, resultSet);
-				}
-				
-				// check if the item was found
-				if(!found){
-					System.out.println("no enemies with that race");
-				}
-				
-				return enemy;
-			}finally{
-				DBUtil.closeQuietly(resultSet);
-				DBUtil.closeQuietly(stmt);
-				DBUtil.closeQuietly(conn);
-			}
-		});
-	}
-	
-	private StringPair getRandomName() {
-		return executeTransaction(conn -> {
-			PreparedStatement stmt = null;
-			ResultSet resultSet = null;
-			
-			try{
-				stmt = conn.prepareStatement(
-						"select names.name, names.gender "
-								+ "from names "
-								+ "where names.number = ?"
-				);
-				Random rand = new Random();
-				stmt.setInt(1, rand.nextInt(8) + 1);
-				
-				resultSet = stmt.executeQuery();
-				StringPair nameGender = new StringPair();
-				
-				boolean found = false;
-				
-				while(resultSet.next()){
-					found = true;
-					loadNameGender(nameGender, resultSet);
-				}
-				
-				if(!found){
-					System.out.println("no names under that number");
-				}
-				
-				return nameGender;
-			}finally{
-				DBUtil.closeQuietly(stmt);
-				DBUtil.closeQuietly(resultSet);
-				DBUtil.closeQuietly(conn);
-			}
-		});
+	public DatabaseResult<Enemy> getEnemyByRace(String race){
+		throw new UnsupportedOperationException("DerbyDatabase not supported anymore!");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////

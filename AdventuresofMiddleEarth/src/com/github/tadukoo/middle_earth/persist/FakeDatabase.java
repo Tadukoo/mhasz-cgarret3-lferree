@@ -51,8 +51,8 @@ public class FakeDatabase implements IDatabase{
 	private final Map<Integer, MapTile> mapTilesByID;
 	private final Map<Integer, GameMap> mapsByID;
 	private final Map<Integer, Player> playersByID;
-	private final List<Quest> quests;
 	private final List<Enemy> enemies;
+	private final List<Quest> quests;
 	private final List<StringPair> nameGenders;
 	
 	public FakeDatabase(){
@@ -195,8 +195,14 @@ public class FakeDatabase implements IDatabase{
 				player.getInventory().add(item);
 			}
 			
-			quests = InitialData.getQuests();
+			// Enemies
 			enemies = InitialData.getEnemies();
+			id = 1;
+			for(Enemy enemy: enemies){
+				enemy.setID(id++);
+			}
+			
+			quests = InitialData.getQuests();
 			nameGenders = InitialData.getNameGenderList();
 		}catch(IOException e){
 			throw new IllegalStateException("Couldn't read initial data", e);
@@ -364,6 +370,33 @@ public class FakeDatabase implements IDatabase{
 		return new DatabaseResult<>(playersByID.get(id), null);
 	}
 	
+	/*
+	 * Enemy Related Queries
+	 */
+	
+	/** {@inheritDoc} */
+	@Override
+	public DatabaseResult<List<String>> getAllEnemyRaces(){
+		return new DatabaseResult<>(enemies.stream()
+				.map(Enemy::getRace)
+				.distinct()
+				.collect(Collectors.toList()), null);
+	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public DatabaseResult<Enemy> getEnemyByRace(String race){
+		List<Enemy> foundEnemies = enemies.stream()
+				.filter(enemy -> enemy.getRace().equals(race))
+				.toList();
+		if(foundEnemies.isEmpty()){
+			return new DatabaseResult<>(null, "No enemies found");
+		}
+		Enemy enemy = foundEnemies.get(random.nextInt(foundEnemies.size()));
+		enemy.setName(nameGenders.get(random.nextInt(nameGenders.size())).getString1());
+		return new DatabaseResult<>(enemy, null);
+	}
+	
 	@Override
 	public List<Quest> getAllQuests() {
 		for(Quest quest : quests) {
@@ -402,33 +435,7 @@ public class FakeDatabase implements IDatabase{
 		// TODO Auto-generated method stub
 		
 	}
-
-	@Override
-	public Enemy getEnemyByRace(String race){
-		Enemy foundEnemy = enemies.stream()
-				.filter(enemy -> enemy.getRace().equals(race))
-				.findFirst().orElse(null);
-		if(foundEnemy == null){
-			return null;
-		}
-		foundEnemy.setName(nameGenders.get(random.nextInt(nameGenders.size())).getString1());
-		return foundEnemy;
-	}
-
-	@Override
-	public ArrayList<Enemy> getAllEnemies() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ArrayList<String> getAllEnemyRaces(){
-		return new ArrayList<>(enemies.stream()
-				.map(Enemy::getRace)
-				.distinct()
-				.toList());
-	}
-
+	
 	@Override
 	public Integer createNewGame(String username) {
 		// TODO Auto-generated method stub
